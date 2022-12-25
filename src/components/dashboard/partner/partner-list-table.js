@@ -112,81 +112,96 @@ export const PartnerListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {partners.map((partner) => {
-              const isPartnerSelected = selectedPartners.includes(partner.id);
+            {partners && partners.length > 0 ? (
+              partners.map((partner) => {
+                const isPartnerSelected = selectedPartners.includes(partner.id);
 
-              return (
-                <TableRow hover key={partner.id} selected={isPartnerSelected}>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isPartnerSelected}
-                      onChange={(event) =>
-                        handleSelectOnePartner(event, partner.id)
-                      }
-                      value={isPartnerSelected}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{
-                        alignItems: "center",
-                        display: "flex",
-                      }}
-                    >
-                      <Avatar
-                        src={partner.avatar}
+                return (
+                  <TableRow hover key={partner.id} selected={isPartnerSelected}>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={isPartnerSelected}
+                        onChange={(event) =>
+                          handleSelectOnePartner(event, partner.id)
+                        }
+                        value={isPartnerSelected}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Box
                         sx={{
-                          height: 42,
-                          width: 42,
+                          alignItems: "center",
+                          display: "flex",
                         }}
                       >
-                        {getInitials(partner.brand)}
-                      </Avatar>
-                      <Box sx={{ ml: 1 }}>
-                        <NextLink
-                          href={`/dashboard/partners/${partner.id}`}
-                          passHref
+                        <Avatar
+                          src={partner.avatar}
+                          sx={{
+                            height: 42,
+                            width: 42,
+                          }}
                         >
-                          <Link color="inherit" variant="subtitle2">
-                            {partner.name}
-                          </Link>
-                        </NextLink>
-                        <Typography color="textSecondary" variant="body2">
-                          {partner.email}
-                        </Typography>
+                          {getInitials(partner.brand)}
+                        </Avatar>
+                        <Box sx={{ ml: 1 }}>
+                          <NextLink
+                            href={`/dashboard/partners/${partner.id}`}
+                            passHref
+                          >
+                            <Link color="inherit" variant="subtitle2">
+                              {partner.name}
+                            </Link>
+                          </NextLink>
+                          <Typography color="textSecondary" variant="body2">
+                            {partner.email}
+                          </Typography>
+                        </Box>
                       </Box>
-                    </Box>
-                  </TableCell>
-                  <TableCell>{partner.companyTin}</TableCell>
-                  <TableCell>{partner.directorName}</TableCell>
-                  <TableCell>{partner.email}</TableCell>
-                  <TableCell>
-                    {partner.phoneNumbers?.map((item) => (
-                      <Typography>{item}</Typography>
-                    ))}
-                  </TableCell>
-                  <TableCell>{partner.region}</TableCell>
-                  <TableCell align="right">
-                    <NextLink
-                      href={`/dashboard/partners/${partner.id}/edit`}
-                      passHref
-                    >
-                      <IconButton component="a">
-                        <PencilAltIcon fontSize="small" />
-                      </IconButton>
-                    </NextLink>
-                    <NextLink
-                      href={`/dashboard/partners/${partner.id}`}
-                      passHref
-                    >
-                      <IconButton component="a">
-                        <ArrowRightIcon fontSize="small" />
-                      </IconButton>
-                    </NextLink>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                    </TableCell>
+                    <TableCell>{partner.companyTin}</TableCell>
+                    <TableCell>{partner.directorName}</TableCell>
+                    <TableCell>{partner.email}</TableCell>
+                    <TableCell>
+                      {partner.phoneNumbers?.map((item) => (
+                        <Typography key={item}>{item}</Typography>
+                      ))}
+                    </TableCell>
+                    <TableCell>{partner.region}</TableCell>
+                    <TableCell align="right">
+                      <NextLink
+                        href={`/dashboard/partners/${partner.id}/edit`}
+                        passHref
+                      >
+                        <IconButton component="a">
+                          <PencilAltIcon fontSize="small" />
+                        </IconButton>
+                      </NextLink>
+                      <NextLink
+                        href={`/dashboard/partners/${partner.id}`}
+                        passHref
+                      >
+                        <IconButton component="a">
+                          <ArrowRightIcon fontSize="small" />
+                        </IconButton>
+                      </NextLink>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell>
+                  <Typography>No Partners</Typography>
+                </TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </Scrollbar>

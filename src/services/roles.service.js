@@ -2,16 +2,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const getPartners = createAsyncThunk(
-  "partners/getPartners",
-  async (params, { rejectWithValue }) => {
+export const getRoles = createAsyncThunk(
+  "roles/getRoles",
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/partners", {
-        params: {
-          page: params?.page ?? 1,
-          perPage: params?.perPage ?? 10,
-        },
-      });
+      const response = await axios.get("/roles");
       return response.data;
     } catch (error) {
       toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -20,11 +15,11 @@ export const getPartners = createAsyncThunk(
   }
 );
 
-export const getPartner = createAsyncThunk(
-  "partners/getPartner",
+export const getRole = createAsyncThunk(
+  "roles/getRole",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/partners/${params?.id}`);
+      const response = await axios.get(`/roles/${params?.id}`);
       return response.data;
     } catch (error) {
       toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -33,12 +28,12 @@ export const getPartner = createAsyncThunk(
   }
 );
 
-export const createPartner = createAsyncThunk(
-  "partners/createPartner",
+export const createRole = createAsyncThunk(
+  "roles/createRole",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/partners", values);
-      toast.success("Партнёр добавлен");
+      const response = await axios.post("/roles", values);
+      toast.success("Роль добавлен");
       return response.data;
     } catch (error) {
       toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -47,17 +42,30 @@ export const createPartner = createAsyncThunk(
   }
 );
 
-export const updatePartner = createAsyncThunk(
-  "partners/updatePartner",
+export const updateRole = createAsyncThunk(
+  "roles/updateRole",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/partners", values);
-      toast.success("Партнёр обнавлен");
+      const response = await axios.post("/roles", values);
+      toast.success("Роль обнавлен");
       return response.data;
     } catch (error) {
       console.log({ error });
       toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.messages);
+    }
+  }
+);
+
+export const getPermissions = createAsyncThunk(
+  "roles/getPermissions",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/perms");
+      return response.data;
+    } catch (error) {
+      toast.error(error?.messages[0]?.name || error?.messages[0]);
+      return rejectWithValue(error.error);
     }
   }
 );

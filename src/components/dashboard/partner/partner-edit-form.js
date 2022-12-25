@@ -1,9 +1,10 @@
+import { Fragment } from "react";
 import NextLink from "next/link";
-import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
-import { useFormik } from "formik";
+import { FieldArray, Form, Formik, getIn, useFormik } from "formik";
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -13,199 +14,267 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import { wait } from "../../../utils/wait";
 import { useDispatch } from "src/store";
 import { createPartner, updatePartner } from "@services/index";
 
 export const PartnerEditForm = (props) => {
   const { partner, mode = "edit", ...other } = props;
 
-  console.log({ partner });
-
   const dispatch = useDispatch();
 
-  const formik = useFormik({
-    initialValues: {
-      brand: partner?.brand || "",
-      companyTin: partner?.companyTin || "",
-      directorName: partner?.directorName || "",
-      email: partner?.email || "",
-      passportSeries: partner?.passportSeries || "",
-      phoneNumbers: partner?.phoneNumbers || ["+992938080888"],
-      region: partner?.region || "",
-      submit: null,
-    },
-    validationSchema: Yup.object({
-      brand: Yup.string().max(255),
-      companyTin: Yup.string().min(9).max(9),
-      directorName: Yup.string().min(10).max(255),
-      email: Yup.string()
-        .email("Must be a valid email")
-        .max(255)
-        .required("Email is required"),
-      passportSeries: Yup.string()
-        .max(14)
-        .required("Passport series is required"),
-      phoneNumbers: Yup.array(),
-      region: Yup.string().max(255).required("Region is required"),
-      phone: Yup.string().max(15),
-      state: Yup.string().max(255),
-    }),
-    onSubmit: async (values, helpers) => {
-      try {
-        // NOTE: Make API request
-        if (mode === "create") {
-          dispatch(createPartner(values));
-        } else {
-          dispatch(updatePartner(values));
-        }
-        await wait(500);
-        helpers.setStatus({ success: true });
-        helpers.setSubmitting(false);
-      } catch (err) {
-        console.error(err);
-        toast.error("Something went wrong!");
-        helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.message });
-        helpers.setSubmitting(false);
-      }
-    },
+  const partnerPhones = partner?.phoneNumbers?.map((item) => {
+    return {
+      phoneNumber: item.substring(4),
+    };
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} {...other}>
-      <Card>
-        <CardHeader
-          title={`${mode === "create" ? "Create" : "Edit"} partner`}
-        />
-        <Divider />
-        <CardContent>
-          <Grid container spacing={3}>
-            <Grid item md={6} xs={12}>
-              <TextField
-                error={Boolean(formik.touched.brand && formik.errors.brand)}
-                fullWidth
-                helperText={formik.touched.brand && formik.errors.brand}
-                label="Brand name"
-                name="brand"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                required
-                value={formik.values.brand}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                error={Boolean(
-                  formik.touched.companyTin && formik.errors.companyTin
-                )}
-                fullWidth
-                helperText={
-                  formik.touched.companyTin && formik.errors.companyTin
-                }
-                label="Company tin"
-                name="companyTin"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                required
-                value={formik.values.companyTin}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                error={Boolean(
-                  formik.touched.directorName && formik.errors.directorName
-                )}
-                fullWidth
-                helperText={
-                  formik.touched.directorName && formik.errors.directorName
-                }
-                label="Director name"
-                name="directorName"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                required
-                value={formik.values.directorName}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                error={Boolean(formik.touched.email && formik.errors.email)}
-                fullWidth
-                helperText={formik.touched.email && formik.errors.email}
-                label="Email address"
-                name="email"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                required
-                value={formik.values.email}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                error={Boolean(
-                  formik.touched.passportSeries && formik.errors.passportSeries
-                )}
-                fullWidth
-                helperText={
-                  formik.touched.passportSeries && formik.errors.passportSeries
-                }
-                label="Passport series"
-                name="passportSeries"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.passportSeries}
-              />
-            </Grid>
+    <Formik
+      enableReinitialize={true}
+      initialValues={{
+        brand: partner?.brand || "",
+        companyTin: partner?.companyTin || "",
+        directorName: partner?.directorName || "",
+        email: partner?.email || "",
+        passportSeries: partner?.passportSeries || "",
+        phoneNumbers:
+          partnerPhones && partnerPhones.length > 0
+            ? partnerPhones
+            : [{ phoneNumber: "" }],
+        region: partner?.region || "",
+        submit: null,
+      }}
+      validationSchema={Yup.object().shape({
+        brand: Yup.string().max(255),
+        companyTin: Yup.string().min(9).max(9),
+        directorName: Yup.string().min(10).max(255),
+        email: Yup.string()
+          .email("Must be a valid email")
+          .max(255)
+          .required("Email is required"),
+        passportSeries: Yup.string()
+          .max(8)
+          .required("Passport series is required"),
+        phoneNumbers: Yup.array().of(
+          Yup.object().shape({
+            phoneNumber: Yup.string()
+              .min(9)
+              .max(12)
+              .required("Phone number is required"),
+          })
+        ),
+        region: Yup.string().max(255).required("Region is required"),
+      })}
+      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+        try {
+          const phonesWithPrefix = values.phoneNumbers.map(
+            (item) => "+992" + item?.phoneNumber?.replaceAll(" ", "")
+          );
 
-            <Grid item md={6} xs={12}>
-              <TextField
-                error={Boolean(formik.touched.region && formik.errors.region)}
-                fullWidth
-                helperText={formik.touched.region && formik.errors.region}
-                label="Region"
-                name="region"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.region}
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-        <CardActions
-          sx={{
-            flexWrap: "wrap",
-            m: -1,
-          }}
-        >
-          <Button
-            disabled={formik.isSubmitting}
-            type="submit"
-            sx={{ m: 1 }}
-            variant="contained"
-          >
-            {mode === "create" ? "Create" : "Update"}
-          </Button>
-          <NextLink href="/dashboard/partners" passHref>
-            <Button
-              component="a"
-              disabled={formik.isSubmitting}
+          const newValues = { ...values, phoneNumbers: phonesWithPrefix };
+          if (mode === "create") {
+            dispatch(createPartner(newValues));
+          } else {
+            dispatch(updatePartner(newValues));
+          }
+          setStatus({ success: true });
+          setSubmitting(false);
+        } catch (err) {
+          console.error(err);
+          toast.error("Something went wrong!");
+          setStatus({ success: false });
+          setErrors({ submit: err.message });
+          setSubmitting(false);
+        }
+      }}
+    >
+      {({
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        isSubmitting,
+        touched,
+        values,
+      }) => (
+        <form noValidate onSubmit={handleSubmit}>
+          <Card>
+            <CardHeader
+              title={`${mode === "create" ? "Create" : "Edit"} partner`}
+            />
+            <Divider />
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.brand && errors.brand)}
+                    fullWidth
+                    helperText={touched.brand && errors.brand}
+                    label="Brand name"
+                    name="brand"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.brand}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    error={Boolean(touched.companyTin && errors.companyTin)}
+                    helperText={touched.companyTin && errors.companyTin}
+                    label="Company tin"
+                    name="companyTin"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.companyTin}
+                    inputProps={{ maxLength: 9 }}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.directorName && errors.directorName)}
+                    fullWidth
+                    helperText={touched.directorName && errors.directorName}
+                    label="Director name"
+                    name="directorName"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.directorName}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.email && errors.email)}
+                    fullWidth
+                    helperText={touched.email && errors.email}
+                    label="Email address"
+                    name="email"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.email}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(
+                      touched.passportSeries && errors.passportSeries
+                    )}
+                    fullWidth
+                    helperText={touched.passportSeries && errors.passportSeries}
+                    label="Passport series"
+                    name="passportSeries"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.passportSeries}
+                    inputProps={{ maxLength: 8 }}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.region && errors.region)}
+                    fullWidth
+                    helperText={touched.region && errors.region}
+                    label="Region"
+                    name="region"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.region}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <FieldArray
+                    name="phoneNumbers"
+                    render={({ push, remove }) => (
+                      <Grid container spacing={3}>
+                        {values?.phoneNumbers?.map((p, index) => {
+                          const phoneNumber = `phoneNumbers[${index}].phoneNumber`;
+                          const touchedPhone = getIn(touched, phoneNumber);
+                          const errorPhone = getIn(errors, phoneNumber);
+                          return (
+                            <Grid item xs={12} key={index}>
+                              <TextField
+                                error={Boolean(touchedPhone && errorPhone)}
+                                fullWidth
+                                helperText={
+                                  touchedPhone && errorPhone ? errorPhone : ""
+                                }
+                                label="Phone numbers"
+                                name={phoneNumber}
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={p?.phoneNumber ?? ""}
+                                inputProps={{ maxLength: 9 }}
+                              />
+                              <Box
+                                mt={3}
+                                gap={3}
+                                display="flex"
+                                justifyContent="space-between"
+                              >
+                                <Button
+                                  fullWidth
+                                  color="primary"
+                                  variant="contained"
+                                  onClick={() => push(index, "")}
+                                >
+                                  Add
+                                </Button>
+                                <Button
+                                  fullWidth
+                                  color="warning"
+                                  variant="outlined"
+                                  onClick={() => remove(index)}
+                                >
+                                  Remove
+                                </Button>
+                              </Box>
+                            </Grid>
+                          );
+                        })}
+                      </Grid>
+                    )}
+                  />
+                </Grid>
+                {/* </Grid> */}
+              </Grid>
+            </CardContent>
+            <CardActions
               sx={{
-                m: 1,
-                mr: "auto",
+                flexWrap: "wrap",
+                m: -1,
               }}
-              variant="outlined"
             >
-              Cancel
-            </Button>
-          </NextLink>
-        </CardActions>
-      </Card>
-    </form>
+              <Button
+                disabled={isSubmitting}
+                type="submit"
+                sx={{ m: 1 }}
+                variant="contained"
+              >
+                {mode === "create" ? "Create" : "Update"}
+              </Button>
+              <NextLink href="/dashboard/partners" passHref>
+                <Button
+                  component="a"
+                  disabled={isSubmitting}
+                  sx={{
+                    m: 1,
+                    mr: "auto",
+                  }}
+                  variant="outlined"
+                >
+                  Cancel
+                </Button>
+              </NextLink>
+            </CardActions>
+          </Card>
+        </form>
+      )}
+    </Formik>
   );
-};
-
-PartnerEditForm.propTypes = {
-  partner: PropTypes.object,
-  mode: PropTypes.string,
 };

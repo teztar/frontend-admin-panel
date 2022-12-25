@@ -90,23 +90,14 @@ const getSections = (t) => [
     title: t("Management"),
     items: [
       {
-        title: t("Parners"),
+        title: t("Partners"),
         path: "/dashboard/partners",
         icon: <UsersIcon fontSize="small" />,
-        children: [
-          {
-            title: t("List"),
-            path: "/dashboard/partners",
-          },
-          {
-            title: t("Details"),
-            path: "/dashboard/partners/:id",
-          },
-          {
-            title: t("Edit"),
-            path: "/dashboard/partners/:id/edit",
-          },
-        ],
+      },
+      {
+        title: t("Roles"),
+        path: "/dashboard/roles",
+        icon: <UsersIcon fontSize="small" />,
       },
       {
         title: t("Customers"),
