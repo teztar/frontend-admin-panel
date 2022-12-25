@@ -5,13 +5,13 @@ import { Box, Container, Link, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AuthGuard } from "../../../../components/authentication/auth-guard";
 import { DashboardLayout } from "../../../../components/dashboard/dashboard-layout";
-import { PartnerEditForm } from "../../../../components/dashboard/partner/partner-edit-form";
+import { RoleEditForm } from "../../../../components/dashboard/role/role-edit-form";
 import { gtm } from "../../../../lib/gtm";
 import { useDispatch, useSelector } from "src/store";
 import { getPartner } from "@services/partners.service";
 import { useRouter } from "next/router";
 
-const PartnerEdit = () => {
+const RoleEdit = () => {
   const dispatch = useDispatch();
 
   const { query } = useRouter();
@@ -37,7 +37,7 @@ const PartnerEdit = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Partner Edit</title>
+        <title>Dashboard: Role Edit</title>
       </Head>
       <Box
         component="main"
@@ -65,7 +65,7 @@ const PartnerEdit = () => {
           </Box>
 
           <Box mt={3}>
-            <PartnerEditForm partner={partner} mode="edit" />
+            <RoleEditForm partner={partner} mode="edit" />
           </Box>
         </Container>
       </Box>
@@ -73,10 +73,10 @@ const PartnerEdit = () => {
   );
 };
 
-PartnerEdit.getLayout = (page) => (
+RoleEdit.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 
-export default PartnerEdit;
+export default RoleEdit;

@@ -88,7 +88,7 @@ const CustomerDetails = () => {
         <Container maxWidth="md">
           <div>
             <Box sx={{ mb: 4 }}>
-              <NextLink href="/dashboard/partners" passHref>
+              <NextLink href="/dashboard/roles" passHref>
                 <Link
                   color="textPrimary"
                   component="a"
@@ -98,7 +98,7 @@ const CustomerDetails = () => {
                   }}
                 >
                   <ArrowBackIcon fontSize="small" sx={{ mr: 1 }} />
-                  <Typography variant="subtitle2">Partners</Typography>
+                  <Typography variant="subtitle2">Roles</Typography>
                 </Link>
               </NextLink>
             </Box>

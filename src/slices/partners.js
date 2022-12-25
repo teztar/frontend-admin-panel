@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getPartners, createPartner, updatePartner } from "@services/index";
+import {
+  getPartner,
+  getPartners,
+  createPartner,
+  updatePartner,
+} from "@services/index";
 
 const initialState = {
   partners: [],
@@ -24,12 +29,22 @@ const partners = createSlice({
       state.loading = false;
     });
 
+    builder.addCase(getPartner.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getPartner.fulfilled, (state, action) => {
+      state.loading = false;
+      state.partner = action.payload;
+    });
+    builder.addCase(getPartner.rejected, (state) => {
+      state.loading = false;
+    });
+
     builder.addCase(createPartner.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(createPartner.fulfilled, (state, action) => {
       state.loading = false;
-      state.partner = action.payload;
     });
     builder.addCase(createPartner.rejected, (state) => {
       state.loading = false;
@@ -40,7 +55,6 @@ const partners = createSlice({
     });
     builder.addCase(updatePartner.fulfilled, (state, action) => {
       state.loading = false;
-      state.partner = action.payload;
     });
     builder.addCase(updatePartner.rejected, (state) => {
       state.loading = false;

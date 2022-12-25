@@ -87,7 +87,6 @@ class AuthApi {
       try {
         // Decode access token
         const user = accessToken;
-        console.log({ accessToken });
 
         // Find the user
         // const user = users.find((_user) => _user.id === userId);
