@@ -10,7 +10,7 @@ import {
 const initialState = {
   roles: [],
   role: {},
-  perms: [],
+  permissions: [],
   loading: true,
   error: null,
 };
@@ -67,7 +67,7 @@ const roles = createSlice({
     });
     builder.addCase(getPermissions.fulfilled, (state, action) => {
       state.loading = false;
-      state.perms = action.payload;
+      state.permissions = action.payload;
     });
     builder.addCase(getPermissions.rejected, (state) => {
       state.loading = false;

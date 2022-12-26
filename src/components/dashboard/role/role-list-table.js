@@ -145,11 +145,12 @@ export const RoleListTable = (props) => {
                   </TableCell>
 
                   <TableCell>
-                    <Box display="flex" flexWrap gap={3}>
-                      {role.perms?.map((item) => (
+                    <Button variant="contained">Посмотреть permissions</Button>
+                    {/* <Box display="flex" flexWrap gap={3}>
+                      {role.permissions?.map((item) => (
                         <Typography key={item}>{item.value}</Typography>
                       ))}
-                    </Box>
+                    </Box> */}
                   </TableCell>
 
                   <TableCell align="right">

@@ -17,10 +17,8 @@ import {
 import { AuthGuard } from "../../../components/authentication/auth-guard";
 import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
 import { PartnerListTable } from "../../../components/dashboard/partner/partner-list-table";
-import { Download as DownloadIcon } from "../../../icons/download";
 import { Plus as PlusIcon } from "../../../icons/plus";
 import { Search as SearchIcon } from "../../../icons/search";
-import { Upload as UploadIcon } from "../../../icons/upload";
 import { gtm } from "../../../lib/gtm";
 import { useDispatch, useSelector } from "src/store";
 import { getPartners } from "@services/index";
@@ -238,22 +236,6 @@ const PartnerList = () => {
                 </NextLink>
               </Grid>
             </Grid>
-            <Box
-              sx={{
-                m: -1,
-                mt: 3,
-              }}
-            >
-              <Button startIcon={<UploadIcon fontSize="small" />} sx={{ m: 1 }}>
-                Import
-              </Button>
-              <Button
-                startIcon={<DownloadIcon fontSize="small" />}
-                sx={{ m: 1 }}
-              >
-                Export
-              </Button>
-            </Box>
           </Box>
           <Card>
             <Tabs

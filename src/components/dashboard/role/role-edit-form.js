@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import {
+  Autocomplete,
   Button,
   Card,
   CardActions,
@@ -39,25 +40,29 @@ export const RoleEditForm = (props) => {
 
   const dispatch = useDispatch();
 
-  const { perms } = useSelector((state) => state.roles);
+  const { permissions } = useSelector((state) => state.roles);
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
+      id: role?.id || "",
       name: role?.name || "",
       permissions: role?.permissions || [""],
       submit: null,
     },
     validationSchema: Yup.object({
       name: Yup.string().max(255),
-      perms: Yup.array(),
+      permissions: Yup.array(),
     }),
     onSubmit: async (values, helpers) => {
       try {
+        const permissionKeys = values.permissions.map((item) => item.key);
+        const newValues = { ...values, permissions: permissionKeys };
         if (mode === "create") {
-          dispatch(createRole(values));
+          dispatch(createRole(newValues));
         } else {
-          dispatch(updateRole(values));
+          console.log({ newValues });
+          dispatch(updateRole(newValues));
         }
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
@@ -96,7 +101,28 @@ export const RoleEditForm = (props) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <FormControl fullWidth>
+              <Autocomplete
+                fullWidth
+                multiple
+                value={formik.values.permissions}
+                options={permissions}
+                onChange={(event, value) =>
+                  formik.setFieldValue("permissions", value)
+                }
+                getOptionLabel={(option) => option.value || option.key}
+                // getOptionSelected={(option, value) => option === value.id}
+                // includeInputInList={true}
+                filterSelectedOptions
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    label="Выбрать продукт"
+                    variant="outlined"
+                  />
+                )}
+              />
+              {/* <FormControl fullWidth>
                 <InputLabel id="perm">Permissions</InputLabel>
                 <Select
                   labelId="perm"
@@ -106,10 +132,13 @@ export const RoleEditForm = (props) => {
                   value={formik.values.permissions}
                   onChange={formik.handleChange}
                   input={<OutlinedInput label="Permissions" />}
-                  renderValue={(selected) => selected.join(", ")}
+                  renderValue={(selected) => {
+                    console.log({ selected });
+                    return selected?.join(" ");
+                  }}
                   MenuProps={MenuProps}
                 >
-                  {perms?.map((name) => (
+                  {permissions?.map((name) => (
                     <MenuItem key={name.key} value={name.key}>
                       <Checkbox
                         checked={
@@ -120,7 +149,7 @@ export const RoleEditForm = (props) => {
                     </MenuItem>
                   ))}
                 </Select>
-              </FormControl>
+              </FormControl> */}
             </Grid>
           </Grid>
         </CardContent>

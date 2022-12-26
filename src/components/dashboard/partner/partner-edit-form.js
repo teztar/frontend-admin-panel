@@ -32,6 +32,7 @@ export const PartnerEditForm = (props) => {
     <Formik
       enableReinitialize={true}
       initialValues={{
+        id: partner?.id || "",
         brand: partner?.brand || "",
         companyTin: partner?.companyTin || "",
         directorName: partner?.directorName || "",

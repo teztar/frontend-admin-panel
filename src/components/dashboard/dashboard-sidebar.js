@@ -97,7 +97,7 @@ const getSections = (t) => [
       {
         title: t("Roles"),
         path: "/dashboard/roles",
-        icon: <UsersIcon fontSize="small" />,
+        icon: <LockClosedIcon fontSize="small" />,
       },
       {
         title: t("Customers"),

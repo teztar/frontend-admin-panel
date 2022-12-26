@@ -46,7 +46,7 @@ export const updateRole = createAsyncThunk(
   "roles/updateRole",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/roles", values);
+      const response = await axios.put("/roles", values);
       toast.success("Роль обнавлен");
       return response.data;
     } catch (error) {
@@ -61,7 +61,7 @@ export const getPermissions = createAsyncThunk(
   "roles/getPermissions",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/perms");
+      const response = await axios.get("/roles/perms");
       return response.data;
     } catch (error) {
       toast.error(error?.messages[0]?.name || error?.messages[0]);

@@ -1,22 +1,22 @@
 import { useEffect } from "react";
 import NextLink from "next/link";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "src/store";
+import { getRole } from "@services/roles.service";
 import { Box, Container, Link, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AuthGuard } from "../../../../components/authentication/auth-guard";
 import { DashboardLayout } from "../../../../components/dashboard/dashboard-layout";
 import { RoleEditForm } from "../../../../components/dashboard/role/role-edit-form";
 import { gtm } from "../../../../lib/gtm";
-import { useDispatch, useSelector } from "src/store";
-import { getPartner } from "@services/partners.service";
-import { useRouter } from "next/router";
 
 const RoleEdit = () => {
   const dispatch = useDispatch();
 
   const { query } = useRouter();
 
-  const { partner } = useSelector((state) => state.partners);
+  const { role } = useSelector((state) => state.roles);
 
   useEffect(() => {
     gtm.push({ event: "page_view" });
@@ -24,13 +24,13 @@ const RoleEdit = () => {
 
   useEffect(
     () => {
-      dispatch(getPartner({ id: query?.partnerId }));
+      dispatch(getRole({ id: query?.roleId }));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  if (!partner) {
+  if (!role) {
     return null;
   }
 
@@ -49,7 +49,7 @@ const RoleEdit = () => {
       >
         <Container maxWidth="md">
           <Box sx={{ mb: 4, cursor: "pointer" }}>
-            <NextLink href="/dashboard/partners" passHref>
+            <NextLink href="/dashboard/roles" passHref>
               <Link
                 color="textPrimary"
                 component="a"
@@ -59,13 +59,13 @@ const RoleEdit = () => {
                 }}
               >
                 <ArrowBackIcon fontSize="small" sx={{ mr: 1 }} />
-                <Typography variant="subtitle2">Partners</Typography>
+                <Typography variant="subtitle2">Roles</Typography>
               </Link>
             </NextLink>
           </Box>
 
           <Box mt={3}>
-            <RoleEditForm partner={partner} mode="edit" />
+            <RoleEditForm role={role} mode="edit" />
           </Box>
         </Container>
       </Box>
