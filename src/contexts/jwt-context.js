@@ -114,8 +114,6 @@ export const AuthProvider = (props) => {
       data: { email, password },
     });
 
-    console.log({ loginResponse });
-
     const accessToken = loginResponse?.data?.token;
     // const { accessToken } = await authApi.login({ email, password });
     const user = await authApi.me({ accessToken });

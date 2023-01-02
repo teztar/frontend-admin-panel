@@ -16,12 +16,12 @@ import {
 } from "@mui/material";
 import { AuthGuard } from "../../../components/authentication/auth-guard";
 import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
-import { PartnerListTable } from "../../../components/dashboard/partner/partner-list-table";
+import { UserListTable } from "../../../components/dashboard/user/user-list-table";
 import { Plus as PlusIcon } from "../../../icons/plus";
 import { Search as SearchIcon } from "../../../icons/search";
 import { gtm } from "../../../lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getPartners } from "@services/index";
+import { getUsers } from "@services/index";
 
 const tabs = [
   {
@@ -61,8 +61,8 @@ const sortOptions = [
   },
 ];
 
-const applyFilters = (partners, filters) =>
-  partners.filter((customer) => {
+const applyFilters = (users, filters) =>
+  users.filter((customer) => {
     if (filters.query) {
       let queryMatched = false;
       const properties = ["email", "name"];
@@ -115,10 +115,10 @@ const getComparator = (sortDir, sortBy) =>
     ? (a, b) => descendingComparator(a, b, sortBy)
     : (a, b) => -descendingComparator(a, b, sortBy);
 
-const applySort = (partners, sort) => {
+const applySort = (users, sort) => {
   const [sortBy, sortDir] = sort.split("|");
   const comparator = getComparator(sortDir, sortBy);
-  const stabilizedThis = partners.map((el, index) => [el, index]);
+  const stabilizedThis = users.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const newOrder = comparator(a[0], b[0]);
@@ -133,13 +133,13 @@ const applySort = (partners, sort) => {
   return stabilizedThis.map((el) => el[0]);
 };
 
-const applyPagination = (partners, page, rowsPerPage) =>
-  partners.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+const applyPagination = (users, page, rowsPerPage) =>
+  users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-const PartnerList = () => {
+const UserList = () => {
   const dispatch = useDispatch();
 
-  const { partners } = useSelector((state) => state.partners);
+  const { users } = useSelector((state) => state.users);
 
   const queryRef = useRef(null);
   const [currentTab, setCurrentTab] = useState("all");
@@ -155,12 +155,11 @@ const PartnerList = () => {
 
   useEffect(() => {
     gtm.push({ event: "page_view" });
-    // dispatch(getPartners());
   }, []);
 
   useEffect(
     () => {
-      dispatch(getPartners());
+      dispatch(getUsers());
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -203,14 +202,14 @@ const PartnerList = () => {
   };
 
   // Usually query is done on backend with indexing solutions
-  const filteredPartners = applyFilters(partners, filters);
-  const sortedPartners = applySort(filteredPartners, sort);
-  const paginatedPartners = applyPagination(sortedPartners, page, rowsPerPage);
+  const filteredUsers = applyFilters(users, filters);
+  const sortedRoles = applySort(filteredUsers, sort);
+  const paginatedUsers = applyPagination(sortedRoles, page, rowsPerPage);
 
   return (
     <>
       <Head>
-        <title>Dashboard: Partner List | Material Kit Pro</title>
+        <title>Dashboard: User List | Material Kit Pro</title>
       </Head>
       <Box
         component="main"
@@ -223,10 +222,10 @@ const PartnerList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Partners</Typography>
+                <Typography variant="h4">Users</Typography>
               </Grid>
               <Grid item>
-                <NextLink href="/dashboard/partners/new" passHref>
+                <NextLink href="/dashboard/users/new" passHref>
                   <Button
                     startIcon={<PlusIcon fontSize="small" />}
                     variant="contained"
@@ -280,7 +279,7 @@ const PartnerList = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder="Search partners"
+                  placeholder="Search users"
                 />
               </Box>
               <TextField
@@ -299,9 +298,9 @@ const PartnerList = () => {
                 ))}
               </TextField>
             </Box>
-            <PartnerListTable
-              partners={paginatedPartners}
-              partnersCount={filteredPartners.length}
+            <UserListTable
+              users={paginatedUsers}
+              usersCount={filteredUsers.length}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               rowsPerPage={rowsPerPage}
@@ -314,10 +313,10 @@ const PartnerList = () => {
   );
 };
 
-PartnerList.getLayout = (page) => (
+UserList.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 
-export default PartnerList;
+export default UserList;

@@ -4,6 +4,7 @@ export {
   createPartner,
   updatePartner,
 } from "./partners.service";
+
 export {
   getRole,
   getRoles,
@@ -11,3 +12,5 @@ export {
   updateRole,
   getPermissions,
 } from "./roles.service";
+
+export { getUser, getUsers, createUser, updateUser } from "./users.service";

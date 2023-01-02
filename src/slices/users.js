@@ -1,64 +1,64 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  getRole,
-  getRoles,
-  createRole,
-  updateRole,
+  getUser,
+  getUsers,
+  createUser,
+  updateUser,
   getPermissions,
 } from "@services/index";
 
 const initialState = {
-  roles: [],
-  role: {},
+  users: [],
+  user: {},
   permissions: [],
   loading: true,
   error: null,
 };
 
-const roles = createSlice({
-  name: "roles",
+const users = createSlice({
+  name: "users",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getRoles.pending, (state) => {
+    builder.addCase(getUsers.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getRoles.fulfilled, (state, action) => {
+    builder.addCase(getUsers.fulfilled, (state, action) => {
       state.loading = false;
-      state.roles = action.payload;
+      state.users = action.payload;
     });
-    builder.addCase(getRoles.rejected, (state) => {
+    builder.addCase(getUsers.rejected, (state) => {
       state.loading = false;
     });
 
-    builder.addCase(getRole.pending, (state) => {
+    builder.addCase(getUser.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getRole.fulfilled, (state, action) => {
+    builder.addCase(getUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.role = action.payload;
+      state.user = action.payload;
     });
-    builder.addCase(getRole.rejected, (state) => {
+    builder.addCase(getUser.rejected, (state) => {
       state.loading = false;
     });
 
-    builder.addCase(createRole.pending, (state) => {
+    builder.addCase(createUser.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(createRole.fulfilled, (state) => {
+    builder.addCase(createUser.fulfilled, (state) => {
       state.loading = false;
     });
-    builder.addCase(createRole.rejected, (state) => {
+    builder.addCase(createUser.rejected, (state) => {
       state.loading = false;
     });
 
-    builder.addCase(updateRole.pending, (state) => {
+    builder.addCase(updateUser.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(updateRole.fulfilled, (state) => {
+    builder.addCase(updateUser.fulfilled, (state) => {
       state.loading = false;
     });
-    builder.addCase(updateRole.rejected, (state) => {
+    builder.addCase(updateUser.rejected, (state) => {
       state.loading = false;
     });
 
@@ -75,6 +75,6 @@ const roles = createSlice({
   },
 });
 
-export const { reducer } = roles;
+export const { reducer } = users;
 
-export default roles;
+export default users;

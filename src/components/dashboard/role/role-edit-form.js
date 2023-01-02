@@ -3,61 +3,47 @@ import toast from "react-hot-toast";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import {
+  Autocomplete,
   Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
-  Checkbox,
   Divider,
-  FormControl,
   Grid,
-  InputLabel,
-  ListItemText,
-  MenuItem,
-  OutlinedInput,
-  Select,
   TextField,
 } from "@mui/material";
 import { useDispatch, useSelector } from "src/store";
 import { createRole, getPermissions, updateRole } from "@services/index";
 import { useEffect } from "react";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
 export const RoleEditForm = (props) => {
   const { role, mode = "edit", ...other } = props;
 
   const dispatch = useDispatch();
 
-  const { perms } = useSelector((state) => state.roles);
+  const { permissions } = useSelector((state) => state.roles);
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
+      id: role?.id || "",
       name: role?.name || "",
       permissions: role?.permissions || [""],
       submit: null,
     },
     validationSchema: Yup.object({
       name: Yup.string().max(255),
-      perms: Yup.array(),
+      permissions: Yup.array(),
     }),
     onSubmit: async (values, helpers) => {
       try {
+        const permissionKeys = values.permissions.map((item) => item.key);
+        const newValues = { ...values, permissions: permissionKeys };
         if (mode === "create") {
-          dispatch(createRole(values));
+          dispatch(createRole(newValues));
         } else {
-          dispatch(updateRole(values));
+          dispatch(updateRole(newValues));
         }
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
@@ -96,31 +82,25 @@ export const RoleEditForm = (props) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <FormControl fullWidth>
-                <InputLabel id="perm">Permissions</InputLabel>
-                <Select
-                  labelId="perm"
-                  id="demo-multiple-checkbox"
-                  multiple
-                  name="permissions"
-                  value={formik.values.permissions}
-                  onChange={formik.handleChange}
-                  input={<OutlinedInput label="Permissions" />}
-                  renderValue={(selected) => selected.join(", ")}
-                  MenuProps={MenuProps}
-                >
-                  {perms?.map((name) => (
-                    <MenuItem key={name.key} value={name.key}>
-                      <Checkbox
-                        checked={
-                          formik.values.permissions.indexOf(name.key) > -1
-                        }
-                      />
-                      <ListItemText primary={name.value} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <Autocomplete
+                fullWidth
+                multiple
+                value={formik.values.permissions}
+                options={permissions}
+                onChange={(event, value) =>
+                  formik.setFieldValue("permissions", value)
+                }
+                getOptionLabel={(option) => option.value || option.key}
+                filterSelectedOptions
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    label="Выбрать роль"
+                    variant="outlined"
+                  />
+                )}
+              />
             </Grid>
           </Grid>
         </CardContent>

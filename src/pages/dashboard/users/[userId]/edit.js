@@ -3,20 +3,20 @@ import NextLink from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "src/store";
-import { getRole } from "@services/roles.service";
+import { getUser } from "@services/users.service";
 import { Box, Container, Link, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AuthGuard } from "../../../../components/authentication/auth-guard";
 import { DashboardLayout } from "../../../../components/dashboard/dashboard-layout";
-import { RoleEditForm } from "../../../../components/dashboard/role/role-edit-form";
+import { UserEditForm } from "../../../../components/dashboard/user/user-edit-form";
 import { gtm } from "../../../../lib/gtm";
 
-const RoleEdit = () => {
+const UserEdit = () => {
   const dispatch = useDispatch();
 
   const { query } = useRouter();
 
-  const { role } = useSelector((state) => state.roles);
+  const { user } = useSelector((state) => state.users);
 
   useEffect(() => {
     gtm.push({ event: "page_view" });
@@ -24,20 +24,20 @@ const RoleEdit = () => {
 
   useEffect(
     () => {
-      dispatch(getRole({ id: query?.roleId }));
+      dispatch(getUser({ id: query?.userId }));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  if (!role) {
+  if (!user) {
     return null;
   }
 
   return (
     <>
       <Head>
-        <title>Dashboard: Role Edit</title>
+        <title>Dashboard: User Edit</title>
       </Head>
       <Box
         component="main"
@@ -49,7 +49,7 @@ const RoleEdit = () => {
       >
         <Container maxWidth="md">
           <Box sx={{ mb: 4, cursor: "pointer" }}>
-            <NextLink href="/dashboard/roles" passHref>
+            <NextLink href="/dashboard/users" passHref>
               <Link
                 color="textPrimary"
                 component="a"
@@ -59,13 +59,13 @@ const RoleEdit = () => {
                 }}
               >
                 <ArrowBackIcon fontSize="small" sx={{ mr: 1 }} />
-                <Typography variant="subtitle2">Roles</Typography>
+                <Typography variant="subtitle2">Users</Typography>
               </Link>
             </NextLink>
           </Box>
 
           <Box mt={3}>
-            <RoleEditForm role={role} mode="edit" />
+            <UserEditForm user={user} mode="edit" />
           </Box>
         </Container>
       </Box>
@@ -73,10 +73,10 @@ const RoleEdit = () => {
   );
 };
 
-RoleEdit.getLayout = (page) => (
+UserEdit.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 
-export default RoleEdit;
+export default UserEdit;
