@@ -73,7 +73,6 @@ export const UserEditForm = (props) => {
           }
           setStatus({ success: true });
           setSubmitting(false);
-          router.push("/dashboard/users");
         } catch (err) {
           console.error(err);
           toast.error("Something went wrong!");
@@ -139,7 +138,7 @@ export const UserEditForm = (props) => {
                         onChange={handleChange}
                         required
                         name="password"
-                        value={values.password}
+                        value={values?.password}
                         id="outlined-adornment-password"
                         type={showPassword ? "text" : "password"}
                         endAdornment={
