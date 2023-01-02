@@ -19,47 +19,47 @@ import { PencilAlt as PencilAltIcon } from "../../../icons/pencil-alt";
 import { getInitials } from "../../../utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
 
-export const RoleListTable = (props) => {
+export const UserListTable = (props) => {
   const {
-    roles,
-    rolesCount,
+    users,
+    usersCount,
     onPageChange,
     onRowsPerPageChange,
     page,
     rowsPerPage,
     ...other
   } = props;
-  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
-  // Reset selected roles when roles change
+  // Reset selected users when users change
   useEffect(
     () => {
-      if (selectedRoles.length) {
-        setSelectedRoles([]);
+      if (selectedUsers.length) {
+        setSelectedUsers([]);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [roles]
+    [users]
   );
 
-  const handleSelectAllRoles = (event) => {
-    setSelectedRoles(event.target.checked ? roles.map((role) => role.id) : []);
+  const handleSelectAllUsers = (event) => {
+    setSelectedUsers(event.target.checked ? users.map((user) => user.id) : []);
   };
 
-  const handleSelectOneRole = (event, roleId) => {
-    if (!selectedRoles.includes(roleId)) {
-      setSelectedRoles((prevSelected) => [...prevSelected, roleId]);
+  const handleSelectOneUser = (event, userId) => {
+    if (!selectedUsers.includes(userId)) {
+      setSelectedUsers((prevSelected) => [...prevSelected, userId]);
     } else {
-      setSelectedRoles((prevSelected) =>
-        prevSelected.filter((id) => id !== roleId)
+      setSelectedUsers((prevSelected) =>
+        prevSelected.filter((id) => id !== userId)
       );
     }
   };
 
-  const enableBulkActions = selectedRoles.length > 0;
-  const selectedSomeRoles =
-    selectedRoles.length > 0 && selectedRoles.length < roles.length;
-  const selectedAllRoles = selectedRoles.length === roles.length;
+  const enableBulkActions = selectedUsers.length > 0;
+  const selectedSomeUsers =
+    selectedUsers.length > 0 && selectedUsers.length < users.length;
+  const selectedAllUsers = selectedUsers.length === users.length;
 
   return (
     <div {...other}>
@@ -73,9 +73,9 @@ export const RoleListTable = (props) => {
         }}
       >
         <Checkbox
-          checked={selectedAllRoles}
-          indeterminate={selectedSomeRoles}
-          onChange={handleSelectAllRoles}
+          checked={selectedAllUsers}
+          indeterminate={selectedSomeUsers}
+          onChange={handleSelectAllUsers}
         />
         <Button size="small" sx={{ ml: 2 }}>
           Delete
@@ -92,27 +92,27 @@ export const RoleListTable = (props) => {
             <TableRow>
               <TableCell padding="checkbox">
                 <Checkbox
-                  checked={selectedAllRoles}
-                  indeterminate={selectedSomeRoles}
-                  onChange={handleSelectAllRoles}
+                  checked={selectedAllUsers}
+                  indeterminate={selectedSomeUsers}
+                  onChange={handleSelectAllUsers}
                 />
               </TableCell>
               <TableCell>Name</TableCell>
-              <TableCell>Permissions</TableCell>
+              <TableCell>Email</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {roles.map((role) => {
-              const isRoleSelected = selectedRoles.includes(role.id);
+            {users.map((user) => {
+              const isUserSelected = selectedUsers.includes(user.id);
 
               return (
-                <TableRow hover key={role.id} selected={isRoleSelected}>
+                <TableRow hover key={user.id} selected={isUserSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={isRoleSelected}
-                      onChange={(event) => handleSelectOneRole(event, role.id)}
-                      value={isRoleSelected}
+                      checked={isUserSelected}
+                      onChange={(event) => handleSelectOneUser(event, user.id)}
+                      value={isUserSelected}
                     />
                   </TableCell>
                   <TableCell>
@@ -123,41 +123,32 @@ export const RoleListTable = (props) => {
                       }}
                     >
                       <Avatar
-                        src={role.avatar}
+                        src={user.avatar}
                         sx={{
                           height: 42,
                           width: 42,
                         }}
                       >
-                        {getInitials(role.name)}
+                        {getInitials(user.name)}
                       </Avatar>
                       <Box sx={{ ml: 1 }}>
                         <NextLink
-                          href={`/dashboard/roles/${role.id}/edit`}
+                          href={`/dashboard/users/${user.id}/edit`}
                           passHref
                         >
                           <Link color="inherit" variant="subtitle2">
-                            {role.name}
+                            {user.name}
                           </Link>
                         </NextLink>
                       </Box>
                     </Box>
                   </TableCell>
 
-                  <TableCell>
-                    <NextLink
-                      href={`/dashboard/roles/${role.id}/edit`}
-                      passHref
-                    >
-                      <Button variant="contained">
-                        Посмотреть permissions
-                      </Button>
-                    </NextLink>
-                  </TableCell>
+                  <TableCell>{user.email}</TableCell>
 
                   <TableCell align="right">
                     <NextLink
-                      href={`/dashboard/roles/${role.id}/edit`}
+                      href={`/dashboard/users/${user.id}/edit`}
                       passHref
                     >
                       <IconButton component="a">
@@ -173,7 +164,7 @@ export const RoleListTable = (props) => {
       </Scrollbar>
       <TablePagination
         component="div"
-        count={rolesCount}
+        count={usersCount}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
@@ -184,9 +175,9 @@ export const RoleListTable = (props) => {
   );
 };
 
-RoleListTable.propTypes = {
-  roles: PropTypes.array.isRequired,
-  rolesCount: PropTypes.number.isRequired,
+UserListTable.propTypes = {
+  users: PropTypes.array.isRequired,
+  usersCount: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,

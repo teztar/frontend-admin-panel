@@ -9,31 +9,13 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Checkbox,
   Divider,
-  FormControl,
   Grid,
-  InputLabel,
-  ListItemText,
-  MenuItem,
-  OutlinedInput,
-  Select,
   TextField,
 } from "@mui/material";
 import { useDispatch, useSelector } from "src/store";
 import { createRole, getPermissions, updateRole } from "@services/index";
 import { useEffect } from "react";
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 export const RoleEditForm = (props) => {
   const { role, mode = "edit", ...other } = props;
@@ -61,7 +43,6 @@ export const RoleEditForm = (props) => {
         if (mode === "create") {
           dispatch(createRole(newValues));
         } else {
-          console.log({ newValues });
           dispatch(updateRole(newValues));
         }
         helpers.setStatus({ success: true });
@@ -110,46 +91,16 @@ export const RoleEditForm = (props) => {
                   formik.setFieldValue("permissions", value)
                 }
                 getOptionLabel={(option) => option.value || option.key}
-                // getOptionSelected={(option, value) => option === value.id}
-                // includeInputInList={true}
                 filterSelectedOptions
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     fullWidth
-                    label="Выбрать продукт"
+                    label="Выбрать роль"
                     variant="outlined"
                   />
                 )}
               />
-              {/* <FormControl fullWidth>
-                <InputLabel id="perm">Permissions</InputLabel>
-                <Select
-                  labelId="perm"
-                  id="demo-multiple-checkbox"
-                  multiple
-                  name="permissions"
-                  value={formik.values.permissions}
-                  onChange={formik.handleChange}
-                  input={<OutlinedInput label="Permissions" />}
-                  renderValue={(selected) => {
-                    console.log({ selected });
-                    return selected?.join(" ");
-                  }}
-                  MenuProps={MenuProps}
-                >
-                  {permissions?.map((name) => (
-                    <MenuItem key={name.key} value={name.key}>
-                      <Checkbox
-                        checked={
-                          formik.values.permissions.indexOf(name.key) > -1
-                        }
-                      />
-                      <ListItemText primary={name.value} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl> */}
             </Grid>
           </Grid>
         </CardContent>

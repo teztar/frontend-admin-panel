@@ -100,8 +100,8 @@ axios.interceptors.response.use(
     if (error.response) {
       if (error.response.status === 401) {
         localStorage.clear();
-        // history.push("/#/");
-        // window.location.reload();
+        history.push("/#/");
+        window.location.reload();
       }
       return parseError(error.response.data);
     }

@@ -12,6 +12,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import HandshakeIcon from "@mui/icons-material/Handshake";
 import { Calendar as CalendarIcon } from "../../icons/calendar";
 import { Cash as CashIcon } from "../../icons/cash";
 import { ChartBar as ChartBarIcon } from "../../icons/chart-bar";
@@ -92,12 +93,17 @@ const getSections = (t) => [
       {
         title: t("Partners"),
         path: "/dashboard/partners",
-        icon: <UsersIcon fontSize="small" />,
+        icon: <HandshakeIcon fontSize="small" />,
       },
       {
         title: t("Roles"),
         path: "/dashboard/roles",
         icon: <LockClosedIcon fontSize="small" />,
+      },
+      {
+        title: t("Users"),
+        path: "/dashboard/users",
+        icon: <UsersIcon fontSize="small" />,
       },
       {
         title: t("Customers"),

@@ -2,24 +2,17 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const getRoles = createAsyncThunk(
-  "roles/getRoles",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get("/roles");
-      return response.data;
-    } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
-      return rejectWithValue(error.error);
-    }
-  }
-);
-
-export const getRole = createAsyncThunk(
-  "roles/getRole",
+export const getUsers = createAsyncThunk(
+  "users/getUsers",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/roles/${params?.id}`);
+      const response = await axios.get("/users", {
+        params: {
+          page: params?.page ?? 1,
+          perPage: params?.perPage ?? 10,
+          search: params?.search ?? "",
+        },
+      });
       return response.data;
     } catch (error) {
       toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -28,43 +21,43 @@ export const getRole = createAsyncThunk(
   }
 );
 
-export const createRole = createAsyncThunk(
-  "roles/createRole",
-  async (values, { rejectWithValue }) => {
+export const getUser = createAsyncThunk(
+  "users/getUser",
+  async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/roles", values);
-      toast.success("Роль добавлен");
+      const response = await axios.get(`/users/${params?.id}`);
       return response.data;
     } catch (error) {
       toast.error(error?.messages[0]?.error || error?.messages[0]);
-      return rejectWithValue(error.messages);
-    }
-  }
-);
-
-export const updateRole = createAsyncThunk(
-  "roles/updateRole",
-  async (values, { rejectWithValue }) => {
-    try {
-      const response = await axios.put("/roles", values);
-      toast.success("Роль обнавлен");
-      return response.data;
-    } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
-      return rejectWithValue(error.messages);
-    }
-  }
-);
-
-export const getPermissions = createAsyncThunk(
-  "roles/getPermissions",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get("/roles/perms");
-      return response.data;
-    } catch (error) {
-      toast.error(error?.messages[0]?.name || error?.messages[0]);
       return rejectWithValue(error.error);
+    }
+  }
+);
+
+export const createUser = createAsyncThunk(
+  "users/createUser",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/users", values);
+      toast.success("Пользователь добавлен");
+      return response.data;
+    } catch (error) {
+      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.messages);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "users/updateUser",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.put("/users", values);
+      toast.success("Пользователь обнавлен");
+      return response.data;
+    } catch (error) {
+      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.messages);
     }
   }
 );

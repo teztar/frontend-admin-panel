@@ -55,7 +55,6 @@ export const updatePartner = createAsyncThunk(
       toast.success("Партнёр обнавлен");
       return response.data;
     } catch (error) {
-      console.log({ error });
       toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.messages);
     }
