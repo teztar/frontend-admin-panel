@@ -1,0 +1,67 @@
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  getClient,
+  getClients,
+  createClient,
+  updateClient,
+} from "@services/index";
+
+const initialState = {
+  clients: [],
+  client: {},
+  loading: true,
+  error: null,
+};
+
+const clients = createSlice({
+  name: "clients",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getClients.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getClients.fulfilled, (state, action) => {
+      state.loading = false;
+      state.clients = action.payload;
+    });
+    builder.addCase(getClients.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(getClient.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getClient.fulfilled, (state, action) => {
+      state.loading = false;
+      state.client = action.payload;
+    });
+    builder.addCase(getClient.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(createClient.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(createClient.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(createClient.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(updateClient.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateClient.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(updateClient.rejected, (state) => {
+      state.loading = false;
+    });
+  },
+});
+
+export const { reducer } = clients;
+
+export default clients;
