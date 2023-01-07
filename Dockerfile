@@ -3,10 +3,12 @@ FROM node:16-alpine AS build
 # Set the working directory
 WORKDIR /app
 
+RUN npm install next react react-dom
+
 # Copy the package.json file and install dependencies
 COPY package.json .
 COPY package-lock.json .
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy the rest of the source code
 COPY . .
