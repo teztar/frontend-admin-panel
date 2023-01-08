@@ -6,11 +6,10 @@ export const getPoints = createAsyncThunk(
   "points/getPoints",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/points", {
+      const response = await axios.get(`/points/${params?.partnerId}`, {
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
-          partnerId: params?.partnerId,
         },
       });
       return response.data;
