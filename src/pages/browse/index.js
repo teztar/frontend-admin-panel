@@ -1,139 +1,137 @@
-import { useEffect } from 'react';
-import Head from 'next/head';
-import NextLink from 'next/link';
-import { Box, Card, Container, Grid, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { BrowseLayout } from '../../components/browse-layout';
-import { MainLayout } from '../../components/main-layout';
-import { ExternalLink as ExternalLinkIcon } from '../../icons/external-link';
-import { gtm } from '../../lib/gtm';
+import { useEffect } from "react";
+import Head from "next/head";
+import NextLink from "next/link";
+import { Box, Card, Container, Grid, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { BrowseLayout } from "../../components/browse-layout";
+import { MainLayout } from "../../components/main-layout";
+import { ExternalLink as ExternalLinkIcon } from "../../icons/external-link";
+import { gtm } from "../../lib/gtm";
 
-const getSections = (mode) => ([
+const getSections = (mode) => [
   {
-    title: 'Data Display',
+    title: "Data Display",
     items: [
       {
-        title: 'Detail Lists',
-        subtitle: '8 components',
+        title: "Detail Lists",
+        subtitle: "8 components",
         image: `/static/browse/data-display-detail-list_${mode}.png`,
-        path: '/browse/data-display/detail-lists'
+        path: "/browse/data-display/detail-lists",
       },
       {
-        title: 'Tables',
-        subtitle: '11 components',
+        title: "Tables",
+        subtitle: "11 components",
         image: `/static/browse/data-display-tables_${mode}.png`,
-        path: '/browse/data-display/tables'
+        path: "/browse/data-display/tables",
       },
       {
-        title: 'Quick Stats',
-        subtitle: '8 components',
+        title: "Quick Stats",
+        subtitle: "8 components",
         image: `/static/browse/data-display-quick-stats_${mode}.png`,
-        path: '/browse/data-display/quick-stats'
-      }
-    ]
+        path: "/browse/data-display/quick-stats",
+      },
+    ],
   },
   {
-    title: 'Lists',
+    title: "Lists",
     items: [
       {
-        title: 'Grouped Lists',
-        subtitle: '11 components',
+        title: "Grouped Lists",
+        subtitle: "11 components",
         image: `/static/browse/lists-grouped_${mode}.png`,
-        path: '/browse/lists/grouped-lists'
+        path: "/browse/lists/grouped-lists",
       },
       {
-        title: 'Grid Lists',
-        subtitle: '6 components',
+        title: "Grid Lists",
+        subtitle: "6 components",
         image: `/static/browse/lists-grid_${mode}.png`,
-        path: '/browse/lists/grid-lists'
-      }
-    ]
+        path: "/browse/lists/grid-lists",
+      },
+    ],
   },
   {
-    title: 'Forms',
+    title: "Forms",
     items: [
       {
-        title: 'Forms',
-        subtitle: '17 components',
+        title: "Forms",
+        subtitle: "17 components",
         image: `/static/browse/forms_${mode}.png`,
-        path: '/browse/forms'
-      }
-    ]
+        path: "/browse/forms",
+      },
+    ],
   },
   {
-    title: 'Overlays',
+    title: "Overlays",
     items: [
       {
-        title: 'Modals',
-        subtitle: '12 components',
+        title: "Modals",
+        subtitle: "12 components",
         image: `/static/browse/overlays-dialog_${mode}.png`,
-        path: '/browse/modals'
-      }
-    ]
+        path: "/browse/modals",
+      },
+    ],
   },
   {
-    title: 'Charts',
+    title: "Charts",
     items: [
       {
-        title: 'Charts',
-        subtitle: '12 components',
+        title: "Charts",
+        subtitle: "12 components",
         image: `/static/browse/charts_${mode}.png`,
-        path: '/browse/charts'
-      }
-    ]
+        path: "/browse/charts",
+      },
+    ],
   },
   {
-    title: 'Components',
+    title: "Components",
     items: [
       {
-        title: 'Buttons',
-        subtitle: '',
+        title: "Buttons",
+        subtitle: "",
         image: `/static/browse/base-buttons_${mode}.png`,
-        path: '/browse/buttons'
+        path: "/browse/buttons",
       },
       {
-        title: 'Typography',
-        subtitle: '',
+        title: "Typography",
+        subtitle: "",
         image: `/static/browse/base-typography_${mode}.png`,
-        path: '/browse/typography'
+        path: "/browse/typography",
       },
       {
-        title: 'Colors',
-        subtitle: '',
+        title: "Colors",
+        subtitle: "",
         image: `/static/browse/base-colors_${mode}.png`,
-        path: '/browse/colors'
+        path: "/browse/colors",
       },
       {
-        title: 'Inputs',
-        subtitle: '',
+        title: "Inputs",
+        subtitle: "",
         image: `/static/browse/base-inputs_${mode}.png`,
-        path: '/browse/inputs'
-      }
-    ]
-  }
-]);
+        path: "/browse/inputs",
+      },
+    ],
+  },
+];
 
 const Browse = () => {
   const theme = useTheme();
   const sections = getSections(theme.palette.mode);
 
   useEffect(() => {
-    gtm.push({ event: 'page_view' });
+    gtm.push({ event: "page_view" });
   }, []);
 
   return (
     <>
       <Head>
-        <title>
-          Browse | Material Kit Pro
-        </title>
+        <title>Browse</title>
       </Head>
       <Box
         component="main"
         sx={{
-          backgroundColor: 'background.paper',
+          backgroundColor: "background.paper",
           flexGrow: 1,
-          py: 8
+          py: 8,
         }}
       >
         <Container maxWidth="lg">
@@ -145,103 +143,70 @@ const Browse = () => {
               sx={{
                 mt: 0,
                 pb: 8,
-                '& + &': {
+                "& + &": {
                   borderTop: 1,
-                  borderColor: 'divider',
-                  pt: 5
-                }
+                  borderColor: "divider",
+                  pt: 5,
+                },
               }}
             >
-              <Grid
-                item
-                lg={3}
-                xs={12}
-              >
-                <Typography
-                  sx={{ fontWeight: 600 }}
-                  variant="h5"
-                >
+              <Grid item lg={3} xs={12}>
+                <Typography sx={{ fontWeight: 600 }} variant="h5">
                   {section.title}
                 </Typography>
               </Grid>
-              <Grid
-                container
-                item
-                lg={9}
-                spacing={3}
-                xs={12}
-              >
+              <Grid container item lg={9} spacing={3} xs={12}>
                 {section.items.map((item) => (
-                  <Grid
-                    item
-                    key={`item-${item.title}`}
-                    md={4}
-                    sm={6}
-                    xs={12}
-                  >
-                    <NextLink
-                      href={item.path}
-                      passHref
-                    >
+                  <Grid item key={`item-${item.title}`} md={4} sm={6} xs={12}>
+                    <NextLink href={item.path} passHref>
                       <Card
                         component="a"
-                        target={item.newTab
-                          ? '_blank'
-                          : '_self'}
+                        target={item.newTab ? "_blank" : "_self"}
                         sx={{
-                          display: 'block',
-                          textDecoration: 'none',
+                          display: "block",
+                          textDecoration: "none",
                           gridColumn: {
-                            xs: 'span 3',
-                            sm: 'span 1'
-                          }
+                            xs: "span 3",
+                            sm: "span 1",
+                          },
                         }}
                         variant="outlined"
                       >
                         <Box sx={{ p: 2 }}>
                           <Box
                             sx={{
-                              position: 'relative',
-                              pt: 'calc(300 / 500 * 100%)',
-                              '& img': {
-                                height: 'auto',
-                                position: 'absolute',
+                              position: "relative",
+                              pt: "calc(300 / 500 * 100%)",
+                              "& img": {
+                                height: "auto",
+                                position: "absolute",
                                 top: 0,
-                                width: '100%'
-                              }
+                                width: "100%",
+                              },
                             }}
                           >
-                            <img
-                              alt=""
-                              src={item.image}
-                            />
+                            <img alt="" src={item.image} />
                           </Box>
                           <Box
                             sx={{
-                              alignItems: 'flex-end',
-                              display: 'flex'
+                              alignItems: "flex-end",
+                              display: "flex",
                             }}
                           >
-                            <Typography
-                              sx={{ mt: 2 }}
-                              variant="subtitle2"
-                            >
+                            <Typography sx={{ mt: 2 }} variant="subtitle2">
                               {item.title}
                             </Typography>
                             {item.newTab && (
                               <ExternalLinkIcon
                                 sx={{
-                                  color: 'text.secondary',
-                                  ml: 1.5
+                                  color: "text.secondary",
+                                  ml: 1.5,
                                 }}
                                 fontSize="small"
                               />
                             )}
                           </Box>
-                          <Typography
-                            color="textSecondary"
-                            variant="body2"
-                          >
+                          <Typography color="textSecondary" variant="body2">
                             {item.subtitle}
                           </Typography>
                         </Box>
@@ -260,9 +225,7 @@ const Browse = () => {
 
 Browse.getLayout = (page) => (
   <MainLayout>
-    <BrowseLayout>
-      {page}
-    </BrowseLayout>
+    <BrowseLayout>{page}</BrowseLayout>
   </MainLayout>
 );
 

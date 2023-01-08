@@ -14,7 +14,7 @@ const UserCreate = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: User Create | Material Kit Pro</title>
+        <title>Dashboard: User Create</title>
       </Head>
       <Box
         component="main"

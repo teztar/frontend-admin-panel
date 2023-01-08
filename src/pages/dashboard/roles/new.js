@@ -14,7 +14,7 @@ const RoleCreate = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Role Create | Material Kit Pro</title>
+        <title>Dashboard: Role Create</title>
       </Head>
       <Box
         component="main"

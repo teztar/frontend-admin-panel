@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Head from 'next/head';
-import { endOfDay, startOfDay } from 'date-fns';
+import { useCallback, useEffect, useRef, useState } from "react";
+import Head from "next/head";
+import { endOfDay, startOfDay } from "date-fns";
 import {
   Box,
   Button,
@@ -8,112 +8,119 @@ import {
   Grid,
   Switch,
   Typography,
-  useMediaQuery
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { invoiceApi } from '../../../__fake-api__/invoice-api';
-import { AuthGuard } from '../../../components/authentication/auth-guard';
-import { DashboardLayout } from '../../../components/dashboard/dashboard-layout';
-import { InvoiceListFilters } from '../../../components/dashboard/invoice/invoice-list-filters';
-import { InvoiceListTable } from '../../../components/dashboard/invoice/invoice-list-table';
-import { useMounted } from '../../../hooks/use-mounted';
-import { Filter as FilterIcon } from '../../../icons/filter';
-import { Plus as PlusIcon } from '../../../icons/plus';
-import { gtm } from '../../../lib/gtm';
+  useMediaQuery,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { invoiceApi } from "../../../__fake-api__/invoice-api";
+import { AuthGuard } from "../../../components/authentication/auth-guard";
+import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
+import { InvoiceListFilters } from "../../../components/dashboard/invoice/invoice-list-filters";
+import { InvoiceListTable } from "../../../components/dashboard/invoice/invoice-list-table";
+import { useMounted } from "../../../hooks/use-mounted";
+import { Filter as FilterIcon } from "../../../icons/filter";
+import { Plus as PlusIcon } from "../../../icons/plus";
+import { gtm } from "../../../lib/gtm";
 
-const applyFilters = (invoices, filters) => invoices.filter((invoice) => {
-  if (filters.query) {
-    const queryMatched = invoice.number.toLowerCase().includes(filters.query.toLowerCase());
+const applyFilters = (invoices, filters) =>
+  invoices.filter((invoice) => {
+    if (filters.query) {
+      const queryMatched = invoice.number
+        .toLowerCase()
+        .includes(filters.query.toLowerCase());
 
-    if (!queryMatched) {
+      if (!queryMatched) {
+        return false;
+      }
+    }
+
+    if (filters.startDate && invoice.issueDate) {
+      // Convert the filter start date to timestamp to be able to compare with the
+      // timestamp from the invoice
+      const startDateMatched =
+        endOfDay(invoice.issueDate) >= startOfDay(filters.startDate.getTime());
+
+      if (!startDateMatched) {
+        return false;
+      }
+    }
+
+    if (filters.endDate && invoice.issueDate) {
+      // Convert the filter end date to timestamp to be able to compare with the
+      // timestamp from the invoice
+      const endDateMatched =
+        startOfDay(invoice.issueDate) <= endOfDay(filters.endDate.getTime());
+
+      if (!endDateMatched) {
+        return false;
+      }
+    }
+
+    if (filters.customer && filters.customer.length > 0) {
+      const customerMatched = filters.customer.includes(invoice.customer.name);
+
+      if (!customerMatched) {
+        return false;
+      }
+    }
+
+    if (filters.status === "paid" && invoice.status !== "paid") {
       return false;
     }
-  }
 
-  if (filters.startDate && invoice.issueDate) {
-    // Convert the filter start date to timestamp to be able to compare with the
-    // timestamp from the invoice
-    const startDateMatched = endOfDay(invoice.issueDate) >= startOfDay(filters.startDate.getTime());
+    return true;
+  });
 
-    if (!startDateMatched) {
-      return false;
-    }
-  }
+const applyPagination = (invoices, page, rowsPerPage) =>
+  invoices.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-  if (filters.endDate && invoice.issueDate) {
-    // Convert the filter end date to timestamp to be able to compare with the
-    // timestamp from the invoice
-    const endDateMatched = startOfDay(invoice.issueDate) <= endOfDay(filters.endDate.getTime());
-
-    if (!endDateMatched) {
-      return false;
-    }
-  }
-
-  if (filters.customer && filters.customer.length > 0) {
-    const customerMatched = filters.customer.includes(invoice.customer.name);
-
-    if (!customerMatched) {
-      return false;
-    }
-  }
-
-  if (filters.status === 'paid' && invoice.status !== 'paid') {
-    return false;
-  }
-
-  return true;
-});
-
-const applyPagination = (invoices, page, rowsPerPage) => invoices.slice(page * rowsPerPage,
-  page * rowsPerPage + rowsPerPage);
-
-const InvoiceListInner = styled('div',
-  { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    flexGrow: 1,
-    overflow: 'hidden',
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-    zIndex: 1,
-    [theme.breakpoints.up('lg')]: {
-      marginLeft: -380
+const InvoiceListInner = styled("div", {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  flexGrow: 1,
+  overflow: "hidden",
+  paddingLeft: theme.spacing(3),
+  paddingRight: theme.spacing(3),
+  paddingTop: theme.spacing(8),
+  paddingBottom: theme.spacing(8),
+  zIndex: 1,
+  [theme.breakpoints.up("lg")]: {
+    marginLeft: -380,
+  },
+  transition: theme.transitions.create("margin", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    [theme.breakpoints.up("lg")]: {
+      marginLeft: 0,
     },
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
     }),
-    ...(open && {
-      [theme.breakpoints.up('lg')]: {
-        marginLeft: 0
-      },
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen
-      })
-    })
-  }));
+  }),
+}));
 
 const InvoiceList = () => {
   const isMounted = useMounted();
   const rootRef = useRef(null);
-  const mdUp = useMediaQuery((theme) => theme.breakpoints.up('md'), { noSsr: true });
+  const mdUp = useMediaQuery((theme) => theme.breakpoints.up("md"), {
+    noSsr: true,
+  });
   const [group, setGroup] = useState(true);
   const [invoices, setInvoices] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openFilters, setOpenFilters] = useState(mdUp);
   const [filters, setFilters] = useState({
-    query: '',
+    query: "",
     startDate: null,
     endDate: null,
-    customer: []
+    customer: [],
   });
 
   useEffect(() => {
-    gtm.push({ event: 'page_view' });
+    gtm.push({ event: "page_view" });
   }, []);
 
   const getInvoices = useCallback(async () => {
@@ -128,11 +135,13 @@ const InvoiceList = () => {
     }
   }, [isMounted]);
 
-  useEffect(() => {
+  useEffect(
+    () => {
       getInvoices();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+    []
+  );
 
   const handleChangeGroup = (event) => {
     setGroup(event.target.checked);
@@ -161,23 +170,25 @@ const InvoiceList = () => {
 
   // Usually query is done on backend with indexing solutions
   const filteredInvoices = applyFilters(invoices, filters);
-  const paginatedInvoices = applyPagination(filteredInvoices, page, rowsPerPage);
+  const paginatedInvoices = applyPagination(
+    filteredInvoices,
+    page,
+    rowsPerPage
+  );
 
   return (
     <>
       <Head>
-        <title>
-          Dashboard: Invoice List | Material Kit Pro
-        </title>
+        <title>Dashboard: Invoice List</title>
       </Head>
       <Box
         component="main"
         ref={rootRef}
         sx={{
-          backgroundColor: 'background.default',
-          display: 'flex',
+          backgroundColor: "background.default",
+          display: "flex",
           flexGrow: 1,
-          overflow: 'hidden'
+          overflow: "hidden",
         }}
       >
         <InvoiceListFilters
@@ -189,20 +200,11 @@ const InvoiceList = () => {
         />
         <InvoiceListInner open={openFilters}>
           <Box sx={{ mb: 3 }}>
-            <Grid
-              container
-              spacing={3}
-              justifyContent="space-between"
-            >
+            <Grid container spacing={3} justifyContent="space-between">
               <Grid item>
-                <Typography variant="h4">
-                  Invoices
-                </Typography>
+                <Typography variant="h4">Invoices</Typography>
               </Grid>
-              <Grid
-                item
-                sx={{ m: -1 }}
-              >
+              <Grid item sx={{ m: -1 }}>
                 <Button
                   endIcon={<FilterIcon fontSize="small" />}
                   onClick={handleToggleFilters}
@@ -222,18 +224,15 @@ const InvoiceList = () => {
             </Grid>
             <Box
               sx={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                mt: 3
+                display: "flex",
+                justifyContent: "flex-end",
+                mt: 3,
               }}
             >
               <FormControlLabel
-                control={(
-                  <Switch
-                    checked={group}
-                    onChange={handleChangeGroup}
-                  />
-                )}
+                control={
+                  <Switch checked={group} onChange={handleChangeGroup} />
+                }
                 label="Show groups"
               />
             </Box>
@@ -255,9 +254,7 @@ const InvoiceList = () => {
 
 InvoiceList.getLayout = (page) => (
   <AuthGuard>
-    <DashboardLayout>
-      {page}
-    </DashboardLayout>
+    <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 

@@ -210,7 +210,7 @@ const PartnerList = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Partner List | Material Kit Pro</title>
+        <title>Dashboard: Partner List</title>
       </Head>
       <Box
         component="main"

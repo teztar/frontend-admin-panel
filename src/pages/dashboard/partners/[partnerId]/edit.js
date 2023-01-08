@@ -8,7 +8,7 @@ import { DashboardLayout } from "../../../../components/dashboard/dashboard-layo
 import { PartnerEditForm } from "../../../../components/dashboard/partner/partner-edit-form";
 import { gtm } from "../../../../lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getPartner } from "@services/partners.service";
+import { getPartner } from "@services/partners/partners.service";
 import { useRouter } from "next/router";
 
 const PartnerEdit = () => {

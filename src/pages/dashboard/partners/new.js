@@ -14,7 +14,7 @@ const PartnerCreate = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Partner Create | Material Kit Pro</title>
+        <title>Dashboard: Partner Create</title>
       </Head>
       <Box
         component="main"

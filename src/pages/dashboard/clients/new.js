@@ -14,7 +14,7 @@ const ClientCreate = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Client Create | Material Kit Pro</title>
+        <title>Dashboard: Client Create</title>
       </Head>
       <Box
         component="main"

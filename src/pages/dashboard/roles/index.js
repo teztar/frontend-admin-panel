@@ -209,7 +209,7 @@ const RoleList = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Role List | Material Kit Pro</title>
+        <title>Dashboard: Role List</title>
       </Head>
       <Box
         component="main"

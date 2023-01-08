@@ -1,20 +1,20 @@
-import { useCallback, useEffect, useState } from 'react';
-import Head from 'next/head';
-import { Box, Container, Typography } from '@mui/material';
-import { socialApi } from '../../../__fake-api__/social-api';
-import { AuthGuard } from '../../../components/authentication/auth-guard';
-import { DashboardLayout } from '../../../components/dashboard/dashboard-layout';
-import { SocialPostAdd } from '../../../components/dashboard/social/social-post-add';
-import { SocialPostCard } from '../../../components/dashboard/social/social-post-card';
-import { useMounted } from '../../../hooks/use-mounted';
-import { gtm } from '../../../lib/gtm';
+import { useCallback, useEffect, useState } from "react";
+import Head from "next/head";
+import { Box, Container, Typography } from "@mui/material";
+import { socialApi } from "../../../__fake-api__/social-api";
+import { AuthGuard } from "../../../components/authentication/auth-guard";
+import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
+import { SocialPostAdd } from "../../../components/dashboard/social/social-post-add";
+import { SocialPostCard } from "../../../components/dashboard/social/social-post-card";
+import { useMounted } from "../../../hooks/use-mounted";
+import { gtm } from "../../../lib/gtm";
 
 const SocialFeed = () => {
   const isMounted = useMounted();
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    gtm.push({ event: 'page_view' });
+    gtm.push({ event: "page_view" });
   }, []);
 
   const getPosts = useCallback(async () => {
@@ -29,32 +29,29 @@ const SocialFeed = () => {
     }
   }, [isMounted]);
 
-  useEffect(() => {
+  useEffect(
+    () => {
       getPosts();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+    []
+  );
 
   return (
     <>
       <Head>
-        <title>
-          Dashboard: Social Feed | Material Kit Pro
-        </title>
+        <title>Dashboard: Social Feed</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: 8,
         }}
       >
         <Container maxWidth="lg">
           <Box sx={{ mb: 3 }}>
-            <Typography
-              color="textSecondary"
-              variant="overline"
-            >
+            <Typography color="textSecondary" variant="overline">
               Social Feed
             </Typography>
             <Typography variant="h4">
@@ -63,10 +60,7 @@ const SocialFeed = () => {
           </Box>
           <SocialPostAdd />
           {posts.map((post) => (
-            <Box
-              key={post.id}
-              sx={{ mt: 3 }}
-            >
+            <Box key={post.id} sx={{ mt: 3 }}>
               <SocialPostCard
                 authorAvatar={post.author.avatar}
                 authorName={post.author.name}
@@ -87,9 +81,7 @@ const SocialFeed = () => {
 
 SocialFeed.getLayout = (page) => (
   <AuthGuard>
-    <DashboardLayout>
-      {page}
-    </DashboardLayout>
+    <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 
