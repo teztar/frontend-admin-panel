@@ -13,6 +13,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import HandshakeIcon from "@mui/icons-material/Handshake";
+import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import { Calendar as CalendarIcon } from "../../icons/calendar";
 import { Cash as CashIcon } from "../../icons/cash";
 import { ChartBar as ChartBarIcon } from "../../icons/chart-bar";
@@ -104,6 +105,11 @@ const getSections = (t) => [
         title: t("Users"),
         path: "/dashboard/users",
         icon: <UsersIcon fontSize="small" />,
+      },
+      {
+        title: t("Bonuses"),
+        path: "/dashboard/bonuses",
+        icon: <CardGiftcardIcon fontSize="small" />,
       },
       {
         title: t("Clients"),

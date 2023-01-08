@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
-import Head from 'next/head';
-import NextLink from 'next/link';
+import { useCallback, useEffect, useState } from "react";
+import Head from "next/head";
+import NextLink from "next/link";
 import {
   Avatar,
   Box,
@@ -11,28 +11,28 @@ import {
   Grid,
   IconButton,
   Link,
-  Typography
-} from '@mui/material';
-import { jobApi } from '../../../__fake-api__/job-api';
-import { AuthGuard } from '../../../components/authentication/auth-guard';
-import { DashboardLayout } from '../../../components/dashboard/dashboard-layout';
-import { JobsBrowseFilter } from '../../../components/dashboard/jobs/jobs-browse-filter';
-import { CompanyJobs } from '../../../components/dashboard/jobs/company-jobs';
-import { useMounted } from '../../../hooks/use-mounted';
-import { BadgeCheckOutlined as BadgeCheckOutlinedIcon } from '../../../icons/badge-check-outlined';
-import { ChevronLeft as ChevronLeftIcon } from '../../../icons/chevron-left';
-import { ChevronRight as ChevronRightIcon } from '../../../icons/chevron-right';
-import { Star as StarIcon } from '../../../icons/star';
-import { Users as UsersIcon } from '../../../icons/users';
-import { gtm } from '../../../lib/gtm';
-import { getInitials } from '../../../utils/get-initials';
+  Typography,
+} from "@mui/material";
+import { jobApi } from "../../../__fake-api__/job-api";
+import { AuthGuard } from "../../../components/authentication/auth-guard";
+import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
+import { JobsBrowseFilter } from "../../../components/dashboard/jobs/jobs-browse-filter";
+import { CompanyJobs } from "../../../components/dashboard/jobs/company-jobs";
+import { useMounted } from "../../../hooks/use-mounted";
+import { BadgeCheckOutlined as BadgeCheckOutlinedIcon } from "../../../icons/badge-check-outlined";
+import { ChevronLeft as ChevronLeftIcon } from "../../../icons/chevron-left";
+import { ChevronRight as ChevronRightIcon } from "../../../icons/chevron-right";
+import { Star as StarIcon } from "../../../icons/star";
+import { Users as UsersIcon } from "../../../icons/users";
+import { gtm } from "../../../lib/gtm";
+import { getInitials } from "../../../utils/get-initials";
 
 const JobBrowse = () => {
   const isMounted = useMounted();
   const [companies, setCompanies] = useState([]);
 
   useEffect(() => {
-    gtm.push({ event: 'page_view' });
+    gtm.push({ event: "page_view" });
   }, []);
 
   const getCompanies = useCallback(async () => {
@@ -47,24 +47,24 @@ const JobBrowse = () => {
     }
   }, [isMounted]);
 
-  useEffect(() => {
+  useEffect(
+    () => {
       getCompanies();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+    []
+  );
 
   return (
     <>
       <Head>
-        <title>
-          Dashboard: Job Browse | Material Kit Pro
-        </title>
+        <title>Dashboard: Job Browse</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: 8,
         }}
       >
         <Container maxWidth="md">
@@ -72,29 +72,18 @@ const JobBrowse = () => {
             alignItems="center"
             container
             sx={{
-              backgroundColor: 'neutral.900',
+              backgroundColor: "neutral.900",
               borderRadius: 1,
-              color: '#FFFFFF',
+              color: "#FFFFFF",
               px: 4,
-              py: 8
+              py: 8,
             }}
           >
-            <Grid
-              item
-              xs={12}
-              sm={7}
-            >
-              <Typography
-                color="inherit"
-                variant="h3"
-              >
+            <Grid item xs={12} sm={7}>
+              <Typography color="inherit" variant="h3">
                 Reach 50K+ potential candidates.
               </Typography>
-              <Typography
-                color="neutral.500"
-                sx={{ mt: 2 }}
-                variant="body1"
-              >
+              <Typography color="neutral.500" sx={{ mt: 2 }} variant="body1">
                 Post your job today for free. Promotions start at $99.
               </Typography>
               <Button
@@ -111,9 +100,9 @@ const JobBrowse = () => {
               sm={5}
               sx={{
                 display: {
-                  xs: 'none',
-                  sm: 'block'
-                }
+                  xs: "none",
+                  sm: "block",
+                },
               }}
             >
               <img
@@ -127,34 +116,28 @@ const JobBrowse = () => {
           </Box>
           <div>
             {companies.map((company) => (
-              <Card
-                key={company.id}
-                sx={{ mt: 4 }}
-              >
+              <Card key={company.id} sx={{ mt: 4 }}>
                 <CardContent>
                   <Box
                     sx={{
-                      display: 'flex',
+                      display: "flex",
                       flexDirection: {
-                        xs: 'column',
-                        sm: 'row'
-                      }
+                        xs: "column",
+                        sm: "row",
+                      },
                     }}
                   >
-                    <NextLink
-                      href="/dashboard/jobs/companies/1"
-                      passHref
-                    >
+                    <NextLink href="/dashboard/jobs/companies/1" passHref>
                       <Avatar
                         component="a"
                         src={company.logo}
                         sx={{
-                          background: 'transparent',
+                          background: "transparent",
                           mr: 2,
                           mb: {
                             xs: 2,
-                            md: 0
-                          }
+                            md: 0,
+                          },
                         }}
                         variant="rounded"
                       >
@@ -162,14 +145,8 @@ const JobBrowse = () => {
                       </Avatar>
                     </NextLink>
                     <div>
-                      <NextLink
-                        href="/dashboard/jobs/companies/1"
-                        passHref
-                      >
-                        <Link
-                          color="textPrimary"
-                          variant="h6"
-                        >
+                      <NextLink href="/dashboard/jobs/companies/1" passHref>
+                        <Link color="textPrimary" variant="h6">
                           {company.name}
                         </Link>
                       </NextLink>
@@ -178,20 +155,20 @@ const JobBrowse = () => {
                       </Typography>
                       <Box
                         sx={{
-                          alignItems: 'center',
-                          display: 'flex',
-                          flexWrap: 'wrap',
+                          alignItems: "center",
+                          display: "flex",
+                          flexWrap: "wrap",
                           ml: -3,
-                          '& > *': {
+                          "& > *": {
                             ml: 3,
-                            mt: 1
-                          }
+                            mt: 1,
+                          },
                         }}
                       >
                         <Box
                           sx={{
-                            alignItems: 'center',
-                            display: 'flex'
+                            alignItems: "center",
+                            display: "flex",
                           }}
                         >
                           <UsersIcon
@@ -209,8 +186,8 @@ const JobBrowse = () => {
                         </Box>
                         <Box
                           sx={{
-                            alignItems: 'center',
-                            display: 'flex'
+                            alignItems: "center",
+                            display: "flex",
                           }}
                         >
                           <StarIcon
@@ -230,8 +207,8 @@ const JobBrowse = () => {
                         {company.isVerified && (
                           <Box
                             sx={{
-                              alignItems: 'center',
-                              display: 'flex'
+                              alignItems: "center",
+                              display: "flex",
                             }}
                           >
                             <BadgeCheckOutlinedIcon
@@ -260,11 +237,11 @@ const JobBrowse = () => {
           </div>
           <Box
             sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
+              display: "flex",
+              justifyContent: "flex-end",
               mt: 4,
               px: 3,
-              py: 2
+              py: 2,
             }}
           >
             <IconButton disabled>
@@ -282,9 +259,7 @@ const JobBrowse = () => {
 
 JobBrowse.getLayout = (page) => (
   <AuthGuard>
-    <DashboardLayout>
-      {page}
-    </DashboardLayout>
+    <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 

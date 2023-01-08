@@ -209,7 +209,7 @@ const ClientList = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Client List | Material Kit Pro</title>
+        <title>Dashboard: Client List</title>
       </Head>
       <Box
         component="main"

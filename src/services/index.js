@@ -3,7 +3,14 @@ export {
   getPartners,
   createPartner,
   updatePartner,
-} from "./partners.service";
+} from "./partners/partners.service";
+
+export {
+  getPoint,
+  getPoints,
+  createPoint,
+  updatePoint,
+} from "./partners/points.service";
 
 export {
   getRole,
@@ -14,9 +21,17 @@ export {
 } from "./roles.service";
 
 export { getUser, getUsers, createUser, updateUser } from "./users.service";
+
 export {
   getClient,
   getClients,
   createClient,
   updateClient,
 } from "./clients.service";
+
+export {
+  getBonus,
+  getBonuses,
+  createBonus,
+  updateBonus,
+} from "./bonuses.service";

@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import NextLink from "next/link";
 import Head from "next/head";
 import {
@@ -15,20 +16,21 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { customerApi } from "../../../../__fake-api__/customer-api";
 import { AuthGuard } from "../../../../components/authentication/auth-guard";
 import { DashboardLayout } from "../../../../components/dashboard/dashboard-layout";
-import { CustomerBasicDetails } from "../../../../components/dashboard/customer/customer-basic-details";
-import { CustomerDataManagement } from "../../../../components/dashboard/customer/customer-data-management";
-import { CustomerEmailsSummary } from "../../../../components/dashboard/customer/customer-emails-summary";
-import { CustomerInvoices } from "../../../../components/dashboard/customer/customer-invoices";
-import { CustomerPayment } from "../../../../components/dashboard/customer/customer-payment";
-import { CustomerLogs } from "../../../../components/dashboard/customer/customer-logs";
+import { PartnerBasicDetails } from "../../../../components/dashboard/partner/partner-basic-details";
+import { PartnerDataManagement } from "../../../../components/dashboard/partner/partner-data-management";
+import { PartnerEmailsSummary } from "../../../../components/dashboard/partner/partner-emails-summary";
+import { PartnerInvoices } from "../../../../components/dashboard/partner/partner-invoices";
+import { PartnerPayment } from "../../../../components/dashboard/partner/partner-payment";
+import { PartnerLogs } from "../../../../components/dashboard/partner/partner-logs";
 import { useMounted } from "../../../../hooks/use-mounted";
 import { ChevronDown as ChevronDownIcon } from "../../../../icons/chevron-down";
 import { PencilAlt as PencilAltIcon } from "../../../../icons/pencil-alt";
 import { gtm } from "../../../../lib/gtm";
 import { getInitials } from "../../../../utils/get-initials";
+import { useDispatch } from "src/store";
+import { getPoints } from "@services/index";
 
 const tabs = [
   { label: "Details", value: "details" },
@@ -36,30 +38,21 @@ const tabs = [
   { label: "Logs", value: "logs" },
 ];
 
-const CustomerDetails = () => {
+const PartnerDetails = () => {
+  const dispatch = useDispatch();
+
+  const { query } = useRouter();
   const isMounted = useMounted();
-  const [customer, setCustomer] = useState(null);
+  const [partner, setPartner] = useState(null);
   const [currentTab, setCurrentTab] = useState("details");
 
   useEffect(() => {
     gtm.push({ event: "page_view" });
   }, []);
 
-  const getCustomer = useCallback(async () => {
-    try {
-      const data = await customerApi.getCustomer();
-
-      if (isMounted()) {
-        setCustomer(data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
-
   useEffect(
     () => {
-      getCustomer();
+      dispatch(getPoints({ partnerId: query?.partnerId }));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -69,14 +62,14 @@ const CustomerDetails = () => {
     setCurrentTab(value);
   };
 
-  if (!customer) {
+  if (!partner) {
     return null;
   }
 
   return (
     <>
       <Head>
-        <title>Dashboard: Customer Details | Material Kit Pro</title>
+        <title>Dashboard: Partners Details</title>
       </Head>
       <Box
         component="main"
@@ -112,17 +105,17 @@ const CustomerDetails = () => {
                 }}
               >
                 <Avatar
-                  src={customer.avatar}
+                  src={partner.avatar}
                   sx={{
                     height: 64,
                     mr: 2,
                     width: 64,
                   }}
                 >
-                  {getInitials(customer.name)}
+                  {getInitials(partner.name)}
                 </Avatar>
                 <div>
-                  <Typography variant="h4">{customer.email}</Typography>
+                  <Typography variant="h4">{partner.email}</Typography>
                   <Box
                     sx={{
                       display: "flex",
@@ -130,12 +123,12 @@ const CustomerDetails = () => {
                     }}
                   >
                     <Typography variant="subtitle2">user_id:</Typography>
-                    <Chip label={customer.id} size="small" sx={{ ml: 1 }} />
+                    <Chip label={partner.id} size="small" sx={{ ml: 1 }} />
                   </Box>
                 </div>
               </Grid>
               <Grid item sx={{ m: -1 }}>
-                <NextLink href="/dashboard/customers/1/edit" passHref>
+                <NextLink href="/dashboard/partners/1/edit" passHref>
                   <Button
                     component="a"
                     endIcon={<PencilAltIcon fontSize="small" />}
@@ -173,29 +166,29 @@ const CustomerDetails = () => {
             {currentTab === "details" && (
               <Grid container spacing={3}>
                 <Grid item xs={12}>
-                  <CustomerBasicDetails
-                    address1={customer.address1}
-                    address2={customer.address2}
-                    country={customer.country}
-                    email={customer.email}
-                    isVerified={!!customer.isVerified}
-                    phone={customer.phone}
-                    state={customer.state}
+                  <PartnerBasicDetails
+                    address1={partner.address1}
+                    address2={partner.address2}
+                    country={partner.country}
+                    email={partner.email}
+                    isVerified={!!partner.isVerified}
+                    phone={partner.phone}
+                    state={partner.state}
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <CustomerPayment />
+                  <PartnerPayment />
                 </Grid>
                 <Grid item xs={12}>
-                  <CustomerEmailsSummary />
+                  <PartnerEmailsSummary />
                 </Grid>
                 <Grid item xs={12}>
-                  <CustomerDataManagement />
+                  <PartnerDataManagement />
                 </Grid>
               </Grid>
             )}
-            {currentTab === "invoices" && <CustomerInvoices />}
-            {currentTab === "logs" && <CustomerLogs />}
+            {currentTab === "invoices" && <PartnerInvoices />}
+            {currentTab === "logs" && <PartnerLogs />}
           </Box>
         </Container>
       </Box>
@@ -203,10 +196,10 @@ const CustomerDetails = () => {
   );
 };
 
-CustomerDetails.getLayout = (page) => (
+PartnerDetails.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 
-export default CustomerDetails;
+export default PartnerDetails;
