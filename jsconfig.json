@@ -18,7 +18,9 @@
       "@components/*": ["src/components/*"],
       "@utils/*": ["src/utils/*"],
       "@slices/*": ["src/slices/*"],
-      "@services/*": ["src/services/*"]
+      "@services/*": ["src/services/*"],
+      "@icons/*": ["src/icons/*"],
+      "@hooks/*": ["src/hooks/*"]
     }
   },
   "include": ["src/**/*.js"],

@@ -98,6 +98,7 @@ export const UserListTable = (props) => {
                 />
               </TableCell>
               <TableCell>Name</TableCell>
+              <TableCell>Role</TableCell>
               <TableCell>Email</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
@@ -144,6 +145,7 @@ export const UserListTable = (props) => {
                     </Box>
                   </TableCell>
 
+                  <TableCell>{user.role?.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
 
                   <TableCell align="right">

@@ -9,7 +9,7 @@ export const getRoles = createAsyncThunk(
       const response = await axios.get("/roles");
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.error);
     }
   }
@@ -22,7 +22,7 @@ export const getRole = createAsyncThunk(
       const response = await axios.get(`/roles/${params?.id}`);
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.error);
     }
   }
@@ -36,7 +36,7 @@ export const createRole = createAsyncThunk(
       toast.success("Роль добавлен");
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.messages);
     }
   }
@@ -50,7 +50,7 @@ export const updateRole = createAsyncThunk(
       toast.success("Роль обнавлен");
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.messages);
     }
   }

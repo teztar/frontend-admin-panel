@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
@@ -15,15 +15,13 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
-  MenuItem,
   OutlinedInput,
-  Select,
   TextField,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useDispatch, useSelector } from "src/store";
+import { useDispatch } from "src/store";
 import { createClient, updateClient } from "@services/index";
 import { format } from "date-fns";
 
@@ -131,7 +129,7 @@ export const ClientEditForm = (props) => {
                       setFieldValue("birthday", date);
                     }}
                     renderInput={(inputProps) => (
-                      <TextField fullWidth {...inputProps} />
+                      <TextField fullWidth error={false} {...inputProps} />
                     )}
                     value={values.birthday}
                   />

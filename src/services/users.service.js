@@ -15,7 +15,7 @@ export const getUsers = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.error);
     }
   }
@@ -28,7 +28,7 @@ export const getUser = createAsyncThunk(
       const response = await axios.get(`/users/${params?.id}`);
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.error);
     }
   }
@@ -42,7 +42,7 @@ export const createUser = createAsyncThunk(
       toast.success("Пользователь добавлен");
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.messages);
     }
   }
@@ -56,7 +56,7 @@ export const updateUser = createAsyncThunk(
       toast.success("Пользователь обнавлен");
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.messages);
     }
   }

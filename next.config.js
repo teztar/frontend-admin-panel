@@ -2,33 +2,38 @@
 const config = {
   swcMinify: true,
   reactStrictMode: false,
-  output: 'standalone',
+  output: "standalone",
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ['@svgr/webpack']
+      use: ["@svgr/webpack"],
     });
     return config;
   },
   async redirects() {
     return [
       {
-        source: '/docs',
-        destination: '/docs/welcome',
-        permanent: true
-      }
+        source: "/",
+        destination: "/dashboard",
+        permanent: true,
+      },
+      {
+        source: "/docs",
+        destination: "/docs/welcome",
+        permanent: true,
+      },
     ];
-  }
+  },
 };
 
 // Remove this if you're not using Fullcalendar features
-const withTM = require('next-transpile-modules')([
-  '@fullcalendar/common',
-  '@fullcalendar/react',
-  '@fullcalendar/daygrid',
-  '@fullcalendar/list',
-  '@fullcalendar/timegrid',
-  '@fullcalendar/timeline'
+const withTM = require("next-transpile-modules")([
+  "@fullcalendar/common",
+  "@fullcalendar/react",
+  "@fullcalendar/daygrid",
+  "@fullcalendar/list",
+  "@fullcalendar/timegrid",
+  "@fullcalendar/timeline",
 ]);
 
 module.exports = withTM(config);
