@@ -177,7 +177,7 @@ export const PartnerListTable = (props) => {
                         </IconButton>
                       </NextLink>
                       <NextLink
-                        href={`/dashboard/partners/${partner.id}`}
+                        href={`/dashboard/partners/${partner.id}/points`}
                         passHref
                       >
                         <IconButton component="a">

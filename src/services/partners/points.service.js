@@ -14,7 +14,7 @@ export const getPoints = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.error);
     }
   }
@@ -24,10 +24,12 @@ export const getPoint = createAsyncThunk(
   "points/getPoint",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/points/${params?.id}`);
+      const response = await axios.get(
+        `/points/${params?.partnerId}/${params?.pointId}`
+      );
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.error);
     }
   }
@@ -41,8 +43,8 @@ export const createPoint = createAsyncThunk(
       toast.success("Точка добавлен");
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
-      return rejectWithValue(error.messages);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error?.messages);
     }
   }
 );
@@ -55,7 +57,7 @@ export const updatePoint = createAsyncThunk(
       toast.success("Точка обнавлен");
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.messages);
     }
   }
