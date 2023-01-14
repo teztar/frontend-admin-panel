@@ -44,13 +44,13 @@ export const PointEditForm = (props) => {
         id: mode === "edit" ? pointId : "",
         partnerId: mode === "create" ? partnerId : "",
         assortment: point?.assortment || "",
-        averageCookingTime: point?.averageCookingTime || "",
-        closingTime: point?.closingTime || "",
+        averageCookingTime: point?.averageCookingTime || null,
+        closingTime: point?.closingTime || null,
         geolocationLatitude: point?.geolocationLatitude || "",
         geolocationLongitude: point?.geolocationLongitude || "",
         kitchenType: point?.kitchenType || "",
         minimumCheckAmount: point?.minimumCheckAmount || "",
-        openingTime: point?.openingTime || "",
+        openingTime: point?.openingTime || null,
         status: point?.status || "",
         phoneNumbers:
           pointPhones && pointPhones.length > 0
@@ -164,7 +164,7 @@ export const PointEditForm = (props) => {
                       setFieldValue("openingTime", time);
                     }}
                     renderInput={(inputProps) => (
-                      <TextField fullWidth error={false} {...inputProps} />
+                      <TextField fullWidth {...inputProps} />
                     )}
                     value={values.openingTime}
                   />
@@ -178,7 +178,7 @@ export const PointEditForm = (props) => {
                       setFieldValue("closingTime", time);
                     }}
                     renderInput={(inputProps) => (
-                      <TextField fullWidth error={false} {...inputProps} />
+                      <TextField fullWidth {...inputProps} />
                     )}
                     value={values.closingTime}
                   />

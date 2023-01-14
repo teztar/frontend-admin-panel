@@ -14,6 +14,8 @@ import {
 } from "@mui/material";
 import HandshakeIcon from "@mui/icons-material/Handshake";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import AssistWalkerIcon from "@mui/icons-material/AssistWalker";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import { Calendar as CalendarIcon } from "../../icons/calendar";
 import { Cash as CashIcon } from "../../icons/cash";
 import { ChartBar as ChartBarIcon } from "../../icons/chart-bar";
@@ -114,7 +116,12 @@ const getSections = (t) => [
       {
         title: t("Clients"),
         path: "/dashboard/clients",
-        icon: <UsersIcon fontSize="small" />,
+        icon: <SupervisedUserCircleIcon fontSize="small" />,
+      },
+      {
+        title: t("Couriers"),
+        path: "/dashboard/couriers",
+        icon: <AssistWalkerIcon fontSize="small" />,
       },
       {
         title: t("Customers"),
