@@ -44,7 +44,7 @@ export const ClientEditForm = (props) => {
       initialValues={{
         id: client?.id || "",
         name: client?.name || "",
-        birthday: client?.birthday || "",
+        birthday: client?.birthday || null,
         password: client?.password || "",
         phone: client?.phone?.substring(4) || "",
         submit: null,
@@ -129,7 +129,7 @@ export const ClientEditForm = (props) => {
                       setFieldValue("birthday", date);
                     }}
                     renderInput={(inputProps) => (
-                      <TextField fullWidth error={false} {...inputProps} />
+                      <TextField fullWidth {...inputProps} />
                     )}
                     value={values.birthday}
                   />
