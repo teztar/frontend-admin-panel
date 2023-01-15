@@ -37,6 +37,13 @@ export {
 } from "./couriers.service";
 
 export {
+  getOrder,
+  getOrders,
+  createOrder,
+  updateOrder,
+} from "./orders.service";
+
+export {
   getBonus,
   getBonuses,
   createBonus,

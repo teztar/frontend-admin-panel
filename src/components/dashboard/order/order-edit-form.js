@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
@@ -15,22 +15,20 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
-  MenuItem,
   OutlinedInput,
-  Select,
   TextField,
 } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useDispatch, useSelector } from "src/store";
-import { createBonus, getRoles, updateBonus } from "@services/index";
+import { useDispatch } from "src/store";
+import { createOrder, updateOrder } from "@services/index";
+import { format } from "date-fns";
 
-const categories = ["FIX", "PRESENT", "OUR"];
+export const OrderEditForm = (props) => {
+  const dispatch = useDispatch();
 
-export const BonusEditForm = (props) => {
-  const { points } = useSelector((state) => state.points);
-
-  const { bonus, mode = "edit", ...other } = props;
+  const { order, mode = "edit", ...other } = props;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -44,29 +42,35 @@ export const BonusEditForm = (props) => {
     <Formik
       enableReinitialize={true}
       initialValues={{
-        id: bonus?.id || "",
-        active: bonus?.active || false,
-        bonus: bonus?.bonus || "",
-        pointId: bonus?.pointId || "",
-        name: bonus?.name || "",
-        email: bonus?.email || "",
-        password: bonus?.password || "",
-        category: bonus?.category || "",
+        added_from: "WEB",
+        client_id: "string",
+        count: 0,
+        geolocation_latitude: "string",
+        geolocation_longitude: "string",
+        payment_option: "CASH",
+        product_id: "string",
+        id: order?.id || "",
+        name: order?.name || "",
+        birthday: order?.birthday || null,
+        password: order?.password || "",
+        phone: order?.phone?.substring(4) || "",
         submit: null,
       }}
       validationSchema={Yup.object().shape({
         name: Yup.string().min(4).max(255),
-        email: Yup.string()
-          .email("Must be a valid email")
-          .max(255)
-          .required("Email is required"),
+        phone: Yup.string().max(9).required("Phone is required"),
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
+          const newValues = {
+            ...values,
+            birthday: format(new Date(values.birthday), "yyyy-MM-dd"),
+            phone: "+992" + values?.phone?.replaceAll(" ", ""),
+          };
           if (mode === "create") {
-            dispatch(createBonus(values));
+            dispatch(createOrder(newValues));
           } else {
-            dispatch(updateBonus(values));
+            dispatch(updateOrder(newValues));
           }
           setStatus({ success: true });
           setSubmitting(false);
@@ -92,7 +96,7 @@ export const BonusEditForm = (props) => {
         <form noValidate onSubmit={handleSubmit} {...other}>
           <Card>
             <CardHeader
-              title={`${mode === "create" ? "Create" : "Edit"} bonus`}
+              title={`${mode === "create" ? "Create" : "Edit"} order`}
             />
             <Divider />
             <CardContent>
@@ -102,7 +106,7 @@ export const BonusEditForm = (props) => {
                     error={Boolean(touched.name && errors.name)}
                     fullWidth
                     helperText={touched.name && errors.name}
-                    label="Bonus name"
+                    label="Order name"
                     name="name"
                     onBlur={handleBlur}
                     onChange={handleChange}
@@ -112,16 +116,29 @@ export const BonusEditForm = (props) => {
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
-                    error={Boolean(touched.email && errors.email)}
+                    error={Boolean(touched.phone && errors.phone)}
                     fullWidth
-                    helperText={touched.email && errors.email}
-                    label="Email"
-                    name="email"
-                    type="email"
+                    helperText={touched.phone && errors.phone}
+                    label="Phone"
+                    name="phone"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     required
-                    value={values.email}
+                    value={values.phone}
+                    inputProps={{ maxLength: 9 }}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <DatePicker
+                    inputFormat="dd/MM/yyyy"
+                    label="Birth date"
+                    onChange={(date) => {
+                      setFieldValue("birthday", date);
+                    }}
+                    renderInput={(inputProps) => (
+                      <TextField fullWidth {...inputProps} />
+                    )}
+                    value={values.birthday}
                   />
                 </Grid>
                 {mode === "create" && (
@@ -159,42 +176,6 @@ export const BonusEditForm = (props) => {
                     </FormControl>
                   </Grid>
                 )}
-                <Grid item md={6} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel id="category-label">Categories</InputLabel>
-                    <Select
-                      labelId="category-label"
-                      value={values.category}
-                      label="Categories"
-                      name="category"
-                      onChange={handleChange}
-                    >
-                      {categories.map((category) => (
-                        <MenuItem key={category} value={category}>
-                          {category}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel id="point-label">Role</InputLabel>
-                    <Select
-                      labelId="point-label"
-                      value={values.pointId}
-                      label="Role"
-                      name="pointId"
-                      onChange={handleChange}
-                    >
-                      {points.map((point) => (
-                        <MenuItem key={point.id} value={point.id}>
-                          {point.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
               </Grid>
             </CardContent>
             <CardActions
@@ -211,7 +192,7 @@ export const BonusEditForm = (props) => {
               >
                 {mode === "create" ? "Create" : "Update"}
               </Button>
-              <NextLink href="/dashboard/bonuses" passHref>
+              <NextLink href="/dashboard/orders" passHref>
                 <Button
                   component="a"
                   disabled={isSubmitting}
