@@ -3,20 +3,20 @@ import NextLink from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "src/store";
-import { getClient } from "@services/clients.service";
+import { getOrder } from "@services/orders.service";
 import { Box, Container, Link, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
-import { ClientEditForm } from "@components/dashboard/client/client-edit-form";
+import { OrderEditForm } from "@components/dashboard/order/order-edit-form";
 import { gtm } from "../../../../lib/gtm";
 
-const ClientEdit = () => {
+const OrderEdit = () => {
   const dispatch = useDispatch();
 
   const { query } = useRouter();
 
-  const { client } = useSelector((state) => state.clients);
+  const { order } = useSelector((state) => state.orders);
 
   useEffect(() => {
     gtm.push({ event: "page_view" });
@@ -24,20 +24,20 @@ const ClientEdit = () => {
 
   useEffect(
     () => {
-      dispatch(getClient({ id: query?.clientId }));
+      dispatch(getOrder({ id: query?.orderId }));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  if (!client) {
+  if (!order) {
     return null;
   }
 
   return (
     <>
       <Head>
-        <title>Dashboard: Client Edit</title>
+        <title>Dashboard: Order Edit</title>
       </Head>
       <Box
         component="main"
@@ -49,7 +49,7 @@ const ClientEdit = () => {
       >
         <Container maxWidth="md">
           <Box sx={{ mb: 4, cursor: "pointer" }}>
-            <NextLink href="/dashboard/clients" passHref>
+            <NextLink href="/dashboard/orders" passHref>
               <Link
                 color="textPrimary"
                 component="a"
@@ -59,13 +59,13 @@ const ClientEdit = () => {
                 }}
               >
                 <ArrowBackIcon fontSize="small" sx={{ mr: 1 }} />
-                <Typography variant="subtitle2">Clients</Typography>
+                <Typography variant="subtitle2">Orders</Typography>
               </Link>
             </NextLink>
           </Box>
 
           <Box mt={3}>
-            <ClientEditForm client={client} mode="edit" />
+            <OrderEditForm order={order} mode="edit" />
           </Box>
         </Container>
       </Box>
@@ -73,10 +73,10 @@ const ClientEdit = () => {
   );
 };
 
-ClientEdit.getLayout = (page) => (
+OrderEdit.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 
-export default ClientEdit;
+export default OrderEdit;

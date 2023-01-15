@@ -20,7 +20,8 @@
       "@slices/*": ["src/slices/*"],
       "@services/*": ["src/services/*"],
       "@icons/*": ["src/icons/*"],
-      "@hooks/*": ["src/hooks/*"]
+      "@hooks/*": ["src/hooks/*"],
+      "@lib/*": ["src/lib/*"]
     }
   },
   "include": ["src/**/*.js"],
