@@ -30,6 +30,13 @@ export {
 } from "./clients.service";
 
 export {
+  getCourier,
+  getCouriers,
+  createCourier,
+  updateCourier,
+} from "./couriers.service";
+
+export {
   getBonus,
   getBonuses,
   createBonus,

@@ -2,11 +2,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const getUsers = createAsyncThunk(
-  "users/getUsers",
+export const getCouriers = createAsyncThunk(
+  "couriers/getCouriers",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/users", {
+      const response = await axios.get("/couriers", {
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
@@ -21,11 +21,11 @@ export const getUsers = createAsyncThunk(
   }
 );
 
-export const getUser = createAsyncThunk(
-  "users/getUser",
+export const getCourier = createAsyncThunk(
+  "couriers/getCourier",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/users/${params?.id}`);
+      const response = await axios.get(`/couriers/${params?.id}`);
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -34,12 +34,12 @@ export const getUser = createAsyncThunk(
   }
 );
 
-export const createUser = createAsyncThunk(
-  "users/createUser",
+export const createCourier = createAsyncThunk(
+  "couriers/createCourier",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/users", values);
-      toast.success("Пользователь добавлен");
+      const response = await axios.post("/couriers", values);
+      toast.success("Курьер добавлен");
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -48,12 +48,12 @@ export const createUser = createAsyncThunk(
   }
 );
 
-export const updateUser = createAsyncThunk(
-  "users/updateUser",
+export const updateCourier = createAsyncThunk(
+  "couriers/updateCourier",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/users", values);
-      toast.success("Пользователь обнавлен");
+      const response = await axios.put("/couriers", values);
+      toast.success("Курьер обнавлен");
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

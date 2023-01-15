@@ -14,14 +14,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { AuthGuard } from "../../../components/authentication/auth-guard";
-import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
-import { BonusListTable } from "../../../components/dashboard/bonus/bonus-list-table";
+import { AuthGuard } from "@components/authentication/auth-guard";
+import { DashboardLayout } from "@components/dashboard/dashboard-layout";
+import { CourierListTable } from "@components/dashboard/courier/courier-list-table";
 import { Plus as PlusIcon } from "../../../icons/plus";
 import { Search as SearchIcon } from "../../../icons/search";
 import { gtm } from "../../../lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getBonuses } from "@services/index";
+import { getCouriers } from "@services/index";
 
 const tabs = [
   {
@@ -61,8 +61,8 @@ const sortOptions = [
   },
 ];
 
-const applyFilters = (bonuses, filters) =>
-  bonuses.filter((customer) => {
+const applyFilters = (couriers, filters) =>
+  couriers.filter((customer) => {
     if (filters.query) {
       let queryMatched = false;
       const properties = ["email", "name"];
@@ -115,10 +115,10 @@ const getComparator = (sortDir, sortBy) =>
     ? (a, b) => descendingComparator(a, b, sortBy)
     : (a, b) => -descendingComparator(a, b, sortBy);
 
-const applySort = (bonuses, sort) => {
+const applySort = (couriers, sort) => {
   const [sortBy, sortDir] = sort.split("|");
   const comparator = getComparator(sortDir, sortBy);
-  const stabilizedThis = bonuses.map((el, index) => [el, index]);
+  const stabilizedThis = couriers.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const newOrder = comparator(a[0], b[0]);
@@ -133,13 +133,13 @@ const applySort = (bonuses, sort) => {
   return stabilizedThis.map((el) => el[0]);
 };
 
-const applyPagination = (bonuses, page, rowsPerPage) =>
-  bonuses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+const applyPagination = (couriers, page, rowsPerPage) =>
+  couriers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-const BonusList = () => {
+const CourierList = () => {
   const dispatch = useDispatch();
 
-  const { bonuses } = useSelector((state) => state.bonuses);
+  const { couriers } = useSelector((state) => state.couriers);
 
   const queryRef = useRef(null);
   const [currentTab, setCurrentTab] = useState("all");
@@ -159,8 +159,8 @@ const BonusList = () => {
 
   useEffect(
     () => {
-      if (!bonuses.length) {
-        dispatch(getBonuses());
+      if (!couriers.length) {
+        dispatch(getCouriers());
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -204,14 +204,14 @@ const BonusList = () => {
   };
 
   // Usually query is done on backend with indexing solutions
-  const filteredBonuses = applyFilters(bonuses, filters);
-  const sortedRoles = applySort(filteredBonuses, sort);
-  const paginatedBonuses = applyPagination(sortedRoles, page, rowsPerPage);
+  const Cilteredcouriers = applyFilters(couriers, filters);
+  const sortedRoles = applySort(Cilteredcouriers, sort);
+  const Caginatedcouriers = applyPagination(sortedRoles, page, rowsPerPage);
 
   return (
     <>
       <Head>
-        <title>Dashboard: Bonus List</title>
+        <title>Dashboard: Courier List</title>
       </Head>
       <Box
         component="main"
@@ -224,10 +224,10 @@ const BonusList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Bonuses</Typography>
+                <Typography variant="h4">Couriers</Typography>
               </Grid>
               <Grid item>
-                <NextLink href="/dashboard/bonuses/new" passHref>
+                <NextLink href="/dashboard/couriers/new" passHref>
                   <Button
                     startIcon={<PlusIcon fontSize="small" />}
                     variant="contained"
@@ -281,7 +281,7 @@ const BonusList = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder="Search bonuses"
+                  placeholder="Search couriers"
                 />
               </Box>
               <TextField
@@ -300,9 +300,9 @@ const BonusList = () => {
                 ))}
               </TextField>
             </Box>
-            <BonusListTable
-              bonuses={paginatedBonuses}
-              bonusesCount={filteredBonuses.length}
+            <CourierListTable
+              couriers={Caginatedcouriers}
+              couriersCount={Cilteredcouriers.length}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               rowsPerPage={rowsPerPage}
@@ -315,10 +315,10 @@ const BonusList = () => {
   );
 };
 
-BonusList.getLayout = (page) => (
+CourierList.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 
-export default BonusList;
+export default CourierList;

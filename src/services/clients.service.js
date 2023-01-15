@@ -15,7 +15,7 @@ export const getClients = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.error);
     }
   }
@@ -28,7 +28,7 @@ export const getClient = createAsyncThunk(
       const response = await axios.get(`/clients/${params?.id}`);
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.error);
     }
   }
@@ -42,7 +42,7 @@ export const createClient = createAsyncThunk(
       toast.success("Клиент добавлен");
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.messages);
     }
   }
@@ -56,7 +56,7 @@ export const updateClient = createAsyncThunk(
       toast.success("Клиент обнавлен");
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.messages);
     }
   }

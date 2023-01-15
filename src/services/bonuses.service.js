@@ -15,7 +15,7 @@ export const getBonuses = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.error);
     }
   }
@@ -28,7 +28,7 @@ export const getBonus = createAsyncThunk(
       const response = await axios.get(`/bonuses/${params?.id}`);
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.error);
     }
   }
@@ -42,7 +42,7 @@ export const createBonus = createAsyncThunk(
       toast.success("Бонус добавлен");
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.messages);
     }
   }
@@ -56,7 +56,7 @@ export const updateBonus = createAsyncThunk(
       toast.success("Бонус обнавлен");
       return response.data;
     } catch (error) {
-      toast.error(error?.messages[0]?.error || error?.messages[0]);
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.messages);
     }
   }

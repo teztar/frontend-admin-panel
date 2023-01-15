@@ -159,7 +159,9 @@ const RoleList = () => {
 
   useEffect(
     () => {
-      dispatch(getRoles());
+      if (!roles.length) {
+        dispatch(getRoles());
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []

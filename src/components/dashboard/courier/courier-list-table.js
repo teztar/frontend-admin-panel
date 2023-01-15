@@ -18,48 +18,51 @@ import {
 import { PencilAlt as PencilAltIcon } from "../../../icons/pencil-alt";
 import { getInitials } from "../../../utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
+import { format } from "date-fns";
 
-export const UserListTable = (props) => {
+export const CourierListTable = (props) => {
   const {
-    users,
-    usersCount,
+    couriers,
+    couriersCount,
     onPageChange,
     onRowsPerPageChange,
     page,
     rowsPerPage,
     ...other
   } = props;
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedCouriers, setSelectedCouriers] = useState([]);
 
-  // Reset selected users when users change
+  // Reset selected couriers when couriers change
   useEffect(
     () => {
-      if (selectedUsers.length) {
-        setSelectedUsers([]);
+      if (selectedCouriers.length) {
+        setSelectedCouriers([]);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [users]
+    [couriers]
   );
 
-  const handleSelectAllUsers = (event) => {
-    setSelectedUsers(event.target.checked ? users.map((user) => user.id) : []);
+  const handleSelectAllCouriers = (event) => {
+    setSelectedCouriers(
+      event.target.checked ? couriers.map((courier) => courier.id) : []
+    );
   };
 
-  const handleSelectOneUser = (event, userId) => {
-    if (!selectedUsers.includes(userId)) {
-      setSelectedUsers((prevSelected) => [...prevSelected, userId]);
+  const handleSelectOneCourier = (event, courierId) => {
+    if (!selectedCouriers.includes(courierId)) {
+      setSelectedCouriers((prevSelected) => [...prevSelected, courierId]);
     } else {
-      setSelectedUsers((prevSelected) =>
-        prevSelected.filter((id) => id !== userId)
+      setSelectedCouriers((prevSelected) =>
+        prevSelected.filter((id) => id !== courierId)
       );
     }
   };
 
-  const enableBulkActions = selectedUsers.length > 0;
-  const selectedSomeUsers =
-    selectedUsers.length > 0 && selectedUsers.length < users.length;
-  const selectedAllUsers = selectedUsers.length === users.length;
+  const enableBulkActions = selectedCouriers.length > 0;
+  const selectedSomeCouriers =
+    selectedCouriers.length > 0 && selectedCouriers.length < couriers.length;
+  const selectedAllCouriers = selectedCouriers.length === couriers.length;
 
   return (
     <div {...other}>
@@ -73,9 +76,9 @@ export const UserListTable = (props) => {
         }}
       >
         <Checkbox
-          checked={selectedAllUsers}
-          indeterminate={selectedSomeUsers}
-          onChange={handleSelectAllUsers}
+          checked={selectedAllCouriers}
+          indeterminate={selectedSomeCouriers}
+          onChange={handleSelectAllCouriers}
         />
         <Button size="small" sx={{ ml: 2 }}>
           Delete
@@ -92,28 +95,33 @@ export const UserListTable = (props) => {
             <TableRow>
               <TableCell padding="checkbox">
                 <Checkbox
-                  checked={selectedAllUsers}
-                  indeterminate={selectedSomeUsers}
-                  onChange={handleSelectAllUsers}
+                  checked={selectedAllCouriers}
+                  indeterminate={selectedSomeCouriers}
+                  onChange={handleSelectAllCouriers}
                 />
               </TableCell>
               <TableCell>Name</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Email</TableCell>
+              <TableCell>Birthdate</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell>Passport</TableCell>
+              <TableCell>Start Work Time</TableCell>
+              <TableCell>End Work Time</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => {
-              const isUserSelected = selectedUsers.includes(user.id);
+            {couriers.map((courier) => {
+              const isCourierSelected = selectedCouriers.includes(courier.id);
 
               return (
-                <TableRow hover key={user.id} selected={isUserSelected}>
+                <TableRow hover key={courier.id} selected={isCourierSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={isUserSelected}
-                      onChange={(event) => handleSelectOneUser(event, user.id)}
-                      value={isUserSelected}
+                      checked={isCourierSelected}
+                      onChange={(event) =>
+                        handleSelectOneCourier(event, courier.id)
+                      }
+                      value={isCourierSelected}
                     />
                   </TableCell>
                   <TableCell>
@@ -124,33 +132,38 @@ export const UserListTable = (props) => {
                       }}
                     >
                       <Avatar
-                        src={user.avatar}
+                        src={courier.avatar}
                         sx={{
                           height: 42,
                           width: 42,
                         }}
                       >
-                        {getInitials(user.name)}
+                        {getInitials(courier.name)}
                       </Avatar>
                       <Box sx={{ ml: 1 }}>
                         <NextLink
-                          href={`/dashboard/users/${user.id}/edit`}
+                          href={`/dashboard/couriers/${courier.id}/edit`}
                           passHref
                         >
                           <Link color="inherit" variant="subtitle2">
-                            {user.name}
+                            {courier.name}
                           </Link>
                         </NextLink>
                       </Box>
                     </Box>
                   </TableCell>
 
-                  <TableCell>{user.role?.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
+                  <TableCell>
+                    {format(new Date(courier.dateOfBirth), "dd-MM-yyyy")}
+                  </TableCell>
+                  <TableCell>{courier.phoneNumber}</TableCell>
+                  <TableCell>{courier.passportSeries}</TableCell>
+                  <TableCell>{courier.startWorkTime}</TableCell>
+                  <TableCell>{courier.endWorkTime}</TableCell>
 
                   <TableCell align="right">
                     <NextLink
-                      href={`/dashboard/users/${user.id}/edit`}
+                      href={`/dashboard/couriers/${courier.id}/edit`}
                       passHref
                     >
                       <IconButton component="a">
@@ -166,7 +179,7 @@ export const UserListTable = (props) => {
       </Scrollbar>
       <TablePagination
         component="div"
-        count={usersCount}
+        count={couriersCount}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
@@ -177,9 +190,9 @@ export const UserListTable = (props) => {
   );
 };
 
-UserListTable.propTypes = {
-  users: PropTypes.array.isRequired,
-  usersCount: PropTypes.number.isRequired,
+CourierListTable.propTypes = {
+  couriers: PropTypes.array.isRequired,
+  couriersCount: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,
