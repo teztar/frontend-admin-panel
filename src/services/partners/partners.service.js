@@ -6,7 +6,7 @@ export const getPartners = createAsyncThunk(
   "partners/getPartners",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/partners", {
+      const response = await axios.get("/partners/all", {
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
@@ -37,7 +37,7 @@ export const createPartner = createAsyncThunk(
   "partners/createPartner",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/partners", values);
+      const response = await axios.post("/partners/new", values);
       toast.success("Партнёр добавлен");
       return response.data;
     } catch (error) {

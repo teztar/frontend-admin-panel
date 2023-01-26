@@ -1,6 +1,10 @@
 import axios from "axios";
+import crypto from "crypto-js";
 import { API_URL } from "./apiUrl";
 import { toCamelCaseFormat, toSnakeCaseFormat } from "./case-style";
+
+const key =
+  "JDJhJDEwJFR1VEN6cGlBVlAwdllocTJVSVVlSWVqQXBJOVo1Yzl3ejBBdkhCYW9MdUZjVm9QTUVBbWI2";
 
 export const cleanEmtpyFields = (obj) => {
   if (obj.data !== undefined) {
@@ -14,6 +18,13 @@ export const cleanEmtpyFields = (obj) => {
   }
 
   return obj;
+};
+
+const removeEmptyBodyFields = (obj) => {
+  return Object.entries(obj).reduce(
+    (a, [k, v]) => (v ? ((a[k] = v), a) : a),
+    {}
+  );
 };
 
 const getNewToken = () =>
@@ -68,9 +79,20 @@ axios.interceptors.request.use(
       removeEmptyParams(config.params);
     }
 
+    const searchParams = new URLSearchParams(toSnakeCaseFormat(config.params));
+
     const accessToken = localStorage.getItem("accessToken");
 
+    const removeEmptyFieds = removeEmptyBodyFields(config.data);
+
+    const request = config.params
+      ? "/api/admin" + config?.url + "?" + searchParams
+      : JSON.stringify(toSnakeCaseFormat(removeEmptyFieds));
+
+    const encryptedData = crypto.HmacSHA256(request, key);
+
     const headers = {
+      "X-RequestDigest": encryptedData,
       "Content-Type": "application/json",
       Accept: "application/json",
       Authorization: accessToken && `Bearer ${accessToken}`,

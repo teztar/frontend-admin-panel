@@ -160,9 +160,9 @@ const PartnerList = () => {
 
   useEffect(
     () => {
-      if (!partners.length) {
-        dispatch(getPartners());
-      }
+      // if (!partners.length) {
+      dispatch(getPartners());
+      // }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
