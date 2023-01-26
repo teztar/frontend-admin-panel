@@ -45,25 +45,25 @@ export const PartnerEditForm = (props) => {
         submit: null,
       }}
       validationSchema={Yup.object().shape({
-        brand: Yup.string().max(255),
-        companyTin: Yup.string().min(9).max(9),
-        directorName: Yup.string().min(10).max(255),
-        email: Yup.string()
-          .email("Must be a valid email")
-          .max(255)
-          .required("Email is required"),
-        passportSeries: Yup.string()
-          .max(8)
-          .required("Passport series is required"),
-        phoneNumbers: Yup.array().of(
-          Yup.object().shape({
-            phoneNumber: Yup.string()
-              .min(9)
-              .max(12)
-              .required("Phone number is required"),
-          })
-        ),
-        region: Yup.string().max(255).required("Region is required"),
+        // brand: Yup.string().max(255),
+        // companyTin: Yup.string().min(9).max(9),
+        // directorName: Yup.string().min(10).max(255),
+        // email: Yup.string()
+        //   .email("Must be a valid email")
+        //   .max(255)
+        //   .required("Email is required"),
+        // passportSeries: Yup.string()
+        //   .max(8)
+        //   .required("Passport series is required"),
+        // phoneNumbers: Yup.array().of(
+        //   Yup.object().shape({
+        //     phoneNumber: Yup.string()
+        //       .min(9)
+        //       .max(12)
+        //       .required("Phone number is required"),
+        //   })
+        // ),
+        // region: Yup.string().max(255).required("Region is required"),
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
@@ -72,6 +72,7 @@ export const PartnerEditForm = (props) => {
           );
 
           const newValues = { ...values, phoneNumbers: phonesWithPrefix };
+
           if (mode === "create") {
             dispatch(createPartner(newValues));
           } else {
