@@ -100,9 +100,10 @@ export const OrderListTable = (props) => {
                   onChange={handleSelectAllOrders}
                 />
               </TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Birthday</TableCell>
-              <TableCell>Phone</TableCell>
+              <TableCell>Added From</TableCell>
+              <TableCell>Amount</TableCell>
+              <TableCell>Payment Option</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -121,39 +122,11 @@ export const OrderListTable = (props) => {
                       value={isOrderSelected}
                     />
                   </TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{
-                        alignItems: "center",
-                        display: "flex",
-                      }}
-                    >
-                      <Avatar
-                        src={order.avatar}
-                        sx={{
-                          height: 42,
-                          width: 42,
-                        }}
-                      >
-                        {getInitials(order.name)}
-                      </Avatar>
-                      <Box sx={{ ml: 1 }}>
-                        <NextLink
-                          href={`/dashboard/orders/${order.id}/edit`}
-                          passHref
-                        >
-                          <Link color="inherit" variant="subtitle2">
-                            {order.name}
-                          </Link>
-                        </NextLink>
-                      </Box>
-                    </Box>
-                  </TableCell>
 
-                  <TableCell>
-                    {format(new Date(order.birthday), "dd.MM.yyyy")}
-                  </TableCell>
-                  <TableCell>{order.phone}</TableCell>
+                  <TableCell>{order.addedFrom}</TableCell>
+                  <TableCell>{order.amount}</TableCell>
+                  <TableCell>{order.paymentOption}</TableCell>
+                  <TableCell>{order.status}</TableCell>
 
                   <TableCell align="right">
                     <NextLink

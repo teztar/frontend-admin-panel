@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
@@ -11,22 +11,26 @@ import {
   CardHeader,
   Divider,
   FormControl,
+  InputLabel,
+  Select,
   Grid,
   IconButton,
   InputAdornment,
-  InputLabel,
   OutlinedInput,
   TextField,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useDispatch } from "src/store";
-import { createOrder, updateOrder } from "@services/index";
-import { format } from "date-fns";
+import { useDispatch, useSelector } from "src/store";
+import { createOrder, getClients, updateOrder } from "@services/index";
+
+const PAYMENT_OPTIONS = ["CASH", "CARD", "QR", "BONUS"];
 
 export const OrderEditForm = (props) => {
   const dispatch = useDispatch();
+
+  const { clients } = useSelector((state) => state.clients);
 
   const { order, mode = "edit", ...other } = props;
 
@@ -38,22 +42,23 @@ export const OrderEditForm = (props) => {
     event.preventDefault();
   };
 
+  useEffect(() => {
+    if (!clients.length) {
+      dispatch(getClients());
+    }
+  }, []);
+
   return (
     <Formik
       enableReinitialize={true}
       initialValues={{
-        added_from: "WEB",
-        client_id: "string",
-        count: 0,
-        geolocation_latitude: "string",
-        geolocation_longitude: "string",
-        payment_option: "CASH",
-        product_id: "string",
-        id: order?.id || "",
-        name: order?.name || "",
-        birthday: order?.birthday || null,
-        password: order?.password || "",
-        phone: order?.phone?.substring(4) || "",
+        count: order?.count || "",
+        addedFrom: order?.addedFrom || "",
+        clientId: order?.clientId || "",
+        geolocationLatitude: order?.geolocationLatitude || "",
+        geolocationLongitude: order?.geolocationLongitude || "",
+        paymentOption: order?.paymentOption || "",
+        productId: order?.productId || "",
         submit: null,
       }}
       validationSchema={Yup.object().shape({
@@ -62,15 +67,10 @@ export const OrderEditForm = (props) => {
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
-          const newValues = {
-            ...values,
-            birthday: format(new Date(values.birthday), "yyyy-MM-dd"),
-            phone: "+992" + values?.phone?.replaceAll(" ", ""),
-          };
           if (mode === "create") {
-            dispatch(createOrder(newValues));
+            dispatch(createOrder(values));
           } else {
-            dispatch(updateOrder(newValues));
+            dispatch(updateOrder(values));
           }
           setStatus({ success: true });
           setSubmitting(false);
@@ -101,6 +101,24 @@ export const OrderEditForm = (props) => {
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
+                <Grid item md={6} xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="client-label">Client</InputLabel>
+                    <Select
+                      labelId="client-label"
+                      value={values.clientId}
+                      label="Client"
+                      name="clientId"
+                      onChange={handleChange}
+                    >
+                      {clients.map((client) => (
+                        <MenuItem key={client.id} value={client.id}>
+                          {client.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
                     error={Boolean(touched.name && errors.name)}

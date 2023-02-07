@@ -24,7 +24,7 @@ export const getPartner = createAsyncThunk(
   "partners/getPartner",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/partners/${params?.id}`);
+      const response = await axios.get(`/partners/info/${params?.id}`);
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -51,7 +51,7 @@ export const updatePartner = createAsyncThunk(
   "partners/updatePartner",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/partners", values);
+      const response = await axios.put("/partners/update", values);
       toast.success("Партнёр обнавлен");
       return response.data;
     } catch (error) {

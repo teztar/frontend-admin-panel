@@ -83,11 +83,20 @@ axios.interceptors.request.use(
 
     const accessToken = localStorage.getItem("accessToken");
 
-    const removeEmptyFieds = removeEmptyBodyFields(config.data);
+    let removeEmptyFieds;
 
-    const request = config.params
-      ? "/api/admin" + config?.url + "?" + searchParams
-      : JSON.stringify(toSnakeCaseFormat(removeEmptyFieds));
+    if (config && config.data) {
+      removeEmptyFieds = removeEmptyBodyFields(config.data);
+    }
+    const getUrl = "/api/admin" + config?.url;
+
+    const getUrlData = config.params ? getUrl + "?" + searchParams : getUrl;
+
+    const request = config.data
+      ? JSON.stringify(toSnakeCaseFormat(removeEmptyFieds))
+      : getUrlData;
+
+    console.log({ request });
 
     const encryptedData = crypto.HmacSHA256(request, key);
 

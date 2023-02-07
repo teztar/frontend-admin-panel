@@ -161,7 +161,12 @@ const PartnerList = () => {
   useEffect(
     () => {
       // if (!partners.length) {
-      dispatch(getPartners());
+      dispatch(
+        getPartners({
+          page: 1,
+          perPage: 10,
+        })
+      );
       // }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

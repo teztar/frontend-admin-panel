@@ -6,7 +6,7 @@ export const getOrders = createAsyncThunk(
   "orders/getOrders",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/orders", {
+      const response = await axios.get("/orders/all", {
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
@@ -25,7 +25,7 @@ export const getOrder = createAsyncThunk(
   "orders/getOrder",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/orders/${params?.id}`);
+      const response = await axios.get(`/orders/info/${params?.id}`);
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -38,7 +38,7 @@ export const createOrder = createAsyncThunk(
   "orders/createOrder",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/orders", values);
+      const response = await axios.post("/orders/new", values);
       toast.success("Заказ добавлен");
       return response.data;
     } catch (error) {
@@ -52,7 +52,7 @@ export const updateOrder = createAsyncThunk(
   "orders/updateOrder",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/orders", values);
+      const response = await axios.put("/orders/update", values);
       toast.success("Заказ обнавлен");
       return response.data;
     } catch (error) {

@@ -6,7 +6,7 @@ export const getCouriers = createAsyncThunk(
   "couriers/getCouriers",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/couriers", {
+      const response = await axios.get("/couriers/all", {
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
@@ -25,7 +25,7 @@ export const getCourier = createAsyncThunk(
   "couriers/getCourier",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/couriers/${params?.id}`);
+      const response = await axios.get(`/couriers/info/${params?.id}`);
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -38,7 +38,7 @@ export const createCourier = createAsyncThunk(
   "couriers/createCourier",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/couriers", values);
+      const response = await axios.post("/couriers/new", values);
       toast.success("Курьер добавлен");
       return response.data;
     } catch (error) {
@@ -52,7 +52,7 @@ export const updateCourier = createAsyncThunk(
   "couriers/updateCourier",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/couriers", values);
+      const response = await axios.put("/couriers/update", values);
       toast.success("Курьер обнавлен");
       return response.data;
     } catch (error) {

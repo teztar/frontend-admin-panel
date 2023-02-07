@@ -19,7 +19,7 @@ export const getBonus = createAsyncThunk(
   "bonuses/getBonus",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/bonuses/${params?.id}`);
+      const response = await axios.get(`/bonuses/info/${params?.id}`);
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -46,7 +46,7 @@ export const updateBonus = createAsyncThunk(
   "bonuses/updateBonus",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/bonuses", values);
+      const response = await axios.put("/bonuses/update", values);
       toast.success("Бонус обнавлен");
       return response.data;
     } catch (error) {

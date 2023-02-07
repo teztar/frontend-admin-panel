@@ -6,7 +6,7 @@ export const getRoles = createAsyncThunk(
   "roles/getRoles",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/roles");
+      const response = await axios.get("/roles/all");
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -19,7 +19,7 @@ export const getRole = createAsyncThunk(
   "roles/getRole",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/roles/${params?.id}`);
+      const response = await axios.get(`/roles/info/${params?.id}`);
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -32,7 +32,7 @@ export const createRole = createAsyncThunk(
   "roles/createRole",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/roles", values);
+      const response = await axios.post("/roles/new", values);
       toast.success("Роль добавлен");
       return response.data;
     } catch (error) {
@@ -46,7 +46,7 @@ export const updateRole = createAsyncThunk(
   "roles/updateRole",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/roles", values);
+      const response = await axios.put("/roles/update", values);
       toast.success("Роль обнавлен");
       return response.data;
     } catch (error) {

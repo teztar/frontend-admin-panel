@@ -6,7 +6,7 @@ export const getUsers = createAsyncThunk(
   "users/getUsers",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/users", {
+      const response = await axios.get("/users/all", {
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
@@ -25,7 +25,7 @@ export const getUser = createAsyncThunk(
   "users/getUser",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/users/${params?.id}`);
+      const response = await axios.get(`/users/info/${params?.id}`);
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -38,7 +38,7 @@ export const createUser = createAsyncThunk(
   "users/createUser",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/users", values);
+      const response = await axios.post("/users/new", values);
       toast.success("Пользователь добавлен");
       return response.data;
     } catch (error) {
@@ -52,7 +52,7 @@ export const updateUser = createAsyncThunk(
   "users/updateUser",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/users", values);
+      const response = await axios.put("/users/update", values);
       toast.success("Пользователь обнавлен");
       return response.data;
     } catch (error) {

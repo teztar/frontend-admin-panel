@@ -130,7 +130,11 @@ export const PartnerEditForm = (props) => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.companyTin}
-                    inputProps={{ maxLength: 9 }}
+                    inputProps={{
+                      maxLength: 9,
+                      inputMode: "numeric",
+                      pattern: "[0-9]*",
+                    }}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>

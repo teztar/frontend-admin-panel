@@ -159,9 +159,7 @@ const OrderList = () => {
 
   useEffect(
     () => {
-      if (!orders.length) {
-        dispatch(getOrders());
-      }
+      dispatch(getOrders());
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -300,14 +298,21 @@ const OrderList = () => {
                 ))}
               </TextField>
             </Box>
-            <OrderListTable
-              orders={paginatedOrders}
-              ordersCount={filteredOrders.length}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              rowsPerPage={rowsPerPage}
-              page={page}
-            />
+
+            {orders?.length > 0 ? (
+              <OrderListTable
+                orders={paginatedOrders}
+                ordersCount={filteredOrders.length}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                rowsPerPage={rowsPerPage}
+                page={page}
+              />
+            ) : (
+              <Box ml={3} mb={3}>
+                No orders
+              </Box>
+            )}
           </Card>
         </Container>
       </Box>

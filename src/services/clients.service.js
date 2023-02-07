@@ -6,7 +6,7 @@ export const getClients = createAsyncThunk(
   "clients/getClients",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/clients", {
+      const response = await axios.get("/clients/all", {
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
@@ -25,7 +25,7 @@ export const getClient = createAsyncThunk(
   "clients/getClient",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/clients/${params?.id}`);
+      const response = await axios.get(`/clients/info/${params?.id}`);
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -38,7 +38,7 @@ export const createClient = createAsyncThunk(
   "clients/createClient",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/clients", values);
+      const response = await axios.post("/clients/new", values);
       toast.success("Клиент добавлен");
       return response.data;
     } catch (error) {
@@ -52,7 +52,7 @@ export const updateClient = createAsyncThunk(
   "clients/updateClient",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/clients", values);
+      const response = await axios.put("/clients/update", values);
       toast.success("Клиент обнавлен");
       return response.data;
     } catch (error) {
