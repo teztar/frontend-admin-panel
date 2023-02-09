@@ -60,7 +60,7 @@ export const getPermissions = createAsyncThunk(
   "roles/getPermissions",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/roles/perms");
+      const response = await axios.get("/roles/perms/all");
       return response.data;
     } catch (error) {
       toast.error(error?.messages[0]?.name || error?.messages[0]);

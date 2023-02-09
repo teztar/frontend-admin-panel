@@ -26,6 +26,8 @@ import { ShoppingCart as ShoppingCartIcon } from "../../icons/shopping-cart";
 import { Truck as TruckIcon } from "../../icons/truck";
 import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import { Users as UsersIcon } from "../../icons/users";
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import MoneyIcon from "@mui/icons-material/Money";
 import { Logo } from "../logo";
 import { Scrollbar } from "../scrollbar";
 import { DashboardSidebarSection } from "./dashboard-sidebar-section";
@@ -81,6 +83,16 @@ const getSections = (t) => [
   {
     title: t("Management"),
     items: [
+      {
+        title: t("Transactions"),
+        path: "/dashboard/transactions",
+        icon: <ReceiptIcon fontSize="small" />,
+      },
+      {
+        title: t("Partners Balance"),
+        path: "/dashboard/partners_balance",
+        icon: <MoneyIcon fontSize="small" />,
+      },
       {
         title: t("Partners"),
         path: "/dashboard/partners",

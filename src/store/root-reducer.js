@@ -11,6 +11,8 @@ import { reducer as couriersReducer } from "@slices/couriers";
 import { reducer as bonusesReducer } from "@slices/bonuses";
 import { reducer as pointsReducer } from "@slices/points";
 import { reducer as ordersReducer } from "@slices/orders";
+import { reducer as transactionsReducer } from "@slices/transactions";
+import { reducer as partnersBalanceReducer } from "@slices/partnersBalance";
 
 export const rootReducer = combineReducers({
   calendar: calendarReducer,
@@ -25,4 +27,6 @@ export const rootReducer = combineReducers({
   points: pointsReducer,
   orders: ordersReducer,
   partners: partnersReducer,
+  transactions: transactionsReducer,
+  partnersBalance: partnersBalanceReducer,
 });

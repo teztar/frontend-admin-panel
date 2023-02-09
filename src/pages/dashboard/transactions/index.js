@@ -16,12 +16,12 @@ import {
 } from "@mui/material";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
-import { RoleListTable } from "@components/dashboard/role/role-list-table";
-import { Plus as PlusIcon } from "../../../icons/plus";
-import { Search as SearchIcon } from "../../../icons/search";
-import { gtm } from "../../../lib/gtm";
+import { TransactionListTable } from "@components/dashboard/transaction/transaction-list-table";
+import { Plus as PlusIcon } from "@icons/plus";
+import { Search as SearchIcon } from "@icons/search";
+import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getRoles } from "@services/index";
+import { getTransactions } from "@services/index";
 
 const tabs = [
   {
@@ -61,8 +61,8 @@ const sortOptions = [
   },
 ];
 
-const applyFilters = (roles, filters) =>
-  roles.filter((customer) => {
+const applyFilters = (transactions, filters) =>
+  transactions.filter((customer) => {
     if (filters.query) {
       let queryMatched = false;
       const properties = ["email", "name"];
@@ -115,10 +115,10 @@ const getComparator = (sortDir, sortBy) =>
     ? (a, b) => descendingComparator(a, b, sortBy)
     : (a, b) => -descendingComparator(a, b, sortBy);
 
-const applySort = (roles, sort) => {
+const applySort = (transactions, sort) => {
   const [sortBy, sortDir] = sort.split("|");
   const comparator = getComparator(sortDir, sortBy);
-  const stabilizedThis = roles.map((el, index) => [el, index]);
+  const stabilizedThis = transactions.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const newOrder = comparator(a[0], b[0]);
@@ -133,13 +133,13 @@ const applySort = (roles, sort) => {
   return stabilizedThis.map((el) => el[0]);
 };
 
-const applyPagination = (roles, page, rowsPerPage) =>
-  roles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+const applyPagination = (transactions, page, rowsPerPage) =>
+  transactions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-const RoleList = () => {
+const TransactionList = () => {
   const dispatch = useDispatch();
 
-  const { roles } = useSelector((state) => state.roles);
+  const { transactions } = useSelector((state) => state.transactions);
 
   const queryRef = useRef(null);
   const [currentTab, setCurrentTab] = useState("all");
@@ -159,9 +159,7 @@ const RoleList = () => {
 
   useEffect(
     () => {
-      if (!roles.length) {
-        dispatch(getRoles());
-      }
+      dispatch(getTransactions());
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -204,14 +202,14 @@ const RoleList = () => {
   };
 
   // Usually query is done on backend with indexing solutions
-  const filteredRoles = applyFilters(roles, filters);
-  const sortedRoles = applySort(filteredRoles, sort);
-  const paginatedRoles = applyPagination(sortedRoles, page, rowsPerPage);
+  const filteredTransactions = applyFilters(transactions, filters);
+  const sortedRoles = applySort(filteredTransactions, sort);
+  const paginatedTransactions = applyPagination(sortedRoles, page, rowsPerPage);
 
   return (
     <>
       <Head>
-        <title>Dashboard: Role List</title>
+        <title>Dashboard: Transaction List</title>
       </Head>
       <Box
         component="main"
@@ -224,10 +222,10 @@ const RoleList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Roles</Typography>
+                <Typography variant="h4">Transactions</Typography>
               </Grid>
               <Grid item>
-                <NextLink href="/dashboard/roles/new" passHref>
+                <NextLink href="/dashboard/transactions/new" passHref>
                   <Button
                     startIcon={<PlusIcon fontSize="small" />}
                     variant="contained"
@@ -281,7 +279,7 @@ const RoleList = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder="Search roles"
+                  placeholder="Search transactions"
                 />
               </Box>
               <TextField
@@ -300,9 +298,9 @@ const RoleList = () => {
                 ))}
               </TextField>
             </Box>
-            <RoleListTable
-              roles={paginatedRoles}
-              rolesCount={filteredRoles.length}
+            <TransactionListTable
+              transactions={paginatedTransactions}
+              transactionsCount={filteredTransactions.length}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               rowsPerPage={rowsPerPage}
@@ -315,10 +313,10 @@ const RoleList = () => {
   );
 };
 
-RoleList.getLayout = (page) => (
+TransactionList.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 
-export default RoleList;
+export default TransactionList;

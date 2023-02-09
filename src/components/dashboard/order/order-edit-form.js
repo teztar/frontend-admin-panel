@@ -16,6 +16,7 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
   OutlinedInput,
   TextField,
 } from "@mui/material";
@@ -119,81 +120,98 @@ export const OrderEditForm = (props) => {
                     </Select>
                   </FormControl>
                 </Grid>
+
                 <Grid item md={6} xs={12}>
-                  <TextField
-                    error={Boolean(touched.name && errors.name)}
-                    fullWidth
-                    helperText={touched.name && errors.name}
-                    label="Order name"
-                    name="name"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    required
-                    value={values.name}
-                  />
+                  <FormControl fullWidth>
+                    <InputLabel id="paymentOption-label">
+                      Payment Option
+                    </InputLabel>
+                    <Select
+                      labelId="paymentOption-label"
+                      value={values.paymentOption}
+                      label="Payment Option"
+                      name="paymentOption"
+                      onChange={handleChange}
+                    >
+                      {PAYMENT_OPTIONS.map((paymentOption) => (
+                        <MenuItem key={paymentOption} value={paymentOption}>
+                          {paymentOption}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="productId-label">Product</InputLabel>
+                    <Select
+                      labelId="productId-label"
+                      value={values.productId}
+                      label="Product"
+                      name="productId"
+                      onChange={handleChange}
+                    >
+                      {PAYMENT_OPTIONS.map((product) => (
+                        <MenuItem key={product} value={product}>
+                          {product}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
-                    error={Boolean(touched.phone && errors.phone)}
+                    error={Boolean(touched.count && errors.count)}
                     fullWidth
-                    helperText={touched.phone && errors.phone}
-                    label="Phone"
-                    name="phone"
+                    helperText={touched.count && errors.count}
+                    label="Count"
+                    name="count"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     required
-                    value={values.phone}
+                    value={values.count}
                     inputProps={{ maxLength: 9 }}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  <DatePicker
-                    inputFormat="dd/MM/yyyy"
-                    label="Birth date"
-                    onChange={(date) => {
-                      setFieldValue("birthday", date);
-                    }}
-                    renderInput={(inputProps) => (
-                      <TextField fullWidth {...inputProps} />
+                  <TextField
+                    required
+                    fullWidth
+                    error={Boolean(
+                      touched.geolocationLatitude && errors.geolocationLatitude
                     )}
-                    value={values.birthday}
+                    helperText={
+                      touched.geolocationLatitude && errors.geolocationLatitude
+                    }
+                    label="Geolocation Latitude"
+                    name="geolocationLatitude"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.geolocationLatitude}
+                    inputProps={{ maxLength: 9 }}
                   />
                 </Grid>
-                {mode === "create" && (
-                  <Grid item md={6} xs={12}>
-                    <FormControl fullWidth variant="outlined">
-                      <InputLabel htmlFor="outlined-adornment-password">
-                        Password
-                      </InputLabel>
-                      <OutlinedInput
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        required
-                        name="password"
-                        value={values?.password}
-                        id="outlined-adornment-password"
-                        type={showPassword ? "text" : "password"}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                              edge="end"
-                            >
-                              {showPassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                        label="Password"
-                      />
-                    </FormControl>
-                  </Grid>
-                )}
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    error={Boolean(
+                      touched.geolocationLongitude &&
+                        errors.geolocationLongitude
+                    )}
+                    helperText={
+                      touched.geolocationLongitude &&
+                      errors.geolocationLongitude
+                    }
+                    label="Geolocation Longitude"
+                    name="geolocationLongitude"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.geolocationLongitude}
+                    inputProps={{ maxLength: 9 }}
+                  />
+                </Grid>
               </Grid>
             </CardContent>
             <CardActions

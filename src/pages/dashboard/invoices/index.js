@@ -12,10 +12,10 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { invoiceApi } from "../../../__fake-api__/invoice-api";
-import { AuthGuard } from "../../../components/authentication/auth-guard";
-import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
-import { InvoiceListFilters } from "../../../components/dashboard/invoice/invoice-list-filters";
-import { InvoiceListTable } from "../../../components/dashboard/invoice/invoice-list-table";
+import { AuthGuard } from "@components/authentication/auth-guard";
+import { DashboardLayout } from "@components/dashboard/dashboard-layout";
+import { InvoiceListFilters } from "@components/dashboard/invoice/invoice-list-filters";
+import { InvoiceListTable } from "@components/dashboard/invoice/invoice-list-table";
 import { useMounted } from "../../../hooks/use-mounted";
 import { Filter as FilterIcon } from "../../../icons/filter";
 import { Plus as PlusIcon } from "../../../icons/plus";

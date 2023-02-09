@@ -14,10 +14,10 @@ import {
   Typography,
 } from "@mui/material";
 import { jobApi } from "../../../__fake-api__/job-api";
-import { AuthGuard } from "../../../components/authentication/auth-guard";
-import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
-import { JobsBrowseFilter } from "../../../components/dashboard/jobs/jobs-browse-filter";
-import { CompanyJobs } from "../../../components/dashboard/jobs/company-jobs";
+import { AuthGuard } from "@components/authentication/auth-guard";
+import { DashboardLayout } from "@components/dashboard/dashboard-layout";
+import { JobsBrowseFilter } from "@components/dashboard/jobs/jobs-browse-filter";
+import { CompanyJobs } from "@components/dashboard/jobs/company-jobs";
 import { useMounted } from "../../../hooks/use-mounted";
 import { BadgeCheckOutlined as BadgeCheckOutlinedIcon } from "../../../icons/badge-check-outlined";
 import { ChevronLeft as ChevronLeftIcon } from "../../../icons/chevron-left";

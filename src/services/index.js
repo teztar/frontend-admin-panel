@@ -49,3 +49,9 @@ export {
   createBonus,
   updateBonus,
 } from "./bonuses.service";
+
+export { getTransaction, getTransactions } from "./transactions.service";
+export {
+  getPartnersBalance,
+  downloadPartnersBalance,
+} from "./partnersBalance.service";

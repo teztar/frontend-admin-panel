@@ -14,9 +14,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { AuthGuard } from "../../../components/authentication/auth-guard";
-import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
-import { BonusListTable } from "../../../components/dashboard/bonus/bonus-list-table";
+import { AuthGuard } from "@components/authentication/auth-guard";
+import { DashboardLayout } from "@components/dashboard/dashboard-layout";
+import { BonusListTable } from "@components/dashboard/bonus/bonus-list-table";
 import { Plus as PlusIcon } from "../../../icons/plus";
 import { Search as SearchIcon } from "../../../icons/search";
 import { gtm } from "../../../lib/gtm";
@@ -159,9 +159,7 @@ const BonusList = () => {
 
   useEffect(
     () => {
-      if (!bonuses.length) {
-        dispatch(getBonuses());
-      }
+      dispatch(getBonuses());
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
