@@ -1,20 +1,20 @@
 import { useEffect } from "react";
 import Head from "next/head";
 import { Box, Container } from "@mui/material";
-import { BrowseLayout } from "../../../components/browse-layout";
-import { MainLayout } from "../../../components/main-layout";
-import { WidgetPreviewer } from "../../../components/widget-previewer";
-import { GroupedList1 } from "../../../components/widgets/grouped-lists/grouped-list-1";
-import { GroupedList2 } from "../../../components/widgets/grouped-lists/grouped-list-2";
-import { GroupedList3 } from "../../../components/widgets/grouped-lists/grouped-list-3";
-import { GroupedList4 } from "../../../components/widgets/grouped-lists/grouped-list-4";
-import { GroupedList5 } from "../../../components/widgets/grouped-lists/grouped-list-5";
-import { GroupedList6 } from "../../../components/widgets/grouped-lists/grouped-list-6";
-import { GroupedList7 } from "../../../components/widgets/grouped-lists/grouped-list-7";
-import { GroupedList8 } from "../../../components/widgets/grouped-lists/grouped-list-8";
-import { GroupedList9 } from "../../../components/widgets/grouped-lists/grouped-list-9";
-import { GroupedList10 } from "../../../components/widgets/grouped-lists/grouped-list-10";
-import { GroupedList11 } from "../../../components/widgets/grouped-lists/grouped-list-11";
+import { BrowseLayout } from "@components/browse-layout";
+import { MainLayout } from "@components/main-layout";
+import { WidgetPreviewer } from "@components/widget-previewer";
+import { GroupedList1 } from "@components/widgets/grouped-lists/grouped-list-1";
+import { GroupedList2 } from "@components/widgets/grouped-lists/grouped-list-2";
+import { GroupedList3 } from "@components/widgets/grouped-lists/grouped-list-3";
+import { GroupedList4 } from "@components/widgets/grouped-lists/grouped-list-4";
+import { GroupedList5 } from "@components/widgets/grouped-lists/grouped-list-5";
+import { GroupedList6 } from "@components/widgets/grouped-lists/grouped-list-6";
+import { GroupedList7 } from "@components/widgets/grouped-lists/grouped-list-7";
+import { GroupedList8 } from "@components/widgets/grouped-lists/grouped-list-8";
+import { GroupedList9 } from "@components/widgets/grouped-lists/grouped-list-9";
+import { GroupedList10 } from "@components/widgets/grouped-lists/grouped-list-10";
+import { GroupedList11 } from "@components/widgets/grouped-lists/grouped-list-11";
 import { gtm } from "../../../lib/gtm";
 
 const BrowseGroupedLists = () => {

@@ -12,61 +12,74 @@ import {
   Divider,
   FormControl,
   Grid,
-  IconButton,
-  InputAdornment,
   InputLabel,
+  FormControlLabel,
+  Switch,
   MenuItem,
-  OutlinedInput,
   Select,
   TextField,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch, useSelector } from "src/store";
-import { createBonus, getRoles, updateBonus } from "@services/index";
+import {
+  createBonus,
+  getPartners,
+  getPoints,
+  updateBonus,
+} from "@services/index";
+import { format } from "date-fns";
 
 const categories = ["FIX", "PRESENT", "OUR"];
 
 export const BonusEditForm = (props) => {
+  const dispatch = useDispatch();
+
+  const { partners } = useSelector((state) => state.partners);
+
   const { points } = useSelector((state) => state.points);
 
   const { bonus, mode = "edit", ...other } = props;
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [partnerId, setPartnerId] = useState();
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  useEffect(() => {
+    dispatch(getPartners());
+  }, []);
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+  useEffect(() => {
+    if (partnerId) {
+      dispatch(getPoints({ partnerId: partnerId }));
+    }
+  }, [partnerId]);
 
   return (
     <Formik
       enableReinitialize={true}
       initialValues={{
         id: bonus?.id || "",
-        active: bonus?.active || false,
-        bonus: bonus?.bonus || "",
+        active: bonus?.active || true,
+        commission: bonus?.commission || "",
+        startDate: bonus?.startDate || null,
+        endDate: bonus?.endDate || null,
+        fixBonus: bonus?.fixBonus || "",
+        ourBonusPercent: bonus?.ourBonusPercent || "",
         pointId: bonus?.pointId || "",
-        name: bonus?.name || "",
-        email: bonus?.email || "",
-        password: bonus?.password || "",
-        category: bonus?.category || "",
+        presentBonusPercent: bonus?.presentBonusPercent || "",
+        productCategory: bonus?.productCategory || "",
+        type: bonus?.type || "",
         submit: null,
       }}
-      validationSchema={Yup.object().shape({
-        name: Yup.string().min(4).max(255),
-        email: Yup.string()
-          .email("Must be a valid email")
-          .max(255)
-          .required("Email is required"),
-      })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
+          const newValues = {
+            ...values,
+            startDate: format(new Date(values.startDate), "yyyy-MM-dd"),
+            endDate: format(new Date(values.endDate), "yyyy-MM-dd"),
+          };
           if (mode === "create") {
-            dispatch(createBonus(values));
+            dispatch(createBonus(newValues));
           } else {
-            dispatch(updateBonus(values));
+            dispatch(updateBonus(newValues));
           }
           setStatus({ success: true });
           setSubmitting(false);
@@ -98,102 +111,171 @@ export const BonusEditForm = (props) => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
-                  <TextField
-                    error={Boolean(touched.name && errors.name)}
-                    fullWidth
-                    helperText={touched.name && errors.name}
-                    label="Bonus name"
-                    name="name"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    required
-                    value={values.name}
+                  <DatePicker
+                    inputFormat="dd/MM/yyyy"
+                    label="Start date"
+                    onChange={(date) => {
+                      setFieldValue("startDate", date);
+                    }}
+                    renderInput={(inputProps) => (
+                      <TextField fullWidth {...inputProps} />
+                    )}
+                    value={values.startDate}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <DatePicker
+                    inputFormat="dd/MM/yyyy"
+                    label="End date"
+                    onChange={(date) => {
+                      setFieldValue("endDate", date);
+                    }}
+                    renderInput={(inputProps) => (
+                      <TextField fullWidth {...inputProps} />
+                    )}
+                    value={values.endDate}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
-                    error={Boolean(touched.email && errors.email)}
+                    required
                     fullWidth
-                    helperText={touched.email && errors.email}
-                    label="Email"
-                    name="email"
-                    type="email"
+                    type="number"
+                    error={Boolean(touched.fixBonus && errors.fixBonus)}
+                    helperText={touched.fixBonus && errors.fixBonus}
+                    name="fixBonus"
+                    label="Fix bonus"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    required
-                    value={values.email}
+                    value={values.fixBonus}
                   />
                 </Grid>
-                {mode === "create" && (
-                  <Grid item md={6} xs={12}>
-                    <FormControl fullWidth variant="outlined">
-                      <InputLabel htmlFor="outlined-adornment-password">
-                        Password
-                      </InputLabel>
-                      <OutlinedInput
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        required
-                        name="password"
-                        value={values?.password}
-                        id="outlined-adornment-password"
-                        type={showPassword ? "text" : "password"}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                              edge="end"
-                            >
-                              {showPassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                        label="Password"
-                      />
-                    </FormControl>
-                  </Grid>
-                )}
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    error={Boolean(
+                      touched.ourBonusPercent && errors.ourBonusPercent
+                    )}
+                    helperText={
+                      touched.ourBonusPercent && errors.ourBonusPercent
+                    }
+                    label="Our bonus percent"
+                    name="ourBonusPercent"
+                    type="number"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.ourBonusPercent}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    error={Boolean(
+                      touched.presentBonusPercent && errors.presentBonusPercent
+                    )}
+                    helperText={
+                      touched.presentBonusPercent && errors.presentBonusPercent
+                    }
+                    label="Present bonus percent"
+                    name="presentBonusPercent"
+                    type="number"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.presentBonusPercent}
+                  />
+                </Grid>
+
                 <Grid item md={6} xs={12}>
                   <FormControl fullWidth>
-                    <InputLabel id="category-label">Categories</InputLabel>
+                    <InputLabel id="partnerId-label">Partner</InputLabel>
                     <Select
-                      labelId="category-label"
-                      value={values.category}
-                      label="Categories"
-                      name="category"
+                      labelId="partnerId-label"
+                      value={values.partnerId}
+                      label="Partner"
+                      name="partnerId"
                       onChange={handleChange}
                     >
-                      {categories.map((category) => (
-                        <MenuItem key={category} value={category}>
-                          {category}
+                      {partners.map((partner) => (
+                        <MenuItem
+                          key={partner.id}
+                          value={partner.id}
+                          onClick={() => setPartnerId(partner?.id)}
+                        >
+                          {partner?.brand}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="productCategory-label">
+                      Product Category
+                    </InputLabel>
+                    <Select
+                      labelId="productCategory-label"
+                      value={values.productCategory}
+                      label="Product Category"
+                      name="productCategory"
+                      onChange={handleChange}
+                    >
+                      {categories.map((productCategory) => (
+                        <MenuItem key={productCategory} value={productCategory}>
+                          {productCategory}
                         </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel id="point-label">Role</InputLabel>
+                  <FormControl fullWidth disabled={!partnerId}>
+                    <InputLabel id="point-label">Point</InputLabel>
                     <Select
                       labelId="point-label"
                       value={values.pointId}
-                      label="Role"
+                      label="Point"
                       name="pointId"
                       onChange={handleChange}
                     >
                       {points.map((point) => (
                         <MenuItem key={point.id} value={point.id}>
-                          {point.name}
+                          {point?.assortment}
                         </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    error={Boolean(touched.type && errors.type)}
+                    helperText={touched.type && errors.type}
+                    name="type"
+                    label="Type"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.type}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <FormControlLabel
+                    name="active"
+                    label="Active"
+                    value={values.active}
+                    onChange={handleChange}
+                    control={<Switch defaultChecked />}
+                    sx={{
+                      "& .MuiTypography-root": {
+                        useSelector: "none",
+                      },
+                    }}
+                  />
                 </Grid>
               </Grid>
             </CardContent>

@@ -159,9 +159,7 @@ const CourierList = () => {
 
   useEffect(
     () => {
-      if (!couriers.length) {
-        dispatch(getCouriers());
-      }
+      dispatch(getCouriers());
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []

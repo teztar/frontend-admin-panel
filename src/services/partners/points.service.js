@@ -6,10 +6,11 @@ export const getPoints = createAsyncThunk(
   "points/getPoints",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/points/${params?.partnerId}`, {
+      const response = await axios.get(`/points/all`, {
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
+          partnerId: params?.partnerId,
         },
       });
       return response.data;
@@ -25,7 +26,7 @@ export const getPoint = createAsyncThunk(
   async (params, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `/points/${params?.partnerId}/${params?.pointId}`
+        `/points/info/${params?.partnerId}/${params?.pointId}`
       );
       return response.data;
     } catch (error) {
@@ -39,7 +40,7 @@ export const createPoint = createAsyncThunk(
   "points/createPoint",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/points", values);
+      const response = await axios.post("/points/new", values);
       toast.success("Точка добавлен");
       return response.data;
     } catch (error) {
@@ -53,7 +54,7 @@ export const updatePoint = createAsyncThunk(
   "points/updatePoint",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/points", values);
+      const response = await axios.put("/points/update", values);
       toast.success("Точка обнавлен");
       return response.data;
     } catch (error) {

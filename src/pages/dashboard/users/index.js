@@ -14,12 +14,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { AuthGuard } from "../../../components/authentication/auth-guard";
-import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
-import { UserListTable } from "../../../components/dashboard/user/user-list-table";
-import { Plus as PlusIcon } from "../../../icons/plus";
-import { Search as SearchIcon } from "../../../icons/search";
-import { gtm } from "../../../lib/gtm";
+import { AuthGuard } from "@components/authentication/auth-guard";
+import { DashboardLayout } from "@components/dashboard/dashboard-layout";
+import { UserListTable } from "@components/dashboard/user/user-list-table";
+import { Plus as PlusIcon } from "@icons/plus";
+import { Search as SearchIcon } from "@icons/search";
+import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
 import { getUsers } from "@services/index";
 
@@ -159,9 +159,7 @@ const UserList = () => {
 
   useEffect(
     () => {
-      if (!users.length) {
-        dispatch(getUsers());
-      }
+      dispatch(getUsers());
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []

@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import Head from "next/head";
 import { Box, Container, Typography } from "@mui/material";
-import { AuthGuard } from "../../../components/authentication/auth-guard";
-import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
-import { UserEditForm } from "../../../components/dashboard/user/user-edit-form";
+import { AuthGuard } from "@components/authentication/auth-guard";
+import { DashboardLayout } from "@components/dashboard/dashboard-layout";
+import { UserEditForm } from "@components/dashboard/user/user-edit-form";
 import { gtm } from "../../../lib/gtm";
 
 const UserCreate = () => {

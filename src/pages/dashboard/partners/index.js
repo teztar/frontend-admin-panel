@@ -14,9 +14,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { AuthGuard } from "../../../components/authentication/auth-guard";
-import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
-import { PartnerListTable } from "../../../components/dashboard/partner/partner-list-table";
+import { AuthGuard } from "@components/authentication/auth-guard";
+import { DashboardLayout } from "@components/dashboard/dashboard-layout";
+import { PartnerListTable } from "@components/dashboard/partner/partner-list-table";
 import { Plus as PlusIcon } from "../../../icons/plus";
 import { Search as SearchIcon } from "../../../icons/search";
 import { gtm } from "../../../lib/gtm";

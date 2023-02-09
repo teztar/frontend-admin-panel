@@ -6,7 +6,12 @@ export const getBonuses = createAsyncThunk(
   "bonuses/getBonuses",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/bonuses/all", params);
+      const response = await axios.get("/bonuses/all", {
+        params: {
+          page: params?.page ?? 1,
+          perPage: params?.perPage ?? 10,
+        },
+      });
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
