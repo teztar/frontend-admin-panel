@@ -16,19 +16,19 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { customerApi } from "../../../../__fake-api__/customer-api";
-import { AuthGuard } from "../@components/authentication/auth-guard";
-import { DashboardLayout } from "../@components/dashboard/dashboard-layout";
-import { CustomerBasicDetails } from "../@components/dashboard/customer/customer-basic-details";
-import { CustomerDataManagement } from "../@components/dashboard/customer/customer-data-management";
-import { CustomerEmailsSummary } from "../@components/dashboard/customer/customer-emails-summary";
-import { CustomerInvoices } from "../@components/dashboard/customer/customer-invoices";
-import { CustomerPayment } from "../@components/dashboard/customer/customer-payment";
-import { CustomerLogs } from "../@components/dashboard/customer/customer-logs";
-import { useMounted } from "../../../../hooks/use-mounted";
-import { ChevronDown as ChevronDownIcon } from "../../../../icons/chevron-down";
-import { PencilAlt as PencilAltIcon } from "../../../../icons/pencil-alt";
-import { gtm } from "../../../../lib/gtm";
-import { getInitials } from "../../../../utils/get-initials";
+import { AuthGuard } from "@components/authentication/auth-guard";
+import { DashboardLayout } from "@components/dashboard/dashboard-layout";
+import { CustomerBasicDetails } from "@components/dashboard/customer/customer-basic-details";
+import { CustomerDataManagement } from "@components/dashboard/customer/customer-data-management";
+import { CustomerEmailsSummary } from "@components/dashboard/customer/customer-emails-summary";
+import { CustomerInvoices } from "@components/dashboard/customer/customer-invoices";
+import { CustomerPayment } from "@components/dashboard/customer/customer-payment";
+import { CustomerLogs } from "@components/dashboard/customer/customer-logs";
+import { useMounted } from "@hooks/use-mounted";
+import { ChevronDown as ChevronDownIcon } from "@icons/chevron-down";
+import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
+import { gtm } from "@lib/gtm";
+import { getInitials } from "@utils/get-initials";
 
 const tabs = [
   { label: "Details", value: "details" },

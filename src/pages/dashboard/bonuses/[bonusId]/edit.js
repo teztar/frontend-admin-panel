@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from "src/store";
 import { getUser } from "@services/users.service";
 import { Box, Container, Link, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { AuthGuard } from "../@components/authentication/auth-guard";
-import { DashboardLayout } from "../@components/dashboard/dashboard-layout";
-import { UserEditForm } from "../@components/dashboard/user/user-edit-form";
-import { gtm } from "../../../../lib/gtm";
+import { AuthGuard } from "@components/authentication/auth-guard";
+import { DashboardLayout } from "@components/dashboard/dashboard-layout";
+import { UserEditForm } from "@components/dashboard/user/user-edit-form";
+import { gtm } from "@lib/gtm";
 
 const UserEdit = () => {
   const dispatch = useDispatch();

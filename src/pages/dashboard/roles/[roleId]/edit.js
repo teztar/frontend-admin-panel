@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from "src/store";
 import { getRole } from "@services/roles.service";
 import { Box, Container, Link, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { AuthGuard } from "../@components/authentication/auth-guard";
-import { DashboardLayout } from "../@components/dashboard/dashboard-layout";
-import { RoleEditForm } from "../@components/dashboard/role/role-edit-form";
+import { AuthGuard } from "@components/authentication/auth-guard";
+import { DashboardLayout } from "@components/dashboard/dashboard-layout";
+import { RoleEditForm } from "@components/dashboard/role/role-edit-form";
 import { gtm } from "../../../../lib/gtm";
 
 const RoleEdit = () => {
