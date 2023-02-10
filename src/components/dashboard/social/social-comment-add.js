@@ -1,28 +1,28 @@
-import { Avatar, Box, Button, IconButton, TextField } from '@mui/material';
-import { EmojiHappy as EmojiHappyIcon } from '../../../icons/emoji-happy';
-import { Link as LinkIcon } from '../../../icons/link';
-import { PaperClip as PaperClipIcon } from '../../../icons/paper-clip';
-import { Photograph as PhotographIcon } from '../../../icons/photograph';
-import { Plus as PlusIcon } from '../../../icons/plus';
-import { getInitials } from '../../../utils/get-initials';
+import { Avatar, Box, Button, IconButton, TextField } from "@mui/material";
+import { EmojiHappy as EmojiHappyIcon } from "@icons/emoji-happy";
+import { Link as LinkIcon } from "@icons/link";
+import { PaperClip as PaperClipIcon } from "@icons/paper-clip";
+import { Photograph as PhotographIcon } from "@icons/photograph";
+import { Plus as PlusIcon } from "@icons/plus";
+import { getInitials } from "@utils/get-initials";
 
 export const SocialCommentAdd = (props) => {
   // To get the user from the authContext, you can use
   // `const { user } = useAuth();`
   const user = {
-    avatar: '/static/mock-images/avatars/avatar-anika_visser.png',
-    name: 'Anika Visser'
+    avatar: "/static/mock-images/avatars/avatar-anika_visser.png",
+    name: "Anika Visser",
   };
 
   return (
     <div {...props}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: "flex" }}>
         <Avatar
           src={user.avatar}
           sx={{
             height: 40,
             mr: 2,
-            width: 40
+            width: 40,
           }}
         >
           {getInitials(user.name)}
@@ -36,18 +36,18 @@ export const SocialCommentAdd = (props) => {
           />
           <Box
             sx={{
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'space-between',
-              mt: 3
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "space-between",
+              mt: 3,
             }}
           >
             <IconButton
               sx={{
                 display: {
-                  xs: 'inline-flex',
-                  sm: 'none'
-                }
+                  xs: "inline-flex",
+                  sm: "none",
+                },
               }}
             >
               <PlusIcon fontSize="small" />
@@ -55,13 +55,13 @@ export const SocialCommentAdd = (props) => {
             <Box
               sx={{
                 display: {
-                  xs: 'none',
-                  sm: 'block'
+                  xs: "none",
+                  sm: "block",
                 },
                 m: -1,
-                '& > *': {
-                  m: 1
-                }
+                "& > *": {
+                  m: 1,
+                },
               }}
             >
               <IconButton>
@@ -77,9 +77,7 @@ export const SocialCommentAdd = (props) => {
                 <EmojiHappyIcon fontSize="small" />
               </IconButton>
             </Box>
-            <Button variant="contained">
-              Send
-            </Button>
+            <Button variant="contained">Send</Button>
           </Box>
         </Box>
       </Box>

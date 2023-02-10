@@ -4,7 +4,7 @@ import { Box, Container, Typography } from "@mui/material";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { PartnerEditForm } from "@components/dashboard/partner/partner-edit-form";
-import { gtm } from "../../../lib/gtm";
+import { gtm } from "@lib/gtm";
 
 const PartnerCreate = () => {
   useEffect(() => {

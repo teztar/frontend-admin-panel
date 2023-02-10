@@ -28,6 +28,7 @@ import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import { Users as UsersIcon } from "../../icons/users";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import MoneyIcon from "@mui/icons-material/Money";
+import CorporateFareIcon from "@mui/icons-material/CorporateFare";
 import { Logo } from "../logo";
 import { Scrollbar } from "../scrollbar";
 import { DashboardSidebarSection } from "./dashboard-sidebar-section";
@@ -89,8 +90,13 @@ const getSections = (t) => [
         icon: <ReceiptIcon fontSize="small" />,
       },
       {
+        title: t("Cooperation"),
+        path: "/dashboard/cooperation",
+        icon: <CorporateFareIcon fontSize="small" />,
+      },
+      {
         title: t("Partners Balance"),
-        path: "/dashboard/partners_balance",
+        path: "/dashboard/partners-balance",
         icon: <MoneyIcon fontSize="small" />,
       },
       {
@@ -107,6 +113,11 @@ const getSections = (t) => [
         title: t("Bonuses"),
         path: "/dashboard/bonuses",
         icon: <CardGiftcardIcon fontSize="small" />,
+      },
+      {
+        title: t("Push Notifications"),
+        path: "/dashboard/push-notifications",
+        icon: <CorporateFareIcon fontSize="small" />,
       },
       {
         title: t("Users"),

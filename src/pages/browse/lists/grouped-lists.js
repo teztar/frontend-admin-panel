@@ -15,7 +15,7 @@ import { GroupedList8 } from "@components/widgets/grouped-lists/grouped-list-8";
 import { GroupedList9 } from "@components/widgets/grouped-lists/grouped-list-9";
 import { GroupedList10 } from "@components/widgets/grouped-lists/grouped-list-10";
 import { GroupedList11 } from "@components/widgets/grouped-lists/grouped-list-11";
-import { gtm } from "../../../lib/gtm";
+import { gtm } from "@lib/gtm";
 
 const BrowseGroupedLists = () => {
   useEffect(() => {

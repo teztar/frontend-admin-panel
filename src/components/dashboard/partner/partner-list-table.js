@@ -17,9 +17,9 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { ArrowRight as ArrowRightIcon } from "../../../icons/arrow-right";
-import { PencilAlt as PencilAltIcon } from "../../../icons/pencil-alt";
-import { getInitials } from "../../../utils/get-initials";
+import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
+import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
+import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
 
 export const PartnerListTable = (props) => {

@@ -1,8 +1,15 @@
-import PropTypes from 'prop-types';
-import { Avatar, Box, Card, CardContent, Divider, Typography } from '@mui/material';
-import { PropertyList } from '../../property-list';
-import { PropertyListItem } from '../../property-list-item';
-import { getInitials } from '../../../utils/get-initials';
+import PropTypes from "prop-types";
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  Divider,
+  Typography,
+} from "@mui/material";
+import { PropertyList } from "../../property-list";
+import { PropertyListItem } from "../../property-list-item";
+import { getInitials } from "@utils/get-initials";
 
 export const CompanySummary = (props) => {
   const { company, ...other } = props;
@@ -10,10 +17,7 @@ export const CompanySummary = (props) => {
   return (
     <Card {...other}>
       <CardContent>
-        <Typography
-          color="textSecondary"
-          variant="overline"
-        >
+        <Typography color="textSecondary" variant="overline">
           About
         </Typography>
         <PropertyList>
@@ -22,7 +26,7 @@ export const CompanySummary = (props) => {
             label="Website"
             sx={{
               mt: 2,
-              p: 0
+              p: 0,
             }}
             value={company.website}
           />
@@ -31,15 +35,11 @@ export const CompanySummary = (props) => {
             label="Locations"
             sx={{
               mt: 2,
-              p: 0
+              p: 0,
             }}
           >
             {(company.locations || []).map((location) => (
-              <Typography
-                key={location}
-                color="textSecondary"
-                variant="body2"
-              >
+              <Typography key={location} color="textSecondary" variant="body2">
                 {location}
               </Typography>
             ))}
@@ -49,16 +49,13 @@ export const CompanySummary = (props) => {
             label="Company size"
             sx={{
               mt: 1,
-              p: 0
+              p: 0,
             }}
             value={company.employees}
           />
         </PropertyList>
         <Divider sx={{ my: 2 }} />
-        <Typography
-          color="textSecondary"
-          variant="overline"
-        >
+        <Typography color="textSecondary" variant="overline">
           Founders
         </Typography>
         <div>
@@ -66,25 +63,17 @@ export const CompanySummary = (props) => {
             <Box
               key={founder.id}
               sx={{
-                alignItems: 'center',
-                display: 'flex',
-                mt: 2
+                alignItems: "center",
+                display: "flex",
+                mt: 2,
               }}
             >
-              <Avatar
-                src={founder.avatar}
-                sx={{ mr: 2 }}
-              >
+              <Avatar src={founder.avatar} sx={{ mr: 2 }}>
                 {getInitials(founder.name)}
               </Avatar>
               <div>
-                <Typography variant="subtitle2">
-                  {founder.name}
-                </Typography>
-                <Typography
-                  color="textSecondary"
-                  variant="body2"
-                >
+                <Typography variant="subtitle2">{founder.name}</Typography>
+                <Typography color="textSecondary" variant="body2">
                   {founder.role}
                 </Typography>
               </div>
@@ -97,5 +86,5 @@ export const CompanySummary = (props) => {
 };
 
 CompanySummary.propTypes = {
-  company: PropTypes.object.isRequired
+  company: PropTypes.object.isRequired,
 };

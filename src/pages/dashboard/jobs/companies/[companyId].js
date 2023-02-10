@@ -25,9 +25,9 @@ import { CompanySummary } from "@components/dashboard/jobs/company-summary";
 import { CompanyActivity } from "@components/dashboard/jobs/company-activity";
 import { CompanyTeam } from "@components/dashboard/jobs/company-team";
 import { CompanyAssets } from "@components/dashboard/jobs/company-assets";
-import { useMounted } from "../../../../hooks/use-mounted";
-import { gtm } from "../../../../lib/gtm";
-import { getInitials } from "../../../../utils/get-initials";
+import { useMounted } from "@hooks/use-mounted";
+import { gtm } from "@lib/gtm";
+import { getInitials } from "@utils/get-initials";
 
 const tabs = [
   { label: "Overview", value: "overview" },

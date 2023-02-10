@@ -1,5 +1,5 @@
-import { forwardRef } from 'react';
-import PropTypes from 'prop-types';
+import { forwardRef } from "react";
+import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
@@ -10,13 +10,22 @@ import {
   ListItemAvatar,
   ListItemText,
   TextField,
-  Typography
-} from '@mui/material';
-import { Search as SearchIcon } from '../../../icons/search';
-import { Tip } from '../../tip';
+  Typography,
+} from "@mui/material";
+import { Search as SearchIcon } from "@icons/search";
+import { Tip } from "../../tip";
 
 export const ChatContactSearch = forwardRef((props, ref) => {
-  const { isFocused, onChange, onClickAway, onFocus, onSelect, query, results, ...other } = props;
+  const {
+    isFocused,
+    onChange,
+    onClickAway,
+    onFocus,
+    onSelect,
+    query,
+    results,
+    ...other
+  } = props;
 
   const displaySearchResults = query && isFocused;
 
@@ -28,10 +37,7 @@ export const ChatContactSearch = forwardRef((props, ref) => {
 
   return (
     <ClickAwayListener onClickAway={() => onClickAway?.()}>
-      <Box
-        ref={ref}
-        sx={{ p: 2 }}
-        {...other}>
+      <Box ref={ref} sx={{ p: 2 }} {...other}>
         <TextField
           fullWidth
           onChange={onChange}
@@ -42,7 +48,7 @@ export const ChatContactSearch = forwardRef((props, ref) => {
               <InputAdornment position="start">
                 <SearchIcon fontSize="small" />
               </InputAdornment>
-            )
+            ),
           }}
           value={query}
         />
@@ -53,21 +59,15 @@ export const ChatContactSearch = forwardRef((props, ref) => {
         )}
         {Boolean(displaySearchResults && results.length === 0) && (
           <Box sx={{ py: 2 }}>
-            <Typography
-              color="textSecondary"
-              variant="body2"
-            >
-              We couldn&apos;t find any matches for &quot;{query}&quot;. Try checking for typos or using
-              complete words.
+            <Typography color="textSecondary" variant="body2">
+              We couldn&apos;t find any matches for &quot;{query}&quot;. Try
+              checking for typos or using complete words.
             </Typography>
           </Box>
         )}
-        {(displaySearchResults && results.length > 0) && (
+        {displaySearchResults && results.length > 0 && (
           <Box sx={{ py: 2 }}>
-            <Typography
-              color="textSecondary"
-              variant="subtitle2"
-            >
+            <Typography color="textSecondary" variant="subtitle2">
               Contacts
             </Typography>
             <List>
@@ -82,7 +82,7 @@ export const ChatContactSearch = forwardRef((props, ref) => {
                       src={result.avatar}
                       sx={{
                         height: 32,
-                        width: 32
+                        width: 32,
                       }}
                     />
                   </ListItemAvatar>
@@ -90,7 +90,7 @@ export const ChatContactSearch = forwardRef((props, ref) => {
                     primary={result.name}
                     primaryTypographyProps={{
                       noWrap: true,
-                      variant: 'subtitle2'
+                      variant: "subtitle2",
                     }}
                   />
                 </ListItem>
@@ -110,11 +110,11 @@ ChatContactSearch.propTypes = {
   onFocus: PropTypes.func,
   onSelect: PropTypes.func,
   query: PropTypes.string,
-  results: PropTypes.array.isRequired
+  results: PropTypes.array.isRequired,
 };
 
 ChatContactSearch.defaultProps = {
   isFocused: false,
-  query: '',
-  results: []
+  query: "",
+  results: [],
 };

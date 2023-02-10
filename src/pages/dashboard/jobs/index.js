@@ -19,13 +19,13 @@ import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { JobsBrowseFilter } from "@components/dashboard/jobs/jobs-browse-filter";
 import { CompanyJobs } from "@components/dashboard/jobs/company-jobs";
 import { useMounted } from "../../../hooks/use-mounted";
-import { BadgeCheckOutlined as BadgeCheckOutlinedIcon } from "../../../icons/badge-check-outlined";
-import { ChevronLeft as ChevronLeftIcon } from "../../../icons/chevron-left";
-import { ChevronRight as ChevronRightIcon } from "../../../icons/chevron-right";
-import { Star as StarIcon } from "../../../icons/star";
-import { Users as UsersIcon } from "../../../icons/users";
-import { gtm } from "../../../lib/gtm";
-import { getInitials } from "../../../utils/get-initials";
+import { BadgeCheckOutlined as BadgeCheckOutlinedIcon } from "@icons/badge-check-outlined";
+import { ChevronLeft as ChevronLeftIcon } from "@icons/chevron-left";
+import { ChevronRight as ChevronRightIcon } from "@icons/chevron-right";
+import { Star as StarIcon } from "@icons/star";
+import { Users as UsersIcon } from "@icons/users";
+import { gtm } from "@lib/gtm";
+import { getInitials } from "@utils/get-initials";
 
 const JobBrowse = () => {
   const isMounted = useMounted();

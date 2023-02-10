@@ -15,8 +15,8 @@ import {
   TablePagination,
   TableRow,
 } from "@mui/material";
-import { PencilAlt as PencilAltIcon } from "../../../icons/pencil-alt";
-import { getInitials } from "../../../utils/get-initials";
+import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
+import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
 
 export const UserListTable = (props) => {

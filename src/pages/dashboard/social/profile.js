@@ -21,10 +21,10 @@ import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { SocialConnections } from "@components/dashboard/social/social-connections";
 import { SocialTimeline } from "@components/dashboard/social/social-timeline";
 import { useMounted } from "../../../hooks/use-mounted";
-import { Chat as ChatIcon } from "../../../icons/chat";
-import { DotsHorizontal as DotsHorizontalIcon } from "../../../icons/dots-horizontal";
-import { UserAdd as UserAddIcon } from "../../../icons/user-add";
-import { gtm } from "../../../lib/gtm";
+import { Chat as ChatIcon } from "@icons/chat";
+import { DotsHorizontal as DotsHorizontalIcon } from "@icons/dots-horizontal";
+import { UserAdd as UserAddIcon } from "@icons/user-add";
+import { gtm } from "@lib/gtm";
 
 const tabs = [
   { label: "Timeline", value: "timeline" },

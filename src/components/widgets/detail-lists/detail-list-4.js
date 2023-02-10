@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { format, subDays, subHours, subMinutes } from 'date-fns';
+import { useState } from "react";
+import { format, subDays, subHours, subMinutes } from "date-fns";
 import {
   Box,
   Button,
@@ -12,29 +12,29 @@ import {
   TableCell,
   TableRow,
   TextField,
-  Typography
-} from '@mui/material';
-import { Mail as MailIcon } from '../../../icons/mail';
+  Typography,
+} from "@mui/material";
+import { Mail as MailIcon } from "@icons/mail";
 
 const now = new Date();
 
 const emails = [
   {
-    id: '5ece2ce3613486d95ffaea58',
+    id: "5ece2ce3613486d95ffaea58",
     createdAt: subDays(subHours(subMinutes(now, 34), 5), 3).getTime(),
-    description: 'Order confirmation'
+    description: "Order confirmation",
   },
   {
-    id: '5ece2ce8cebf7ad1d100c0cd',
+    id: "5ece2ce8cebf7ad1d100c0cd",
     createdAt: subDays(subHours(subMinutes(now, 49), 11), 4).getTime(),
-    description: 'Order confirmation'
-  }
+    description: "Order confirmation",
+  },
 ];
 
 const emailOptions = [
-  'Resend last invoice',
-  'Send password reset',
-  'Send verification'
+  "Resend last invoice",
+  "Send password reset",
+  "Send verification",
 ];
 
 export const DetailList4 = () => {
@@ -43,9 +43,9 @@ export const DetailList4 = () => {
   return (
     <Box
       sx={{
-        backgroundColor: 'background.default',
-        minHeight: '100%',
-        p: 3
+        backgroundColor: "background.default",
+        minHeight: "100%",
+        p: 3,
       }}
     >
       <Card>
@@ -61,10 +61,7 @@ export const DetailList4 = () => {
             value={emailOption}
           >
             {emailOptions.map((option) => (
-              <option
-                key={option}
-                value={option}
-              >
+              <option key={option} value={option}>
                 {option}
               </option>
             ))}
@@ -88,7 +85,7 @@ export const DetailList4 = () => {
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      {format(email.createdAt, 'dd/MM/yyyy | HH:mm')}
+                      {format(email.createdAt, "dd/MM/yyyy | HH:mm")}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -220,7 +220,7 @@ const OrderList = () => {
       >
         <Container maxWidth="xl">
           <Box sx={{ mb: 4 }}>
-            <Grid container justifyContent="space-between" spacing={3}>
+            {/* <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
                 <Typography variant="h4">Orders</Typography>
               </Grid>
@@ -234,7 +234,7 @@ const OrderList = () => {
                   </Button>
                 </NextLink>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Box>
           <Card>
             <Tabs

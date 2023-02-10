@@ -1,15 +1,22 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Box, Button, Chip, InputAdornment, TextField, Typography } from '@mui/material';
-import { MobileDatePicker } from '@mui/x-date-pickers';
-import { ArrowRight as ArrowRightIcon } from '../../../icons/arrow-right';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import {
+  Box,
+  Button,
+  Chip,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { MobileDatePicker } from "@mui/x-date-pickers";
+import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
 
 export const JobDetailsStep = (props) => {
   const { onBack, onNext, ...other } = props;
-  const [tag, setTag] = useState('');
+  const [tag, setTag] = useState("");
   const [tagArray, setTagArray] = useState([]);
-  const [startDate, setStartDate] = useState(new Date('2021-09-22T11:41:50'));
-  const [endDate, setEndDate] = useState(new Date('2022-01-11T12:41:50'));
+  const [startDate, setStartDate] = useState(new Date("2021-09-22T11:41:50"));
+  const [endDate, setEndDate] = useState(new Date("2022-01-11T12:41:50"));
 
   const handleStartDateChange = (newValue) => {
     setStartDate(newValue);
@@ -26,9 +33,7 @@ export const JobDetailsStep = (props) => {
 
   return (
     <div {...other}>
-      <Typography variant="h6">
-        What is the job about?
-      </Typography>
+      <Typography variant="h6">What is the job about?</Typography>
       <Box sx={{ mt: 3 }}>
         <TextField
           fullWidth
@@ -49,13 +54,13 @@ export const JobDetailsStep = (props) => {
                     }
 
                     handleTagAdd(tag);
-                    setTag('');
+                    setTag("");
                   }}
                 >
                   Add
                 </Button>
               </InputAdornment>
-            )
+            ),
           }}
           label="Tags"
           name="tags"
@@ -75,23 +80,20 @@ export const JobDetailsStep = (props) => {
               label={_tag}
               sx={{
                 mt: 1,
-                ml: 1
+                ml: 1,
               }}
               variant="outlined"
             />
           ))}
         </Box>
-        <Typography
-          sx={{ mt: 3 }}
-          variant="subtitle1"
-        >
+        <Typography sx={{ mt: 3 }} variant="subtitle1">
           When is the project starting?
         </Typography>
         <Box
           sx={{
-            alignItems: 'center',
-            display: 'flex',
-            mt: 3
+            alignItems: "center",
+            display: "flex",
+            mt: 3,
           }}
         >
           <MobileDatePicker
@@ -114,18 +116,13 @@ export const JobDetailsStep = (props) => {
       </Box>
       <Box sx={{ mt: 3 }}>
         <Button
-          endIcon={(
-            <ArrowRightIcon fontSize="small" />
-          )}
+          endIcon={<ArrowRightIcon fontSize="small" />}
           onClick={onNext}
           variant="contained"
         >
           Continue
         </Button>
-        <Button
-          onClick={onBack}
-          sx={{ ml: 2 }}
-        >
+        <Button onClick={onBack} sx={{ ml: 2 }}>
           Back
         </Button>
       </Box>
@@ -135,5 +132,5 @@ export const JobDetailsStep = (props) => {
 
 JobDetailsStep.propTypes = {
   onBack: PropTypes.func,
-  onNext: PropTypes.func
+  onNext: PropTypes.func,
 };

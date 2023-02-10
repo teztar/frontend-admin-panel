@@ -17,9 +17,9 @@ import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { InvoiceListFilters } from "@components/dashboard/invoice/invoice-list-filters";
 import { InvoiceListTable } from "@components/dashboard/invoice/invoice-list-table";
 import { useMounted } from "../../../hooks/use-mounted";
-import { Filter as FilterIcon } from "../../../icons/filter";
-import { Plus as PlusIcon } from "../../../icons/plus";
-import { gtm } from "../../../lib/gtm";
+import { Filter as FilterIcon } from "@icons/filter";
+import { Plus as PlusIcon } from "@icons/plus";
+import { gtm } from "@lib/gtm";
 
 const applyFilters = (invoices, filters) =>
   invoices.filter((invoice) => {

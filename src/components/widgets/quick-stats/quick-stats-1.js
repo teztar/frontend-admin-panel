@@ -1,26 +1,33 @@
-import { Box, Card, CardHeader, Divider, IconButton, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { DotsHorizontal as DotsHorizontalIcon } from '../../../icons/dots-horizontal';
-import { Chart } from '../../chart';
+import {
+  Box,
+  Card,
+  CardHeader,
+  Divider,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { DotsHorizontal as DotsHorizontalIcon } from "@icons/dots-horizontal";
+import { Chart } from "../../chart";
 
 const data = {
   series: [
     {
-      color: '#169BE0',
+      color: "#169BE0",
       data: 56,
-      name: 'Subscriptions'
+      name: "Subscriptions",
     },
     {
-      color: '#DB9846',
+      color: "#DB9846",
       data: 24,
-      name: 'Affiliate'
+      name: "Affiliate",
     },
     {
-      color: '#FF5C7C',
+      color: "#FF5C7C",
       data: 20,
-      name: 'Sales'
-    }
-  ]
+      name: "Sales",
+    },
+  ],
 };
 
 export const QuickStats1 = () => {
@@ -28,29 +35,29 @@ export const QuickStats1 = () => {
 
   const chartOptions = {
     chart: {
-      background: 'transparent',
+      background: "transparent",
       stacked: false,
       toolbar: {
-        show: false
-      }
+        show: false,
+      },
     },
     colors: data.series.map((item) => item.color),
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     fill: {
-      opacity: 1
+      opacity: 1,
     },
     labels: data.series.map((item) => item.name),
     legend: {
-      show: false
+      show: false,
     },
     stroke: {
-      show: false
+      show: false,
     },
     theme: {
-      mode: theme.palette.mode
-    }
+      mode: theme.palette.mode,
+    },
   };
 
   const chartSeries = data.series.map((item) => item.data);
@@ -58,17 +65,17 @@ export const QuickStats1 = () => {
   return (
     <Box
       sx={{
-        backgroundColor: 'background.default',
-        p: 3
+        backgroundColor: "background.default",
+        p: 3,
       }}
     >
       <Card>
         <CardHeader
-          action={(
+          action={
             <IconButton>
               <DotsHorizontalIcon fontSize="small" />
             </IconButton>
-          )}
+          }
           title="Earnings Source"
         />
         <Divider />
@@ -81,32 +88,26 @@ export const QuickStats1 = () => {
           />
         </Box>
         <Divider />
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: "flex" }}>
           {data.series.map((item) => (
             <Box
               key={item.name}
               sx={{
-                display: 'flex',
-                flexDirection: 'column',
+                display: "flex",
+                flexDirection: "column",
                 flexGrow: 1,
-                justifyContent: 'center',
+                justifyContent: "center",
                 px: 2,
                 py: 3,
-                textAlign: 'center',
-                '&:not(:last-of-type)': {
+                textAlign: "center",
+                "&:not(:last-of-type)": {
                   borderRight: 1,
-                  borderColor: 'divider'
-                }
+                  borderColor: "divider",
+                },
               }}
             >
-              <Typography variant="h4">
-                {item.data}
-                %
-              </Typography>
-              <Typography
-                color="textSecondary"
-                variant="overline"
-              >
+              <Typography variant="h4">{item.data}%</Typography>
+              <Typography color="textSecondary" variant="overline">
                 {item.name}
               </Typography>
             </Box>
