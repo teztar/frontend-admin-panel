@@ -12,7 +12,7 @@ import { QuickStats5 } from "@components/widgets/quick-stats/quick-stats-5";
 import { QuickStats6 } from "@components/widgets/quick-stats/quick-stats-6";
 import { QuickStats7 } from "@components/widgets/quick-stats/quick-stats-7";
 import { QuickStats8 } from "@components/widgets/quick-stats/quick-stats-8";
-import { gtm } from "../../../lib/gtm";
+import { gtm } from "@lib/gtm";
 
 const BrowseQuickStats = () => {
   useEffect(() => {

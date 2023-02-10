@@ -8,18 +8,18 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Typography
-} from '@mui/material';
-import { Lock as LockIcon } from '../../../icons/lock';
-import { User as UserIcon } from '../../../icons/user';
-import { SeverityPill } from '../../severity-pill';
+  Typography,
+} from "@mui/material";
+import { Lock as LockIcon } from "@icons/lock";
+import { User as UserIcon } from "@icons/user";
+import { SeverityPill } from "../../severity-pill";
 
 export const DetailList2 = () => (
   <Box
     sx={{
-      backgroundColor: 'background.default',
-      minHeight: '100%',
-      p: 3
+      backgroundColor: "background.default",
+      minHeight: "100%",
+      p: 3,
     }}
   >
     <Card>
@@ -29,93 +29,61 @@ export const DetailList2 = () => (
         <TableBody>
           <TableRow>
             <TableCell>
-              <Typography variant="subtitle2">
-                Email
-              </Typography>
+              <Typography variant="subtitle2">Email</Typography>
             </TableCell>
             <TableCell>
-              <Typography
-                color="textSecondary"
-                variant="body2"
-              >
+              <Typography color="textSecondary" variant="body2">
                 miron.vitold@devias.io
               </Typography>
-              <SeverityPill color="success">
-                Email verified
-              </SeverityPill>
+              <SeverityPill color="success">Email verified</SeverityPill>
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography variant="subtitle2">
-                Phone
-              </Typography>
+              <Typography variant="subtitle2">Phone</Typography>
             </TableCell>
             <TableCell>
-              <Typography
-                color="textSecondary"
-                variant="body2"
-              >
+              <Typography color="textSecondary" variant="body2">
                 +55 748 327 439
               </Typography>
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography variant="subtitle2">
-                Country
-              </Typography>
+              <Typography variant="subtitle2">Country</Typography>
             </TableCell>
             <TableCell>
-              <Typography
-                color="textSecondary"
-                variant="body2"
-              >
+              <Typography color="textSecondary" variant="body2">
                 USA
               </Typography>
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography variant="subtitle2">
-                State/Region
-              </Typography>
+              <Typography variant="subtitle2">State/Region</Typography>
             </TableCell>
             <TableCell>
-              <Typography
-                color="textSecondary"
-                variant="body2"
-              >
+              <Typography color="textSecondary" variant="body2">
                 New York
               </Typography>
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography variant="subtitle2">
-                Address 1
-              </Typography>
+              <Typography variant="subtitle2">Address 1</Typography>
             </TableCell>
             <TableCell>
-              <Typography
-                color="textSecondary"
-                variant="body2"
-              >
+              <Typography color="textSecondary" variant="body2">
                 Street John Wick, no. 7
               </Typography>
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography variant="subtitle2">
-                Address 2
-              </Typography>
+              <Typography variant="subtitle2">Address 2</Typography>
             </TableCell>
             <TableCell>
-              <Typography
-                color="textSecondary"
-                variant="body2"
-              >
+              <Typography color="textSecondary" variant="body2">
                 House #25
               </Typography>
             </TableCell>
@@ -124,16 +92,13 @@ export const DetailList2 = () => (
       </Table>
       <Box
         sx={{
-          alignItems: 'flex-start',
-          display: 'flex',
-          flexDirection: 'column',
-          p: 1
+          alignItems: "flex-start",
+          display: "flex",
+          flexDirection: "column",
+          p: 1,
         }}
       >
-        <Button
-          color="inherit"
-          startIcon={<LockIcon fontSize="small" />}
-        >
+        <Button color="inherit" startIcon={<LockIcon fontSize="small" />}>
           Reset &amp; Send Password
         </Button>
         <Button

@@ -15,7 +15,7 @@ import { Table8 } from "@components/widgets/tables/table-8";
 import { Table9 } from "@components/widgets/tables/table-9";
 import { Table10 } from "@components/widgets/tables/table-10";
 import { Table11 } from "@components/widgets/tables/table-11";
-import { gtm } from "../../../lib/gtm";
+import { gtm } from "@lib/gtm";
 
 const BrowseTables = () => {
   useEffect(() => {

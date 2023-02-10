@@ -1,56 +1,65 @@
-import { Avatar, Box, Button, Card, CardActions, Divider, Grid, Typography } from '@mui/material';
-import { alpha, useTheme } from '@mui/material/styles';
-import { ArrowRight as ArrowRightIcon } from '../../../icons/arrow-right';
-import { ChevronDown as ChevronDownIcon } from '../../../icons/chevron-down';
-import { ChevronUp as ChevronUpIcon } from '../../../icons/chevron-up';
-import { Chart } from '../../chart';
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  Divider,
+  Grid,
+  Typography,
+} from "@mui/material";
+import { alpha, useTheme } from "@mui/material/styles";
+import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
+import { ChevronDown as ChevronDownIcon } from "@icons/chevron-down";
+import { ChevronUp as ChevronUpIcon } from "@icons/chevron-up";
+import { Chart } from "../../chart";
 
 const LineChart = () => {
   const theme = useTheme();
 
   const chartOptions = {
     chart: {
-      background: 'transparent',
+      background: "transparent",
       toolbar: {
-        show: false
+        show: false,
       },
       zoom: {
-        enabled: false
-      }
+        enabled: false,
+      },
     },
-    colors: ['#2F3EB1'],
+    colors: ["#2F3EB1"],
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     fill: {
-      opacity: 1
+      opacity: 1,
     },
     grid: {
-      show: false
+      show: false,
     },
     stroke: {
-      width: 3
+      width: 3,
     },
     theme: {
-      mode: theme.palette.mode
+      mode: theme.palette.mode,
     },
     tooltip: {
-      enabled: false
+      enabled: false,
     },
     xaxis: {
       labels: {
-        show: false
+        show: false,
       },
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
-        show: false
-      }
+        show: false,
+      },
     },
     yaxis: {
-      show: false
-    }
+      show: false,
+    },
   };
 
   const chartSeries = [{ data: [0, 60, 30, 60, 0, 30, 10, 30, 0] }];
@@ -70,101 +79,82 @@ const BarChart = () => {
 
   const chartOptions = {
     chart: {
-      background: 'transparent',
+      background: "transparent",
       toolbar: {
-        show: false
+        show: false,
       },
       zoom: {
-        enabled: false
-      }
+        enabled: false,
+      },
     },
-    colors: ['#2F3EB1'],
+    colors: ["#2F3EB1"],
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     fill: {
-      opacity: 1
+      opacity: 1,
     },
     grid: {
-      show: false
+      show: false,
     },
     states: {
       normal: {
         filter: {
-          type: 'none',
-          value: 0
-        }
-      }
+          type: "none",
+          value: 0,
+        },
+      },
     },
     stroke: {
-      width: 0
+      width: 0,
     },
     theme: {
-      mode: theme.palette.mode
+      mode: theme.palette.mode,
     },
     tooltip: {
-      enabled: false
+      enabled: false,
     },
     xaxis: {
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
-        show: false
+        show: false,
       },
       labels: {
-        show: false
-      }
+        show: false,
+      },
     },
     yaxis: {
-      show: false
-    }
+      show: false,
+    },
   };
 
   const chartSeries = [{ data: [10, 20, 30, 40, 50, 60, 5] }];
 
   return (
-    <Chart
-      options={chartOptions}
-      series={chartSeries}
-      type="bar"
-      width={120}
-    />
+    <Chart options={chartOptions} series={chartSeries} type="bar" width={120} />
   );
 };
 
 export const AnalyticsGeneralOverview = () => (
-  <Grid
-    container
-    spacing={4}
-  >
-    <Grid
-      item
-      md={3}
-      sm={6}
-      xs={12}
-    >
+  <Grid container spacing={4}>
+    <Grid item md={3} sm={6} xs={12}>
       <Card>
         <Box
           sx={{
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'space-between',
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "space-between",
             px: 3,
-            py: 2
+            py: 2,
           }}
         >
           <div>
-            <Typography
-              color="textSecondary"
-              variant="body2"
-            >
+            <Typography color="textSecondary" variant="body2">
               Impressions
             </Typography>
-            <Typography
-              sx={{ mt: 1 }}
-              variant="h5"
-            >
+            <Typography sx={{ mt: 1 }} variant="h5">
               1.9M
             </Typography>
           </div>
@@ -178,33 +168,22 @@ export const AnalyticsGeneralOverview = () => (
         </CardActions>
       </Card>
     </Grid>
-    <Grid
-      item
-      md={3}
-      sm={6}
-      xs={12}
-    >
+    <Grid item md={3} sm={6} xs={12}>
       <Card>
         <Box
           sx={{
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'space-between',
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "space-between",
             px: 3,
-            py: 2
+            py: 2,
           }}
         >
           <div>
-            <Typography
-              color="textSecondary"
-              variant="body2"
-            >
+            <Typography color="textSecondary" variant="body2">
               Spent
             </Typography>
-            <Typography
-              sx={{ mt: 1 }}
-              variant="h5"
-            >
+            <Typography sx={{ mt: 1 }} variant="h5">
               $41.2K
             </Typography>
           </div>
@@ -213,57 +192,43 @@ export const AnalyticsGeneralOverview = () => (
         <Divider />
         <CardActions
           sx={{
-            alignItems: 'center',
-            display: 'flex'
+            alignItems: "center",
+            display: "flex",
           }}
         >
           <Avatar
             sx={{
-              backgroundColor: (theme) => alpha(theme.palette.success.main, 0.08),
-              color: 'success.main',
+              backgroundColor: (theme) =>
+                alpha(theme.palette.success.main, 0.08),
+              color: "success.main",
               height: 36,
-              width: 36
+              width: 36,
             }}
           >
             <ChevronUpIcon fontSize="small" />
           </Avatar>
-          <Typography
-            color="textSecondary"
-            sx={{ ml: 1 }}
-            variant="caption"
-          >
+          <Typography color="textSecondary" sx={{ ml: 1 }} variant="caption">
             12% more then last month
           </Typography>
         </CardActions>
       </Card>
     </Grid>
-    <Grid
-      item
-      md={3}
-      sm={6}
-      xs={12}
-    >
+    <Grid item md={3} sm={6} xs={12}>
       <Card>
         <Box
           sx={{
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'space-between',
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "space-between",
             px: 3,
-            py: 2
+            py: 2,
           }}
         >
           <div>
-            <Typography
-              color="textSecondary"
-              variant="body2"
-            >
+            <Typography color="textSecondary" variant="body2">
               Engagements
             </Typography>
-            <Typography
-              sx={{ mt: 1 }}
-              variant="h5"
-            >
+            <Typography sx={{ mt: 1 }} variant="h5">
               36,6K
             </Typography>
           </div>
@@ -272,57 +237,42 @@ export const AnalyticsGeneralOverview = () => (
         <Divider />
         <CardActions
           sx={{
-            alignItems: 'center',
-            display: 'flex'
+            alignItems: "center",
+            display: "flex",
           }}
         >
           <Avatar
             sx={{
               backgroundColor: (theme) => alpha(theme.palette.error.main, 0.08),
-              color: 'error.main',
+              color: "error.main",
               height: 36,
-              width: 36
+              width: 36,
             }}
           >
             <ChevronDownIcon fontSize="small" />
           </Avatar>
-          <Typography
-            color="textSecondary"
-            sx={{ ml: 1 }}
-            variant="caption"
-          >
+          <Typography color="textSecondary" sx={{ ml: 1 }} variant="caption">
             30% less then last month
           </Typography>
         </CardActions>
       </Card>
     </Grid>
-    <Grid
-      item
-      md={3}
-      sm={6}
-      xs={12}
-    >
+    <Grid item md={3} sm={6} xs={12}>
       <Card>
         <Box
           sx={{
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'space-between',
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "space-between",
             px: 3,
-            py: 2
+            py: 2,
           }}
         >
           <div>
-            <Typography
-              color="textSecondary"
-              variant="body2"
-            >
+            <Typography color="textSecondary" variant="body2">
               Conversions
             </Typography>
-            <Typography
-              sx={{ mt: 1 }}
-              variant="h5"
-            >
+            <Typography sx={{ mt: 1 }} variant="h5">
               131,3K
             </Typography>
           </div>
@@ -331,25 +281,22 @@ export const AnalyticsGeneralOverview = () => (
         <Divider />
         <CardActions
           sx={{
-            alignItems: 'center',
-            display: 'flex'
+            alignItems: "center",
+            display: "flex",
           }}
         >
           <Avatar
             sx={{
-              backgroundColor: (theme) => alpha(theme.palette.success.main, 0.08),
-              color: 'success.main',
+              backgroundColor: (theme) =>
+                alpha(theme.palette.success.main, 0.08),
+              color: "success.main",
               height: 36,
-              width: 36
+              width: 36,
             }}
           >
             <ChevronUpIcon fontSize="small" />
           </Avatar>
-          <Typography
-            color="textSecondary"
-            sx={{ ml: 1 }}
-            variant="caption"
-          >
+          <Typography color="textSecondary" sx={{ ml: 1 }} variant="caption">
             12% more then last month
           </Typography>
         </CardActions>

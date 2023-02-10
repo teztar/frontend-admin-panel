@@ -17,7 +17,7 @@ import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { JobCategoryStep } from "@components/dashboard/jobs/job-category-step";
 import { JobDetailsStep } from "@components/dashboard/jobs/job-details-step";
 import { JobDescriptionStep } from "@components/dashboard/jobs/job-description-step";
-import { Check as CheckIcon } from "../../../icons/check";
+import { Check as CheckIcon } from "@icons/check";
 
 const StepIcon = (props) => {
   const { active, completed, icon } = props;

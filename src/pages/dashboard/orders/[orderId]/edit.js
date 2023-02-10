@@ -9,7 +9,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { OrderEditForm } from "@components/dashboard/order/order-edit-form";
-import { gtm } from "../../../../lib/gtm";
+import { gtm } from "@lib/gtm";
 
 const OrderEdit = () => {
   const dispatch = useDispatch();

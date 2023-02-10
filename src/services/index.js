@@ -23,6 +23,13 @@ export {
 export { getUser, getUsers, createUser, updateUser } from "./users.service";
 
 export {
+  createPushNotification,
+  updatePushNotification,
+  getPushNotification,
+  getPushNotifications,
+} from "./pushNotifications.service";
+
+export {
   getClient,
   getClients,
   createClient,
@@ -51,6 +58,9 @@ export {
 } from "./bonuses.service";
 
 export { getTransaction, getTransactions } from "./transactions.service";
+
+export { getCooperation, getCooperations } from "./cooperations.service";
+
 export {
   getPartnersBalance,
   downloadPartnersBalance,

@@ -8,10 +8,10 @@ import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { ProjectListFilters } from "@components/dashboard/product/product-list-filters";
 import { ProductListTable } from "@components/dashboard/product/product-list-table";
 import { useMounted } from "../../../hooks/use-mounted";
-import { Download as DownloadIcon } from "../../../icons/download";
-import { Upload as UploadIcon } from "../../../icons/upload";
-import { Plus as PlusIcon } from "../../../icons/plus";
-import { gtm } from "../../../lib/gtm";
+import { Download as DownloadIcon } from "@icons/download";
+import { Upload as UploadIcon } from "@icons/upload";
+import { Plus as PlusIcon } from "@icons/plus";
+import { gtm } from "@lib/gtm";
 
 const applyFilters = (products, filters) =>
   products.filter((product) => {

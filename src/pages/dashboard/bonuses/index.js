@@ -17,9 +17,9 @@ import {
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { BonusListTable } from "@components/dashboard/bonus/bonus-list-table";
-import { Plus as PlusIcon } from "../../../icons/plus";
-import { Search as SearchIcon } from "../../../icons/search";
-import { gtm } from "../../../lib/gtm";
+import { Plus as PlusIcon } from "@icons/plus";
+import { Search as SearchIcon } from "@icons/search";
+import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
 import { getBonuses } from "@services/index";
 

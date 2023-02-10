@@ -9,47 +9,47 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Typography
-} from '@mui/material';
-import { Truck as TruckIcon } from '../../../icons/truck';
-import { Scrollbar } from '../../scrollbar';
-import { SeverityPill } from '../../severity-pill';
+  Typography,
+} from "@mui/material";
+import { Truck as TruckIcon } from "@icons/truck";
+import { Scrollbar } from "../../scrollbar";
+import { SeverityPill } from "../../severity-pill";
 
 const vehicles = [
   {
-    id: 'VOL-653CD1',
-    endingRoute: 'Cleveland, Ohio, USA',
-    startingRoute: 'Cleveland, Ohio, USA',
-    status: 'success',
+    id: "VOL-653CD1",
+    endingRoute: "Cleveland, Ohio, USA",
+    startingRoute: "Cleveland, Ohio, USA",
+    status: "success",
     temperature: 8,
-    temperatureLabel: 'Very Good'
+    temperatureLabel: "Very Good",
   },
   {
-    id: 'VOL-653CD2',
-    endingRoute: 'Cleveland, Ohio, USA',
-    startingRoute: 'Cleveland, Ohio, USA',
-    status: 'warning',
+    id: "VOL-653CD2",
+    endingRoute: "Cleveland, Ohio, USA",
+    startingRoute: "Cleveland, Ohio, USA",
+    status: "warning",
     temperature: 8,
-    temperatureLabel: 'Very Good',
-    warning: 'Temperature not optimal'
+    temperatureLabel: "Very Good",
+    warning: "Temperature not optimal",
   },
   {
-    id: 'VOL-653CD3',
-    endingRoute: 'Cleveland, Ohio, USA',
-    startingRoute: 'Cleveland, Ohio, USA',
-    status: 'error',
+    id: "VOL-653CD3",
+    endingRoute: "Cleveland, Ohio, USA",
+    startingRoute: "Cleveland, Ohio, USA",
+    status: "error",
     temperature: 8,
-    temperatureLabel: 'Very Good',
-    warning: 'ECU not responding'
+    temperatureLabel: "Very Good",
+    warning: "ECU not responding",
   },
   {
-    id: 'VOL-653CD4',
-    endingRoute: 'Cleveland, Ohio, USA',
-    startingRoute: 'Cleveland, Ohio, USA',
-    status: 'success',
+    id: "VOL-653CD4",
+    endingRoute: "Cleveland, Ohio, USA",
+    startingRoute: "Cleveland, Ohio, USA",
+    status: "success",
     temperature: 8,
-    temperatureLabel: 'Very Good'
-  }
+    temperatureLabel: "Very Good",
+  },
 ];
 
 export const LogisticsOnRouteVehicles = () => (
@@ -63,48 +63,34 @@ export const LogisticsOnRouteVehicles = () => (
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>
-                Location
-              </TableCell>
-              <TableCell>
-                Ending Route
-              </TableCell>
-              <TableCell>
-                Starting Route
-              </TableCell>
-              <TableCell>
-                Warnings
-              </TableCell>
-              <TableCell>
-                Refrigerator Temperature
-              </TableCell>
+              <TableCell>Location</TableCell>
+              <TableCell>Ending Route</TableCell>
+              <TableCell>Starting Route</TableCell>
+              <TableCell>Warnings</TableCell>
+              <TableCell>Refrigerator Temperature</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {vehicles.map((vehicle) => (
               <TableRow
                 key={vehicle.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell>
                   <Box
                     sx={{
-                      alignItems: 'center',
-                      display: 'flex'
+                      alignItems: "center",
+                      display: "flex",
                     }}
                   >
                     <Avatar sx={{ mr: 2 }}>
                       <TruckIcon fontSize="small" />
                     </Avatar>
-                    <Typography variant="subtitle2">
-                      {vehicle.id}
-                    </Typography>
+                    <Typography variant="subtitle2">{vehicle.id}</Typography>
                   </Box>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="body2">
-                    {vehicle.endingRoute}
-                  </Typography>
+                  <Typography variant="body2">{vehicle.endingRoute}</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2">
@@ -113,7 +99,7 @@ export const LogisticsOnRouteVehicles = () => (
                 </TableCell>
                 <TableCell>
                   <SeverityPill color={vehicle.status}>
-                    {vehicle.warning || 'No warnings'}
+                    {vehicle.warning || "No warnings"}
                   </SeverityPill>
                 </TableCell>
                 <TableCell>
@@ -123,22 +109,16 @@ export const LogisticsOnRouteVehicles = () => (
                   />
                   <Box
                     sx={{
-                      alignItems: 'center',
-                      display: 'flex',
-                      mt: 2
+                      alignItems: "center",
+                      display: "flex",
+                      mt: 2,
                     }}
                   >
-                    <Typography
-                      color="inherit"
-                      variant="inherit"
-                    >
+                    <Typography color="inherit" variant="inherit">
                       {vehicle.temperatureLabel}
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
-                    <Typography
-                      color="textSecondary"
-                      variant="inherit"
-                    >
+                    <Typography color="textSecondary" variant="inherit">
                       {vehicle.temperature}
                       °C
                     </Typography>

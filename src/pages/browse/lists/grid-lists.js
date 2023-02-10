@@ -10,7 +10,7 @@ import { GridList3 } from "@components/widgets/grid-lists/grid-list-3";
 import { GridList4 } from "@components/widgets/grid-lists/grid-list-4";
 import { GridList5 } from "@components/widgets/grid-lists/grid-list-5";
 import { GridList6 } from "@components/widgets/grid-lists/grid-list-6";
-import { gtm } from "../../../lib/gtm";
+import { gtm } from "@lib/gtm";
 
 const BrowseGridLists = () => {
   useEffect(() => {

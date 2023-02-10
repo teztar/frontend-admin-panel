@@ -9,7 +9,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { CourierEditForm } from "@components/dashboard/courier/courier-edit-form";
-import { gtm } from "../../../../lib/gtm";
+import { gtm } from "@lib/gtm";
 
 const CourierEdit = () => {
   const dispatch = useDispatch();

@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import { formatDistanceToNowStrict } from 'date-fns';
+import { useRef, useState } from "react";
+import PropTypes from "prop-types";
+import { formatDistanceToNowStrict } from "date-fns";
 import {
   Avatar,
   AvatarGroup,
@@ -11,15 +11,15 @@ import {
   Menu,
   MenuItem,
   Tooltip,
-  Typography
-} from '@mui/material';
-import { Archive as ArchiveIcon } from '../../../icons/archive';
-import { Bell as BellIcon } from '../../../icons/bell';
-import { Ban as BanIcon } from '../../../icons/ban';
-import { Camera as CameraIcon } from '../../../icons/camera';
-import { Phone as PhoneIcon } from '../../../icons/phone';
-import { DotsHorizontal as DotsHorizontalIcon } from '../../../icons/dots-horizontal';
-import { Trash as TrashIcon } from '../../../icons/trash';
+  Typography,
+} from "@mui/material";
+import { Archive as ArchiveIcon } from "@icons/archive";
+import { Bell as BellIcon } from "@icons/bell";
+import { Ban as BanIcon } from "@icons/ban";
+import { Camera as CameraIcon } from "@icons/camera";
+import { Phone as PhoneIcon } from "@icons/phone";
+import { DotsHorizontal as DotsHorizontalIcon } from "@icons/dots-horizontal";
+import { Trash as TrashIcon } from "@icons/trash";
 
 export const ChatThreadToolbar = (props) => {
   const { participants, ...other } = props;
@@ -28,12 +28,15 @@ export const ChatThreadToolbar = (props) => {
   // To get the user from the authContext, you can use
   // `const { user } = useAuth();`
   const user = {
-    id: '5e86809283e28b96d2d38537'
+    id: "5e86809283e28b96d2d38537",
   };
 
-  const recipients = participants.filter((participant) => (participant.id !== user.id));
-  const name = recipients.reduce((names, participant) => [...names, participant.name],
-    []).join(', ');
+  const recipients = participants.filter(
+    (participant) => participant.id !== user.id
+  );
+  const name = recipients
+    .reduce((names, participant) => [...names, participant.name], [])
+    .join(", ");
 
   const handleMenuOpen = () => {
     setOpenMenu(true);
@@ -46,57 +49,51 @@ export const ChatThreadToolbar = (props) => {
   return (
     <Box
       sx={{
-        alignItems: 'center',
-        backgroundColor: 'background.paper',
-        borderBottomColor: 'divider',
-        borderBottomStyle: 'solid',
+        alignItems: "center",
+        backgroundColor: "background.paper",
+        borderBottomColor: "divider",
+        borderBottomStyle: "solid",
         borderBottomWidth: 1,
-        display: 'flex',
+        display: "flex",
         flexShrink: 0,
         minHeight: 64,
         px: 2,
-        py: 1
+        py: 1,
       }}
-      {...other}>
+      {...other}
+    >
       <Box
         sx={{
-          alignItems: 'center',
-          display: 'flex'
+          alignItems: "center",
+          display: "flex",
         }}
       >
         <AvatarGroup
           max={2}
           sx={{
             ...(recipients.length > 1 && {
-              '& .MuiAvatar-root': {
+              "& .MuiAvatar-root": {
                 height: 30,
                 width: 30,
-                '&:nth-of-type(2)': {
-                  mt: '10px'
-                }
-              }
-            })
+                "&:nth-of-type(2)": {
+                  mt: "10px",
+                },
+              },
+            }),
           }}
         >
           {recipients.map((recipient) => (
-            <Avatar
-              key={recipient.id}
-              src={recipient.avatar || undefined}
-            />
+            <Avatar key={recipient.id} src={recipient.avatar || undefined} />
           ))}
         </AvatarGroup>
         <Box sx={{ ml: 2 }}>
-          <Typography variant="subtitle2">
-            {name}
-          </Typography>
+          <Typography variant="subtitle2">{name}</Typography>
           {Boolean(recipients.length === 1 && recipients[0].lastActivity) && (
-            <Typography
-              color="textSecondary"
-              variant="caption"
-            >
-              Last active
-              {' '}
-              {formatDistanceToNowStrict(recipients[0].lastActivity, { addSuffix: true })}
+            <Typography color="textSecondary" variant="caption">
+              Last active{" "}
+              {formatDistanceToNowStrict(recipients[0].lastActivity, {
+                addSuffix: true,
+              })}
             </Typography>
           )}
         </Box>
@@ -109,10 +106,7 @@ export const ChatThreadToolbar = (props) => {
         <CameraIcon fontSize="small" />
       </IconButton>
       <Tooltip title="More options">
-        <IconButton
-          onClick={handleMenuOpen}
-          ref={moreRef}
-        >
+        <IconButton onClick={handleMenuOpen} ref={moreRef}>
           <DotsHorizontalIcon fontSize="small" />
         </IconButton>
       </Tooltip>
@@ -152,9 +146,9 @@ export const ChatThreadToolbar = (props) => {
 };
 
 ChatThreadToolbar.propTypes = {
-  participants: PropTypes.array
+  participants: PropTypes.array,
 };
 
 ChatThreadToolbar.defaultProps = {
-  participants: []
+  participants: [],
 };

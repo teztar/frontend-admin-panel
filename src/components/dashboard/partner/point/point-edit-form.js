@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
 import { FieldArray, Formik, getIn } from "formik";
+import { Map, Placemark, SearchControl, YMaps } from "react-yandex-maps";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import {
   Box,
@@ -18,6 +19,7 @@ import {
 import { useDispatch } from "src/store";
 import { createPoint, updatePoint } from "@services/index";
 import { format } from "date-fns";
+import { useRef } from "react";
 
 export const PointEditForm = (props) => {
   const { point, mode = "edit", ...other } = props;
@@ -28,6 +30,19 @@ export const PointEditForm = (props) => {
 
   const pointId = query?.pointId;
   const partnerId = query?.partnerId;
+
+  const map = useRef(null);
+
+  const handleGetGeoObject = async (map, setFieldValue) => {
+    if (Array.isArray(map)) {
+      setFieldValue("geolocationLatitude", map[0]);
+      setFieldValue("geolocationLongitude", map[1]);
+    } else {
+      const coords = map.get("coords");
+      setFieldValue("geolocationLatitude", coords[0]);
+      setFieldValue("geolocationLongitude", coords[1]);
+    }
+  };
 
   const pointPhones = point?.phoneNumbers?.map((item) => {
     return {
@@ -309,6 +324,61 @@ export const PointEditForm = (props) => {
                       </Grid>
                     )}
                   />
+                </Grid>
+                <Grid item xs={12}>
+                  <YMaps
+                    query={{
+                      lang: "ru_RU",
+                      apikey: "6d2219fd-5118-4e09-bb69-e786ff23284a",
+                    }}
+                  >
+                    <Map
+                      defaultState={{
+                        center: [38.559772, 68.787038],
+                        zoom: 11,
+                      }}
+                      options={{ maxZoom: 11, minZoom: 8 }}
+                      width="100%"
+                      height="300px"
+                      onClick={(map) => {
+                        handleGetGeoObject(map, setFieldValue);
+                      }}
+                      modules={[
+                        "templateLayoutFactory",
+                        "layout.ImageWithContent",
+                        "geocode",
+                        "geoObject.addon.balloon",
+                        "multiRouter.MultiRoute",
+                      ]}
+                      instanceRef={map}
+                    >
+                      <SearchControl
+                        options={{
+                          float: "right",
+                        }}
+                      />
+                      <Placemark
+                        // onClick={() => handlePoint(point)}
+                        geometry={[
+                          values.geolocationLatitude,
+                          values.geolocationLongitude,
+                        ]}
+                        options={{
+                          iconColor: "#ff0000",
+                        }}
+                        //       properties={{
+                        //         hintContent: `
+                        // <div>
+                        //   <h6>Название: ${point?.name}</h6>
+                        //     <div>Адрес: ${point?.address}</div>
+                        //     <div>Тип: ${point?.type?.name}</div><br/>
+                        // </div>
+                        // `,
+                        //       }}
+                        modules={["geoObject.addon.hint"]}
+                      />
+                    </Map>
+                  </YMaps>
                 </Grid>
                 {/* </Grid> */}
               </Grid>

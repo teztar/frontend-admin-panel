@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import { Map, Placemark, SearchControl, YMaps } from "react-yandex-maps";
 import {
   Button,
   Card,
@@ -14,15 +15,9 @@ import {
   InputLabel,
   Select,
   Grid,
-  IconButton,
-  InputAdornment,
   MenuItem,
-  OutlinedInput,
   TextField,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useDispatch, useSelector } from "src/store";
 import { createOrder, getClients, updateOrder } from "@services/index";
 
@@ -35,17 +30,22 @@ export const OrderEditForm = (props) => {
 
   const { order, mode = "edit", ...other } = props;
 
-  const [showPassword, setShowPassword] = useState(false);
+  const map = useRef(null);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  const handleGetGeoObject = async (map, setFieldValue) => {
+    if (Array.isArray(map)) {
+      setFieldValue("geolocationLatitude", map[0]);
+      setFieldValue("geolocationLongitude", map[1]);
+    } else {
+      const coords = map.get("coords");
+      setFieldValue("geolocationLatitude", coords[0]);
+      setFieldValue("geolocationLongitude", coords[1]);
+    }
   };
 
   useEffect(() => {
     if (!clients.length) {
-      dispatch(getClients());
+      dispatch(getClients({ page: 1, perPage: 1000 }));
     }
   }, []);
 
@@ -62,10 +62,6 @@ export const OrderEditForm = (props) => {
         productId: order?.productId || "",
         submit: null,
       }}
-      validationSchema={Yup.object().shape({
-        name: Yup.string().min(4).max(255),
-        phone: Yup.string().max(9).required("Phone is required"),
-      })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
           if (mode === "create") {
@@ -211,6 +207,62 @@ export const OrderEditForm = (props) => {
                     value={values.geolocationLongitude}
                     inputProps={{ maxLength: 9 }}
                   />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <YMaps
+                    query={{
+                      lang: "ru_RU",
+                      apikey: "6d2219fd-5118-4e09-bb69-e786ff23284a",
+                    }}
+                  >
+                    <Map
+                      defaultState={{
+                        center: [38.559772, 68.787038],
+                        zoom: 11,
+                      }}
+                      options={{ maxZoom: 11, minZoom: 8 }}
+                      width="100%"
+                      height="300px"
+                      onClick={(map) => {
+                        handleGetGeoObject(map, setFieldValue);
+                      }}
+                      modules={[
+                        "templateLayoutFactory",
+                        "layout.ImageWithContent",
+                        "geocode",
+                        "geoObject.addon.balloon",
+                        "multiRouter.MultiRoute",
+                      ]}
+                      instanceRef={map}
+                    >
+                      <SearchControl
+                        options={{
+                          float: "right",
+                        }}
+                      />
+                      <Placemark
+                        // onClick={() => handlePoint(point)}
+                        geometry={[
+                          values.geolocationLatitude,
+                          values.geolocationLongitude,
+                        ]}
+                        options={{
+                          iconColor: "#ff0000",
+                        }}
+                        //       properties={{
+                        //         hintContent: `
+                        // <div>
+                        //   <h6>Название: ${point?.name}</h6>
+                        //     <div>Адрес: ${point?.address}</div>
+                        //     <div>Тип: ${point?.type?.name}</div><br/>
+                        // </div>
+                        // `,
+                        //       }}
+                        modules={["geoObject.addon.hint"]}
+                      />
+                    </Map>
+                  </YMaps>
                 </Grid>
               </Grid>
             </CardContent>
