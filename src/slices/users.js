@@ -9,6 +9,7 @@ import {
 
 const initialState = {
   users: [],
+  count: null,
   user: {},
   permissions: [],
   loading: true,
@@ -25,7 +26,8 @@ const users = createSlice({
     });
     builder.addCase(getUsers.fulfilled, (state, action) => {
       state.loading = false;
-      state.users = action.payload;
+      state.users = action.payload?.payload;
+      state.count = action.payload?.count;
     });
     builder.addCase(getUsers.rejected, (state) => {
       state.loading = false;
@@ -36,7 +38,7 @@ const users = createSlice({
     });
     builder.addCase(getUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload;
+      state.user = action.payload?.payload;
     });
     builder.addCase(getUser.rejected, (state) => {
       state.loading = false;
@@ -67,7 +69,7 @@ const users = createSlice({
     });
     builder.addCase(getPermissions.fulfilled, (state, action) => {
       state.loading = false;
-      state.permissions = action.payload;
+      state.permissions = action.payload?.payload;
     });
     builder.addCase(getPermissions.rejected, (state) => {
       state.loading = false;

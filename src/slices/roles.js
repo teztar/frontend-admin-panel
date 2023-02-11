@@ -9,6 +9,7 @@ import {
 
 const initialState = {
   roles: [],
+  count: null,
   role: {},
   permissions: [],
   loading: true,
@@ -25,7 +26,8 @@ const roles = createSlice({
     });
     builder.addCase(getRoles.fulfilled, (state, action) => {
       state.loading = false;
-      state.roles = action.payload;
+      state.roles = action.payload?.payload;
+      state.count = action.payload?.count;
     });
     builder.addCase(getRoles.rejected, (state) => {
       state.loading = false;
@@ -36,7 +38,7 @@ const roles = createSlice({
     });
     builder.addCase(getRole.fulfilled, (state, action) => {
       state.loading = false;
-      state.role = action.payload;
+      state.role = action.payload?.payload;
     });
     builder.addCase(getRole.rejected, (state) => {
       state.loading = false;
@@ -67,7 +69,7 @@ const roles = createSlice({
     });
     builder.addCase(getPermissions.fulfilled, (state, action) => {
       state.loading = false;
-      state.permissions = action.payload;
+      state.permissions = action.payload?.payload;
     });
     builder.addCase(getPermissions.rejected, (state) => {
       state.loading = false;

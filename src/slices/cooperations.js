@@ -3,6 +3,7 @@ import { getCooperation, getCooperations } from "@services/index";
 
 const initialState = {
   cooperations: [],
+  count: null,
   transaction: {},
   loading: true,
   error: null,
@@ -18,7 +19,8 @@ const cooperations = createSlice({
     });
     builder.addCase(getCooperations.fulfilled, (state, action) => {
       state.loading = false;
-      state.cooperations = action.payload;
+      state.cooperations = action.payload?.payload;
+      state.count = action.payload?.count;
     });
     builder.addCase(getCooperations.rejected, (state) => {
       state.loading = false;
@@ -29,7 +31,7 @@ const cooperations = createSlice({
     });
     builder.addCase(getCooperation.fulfilled, (state, action) => {
       state.loading = false;
-      state.transaction = action.payload;
+      state.transaction = action.payload?.payload;
     });
     builder.addCase(getCooperation.rejected, (state) => {
       state.loading = false;

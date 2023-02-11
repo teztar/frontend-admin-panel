@@ -96,8 +96,6 @@ axios.interceptors.request.use(
       ? JSON.stringify(toSnakeCaseFormat(removeEmptyFieds))
       : getUrlData;
 
-    console.log({ request });
-
     const encryptedData = crypto.HmacSHA256(request, key);
 
     const headers = {

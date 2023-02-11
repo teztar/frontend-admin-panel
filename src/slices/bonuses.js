@@ -8,6 +8,7 @@ import {
 
 const initialState = {
   bonuses: [],
+  count: null,
   bonus: {},
   loading: true,
   error: null,
@@ -23,7 +24,8 @@ const bonuses = createSlice({
     });
     builder.addCase(getBonuses.fulfilled, (state, action) => {
       state.loading = false;
-      state.bonuses = action.payload;
+      state.bonuses = action.payload?.payload;
+      state.count = action.payload?.count;
     });
     builder.addCase(getBonuses.rejected, (state) => {
       state.loading = false;
@@ -34,7 +36,7 @@ const bonuses = createSlice({
     });
     builder.addCase(getBonus.fulfilled, (state, action) => {
       state.loading = false;
-      state.bonus = action.payload;
+      state.bonus = action.payload?.payload;
     });
     builder.addCase(getBonus.rejected, (state) => {
       state.loading = false;

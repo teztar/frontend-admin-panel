@@ -8,6 +8,7 @@ import {
 
 const initialState = {
   couriers: [],
+  count: null,
   courier: {},
   loading: true,
   error: null,
@@ -23,7 +24,8 @@ const couriers = createSlice({
     });
     builder.addCase(getCouriers.fulfilled, (state, action) => {
       state.loading = false;
-      state.couriers = action.payload;
+      state.couriers = action.payload?.payload;
+      state.count = action.payload?.count;
     });
     builder.addCase(getCouriers.rejected, (state) => {
       state.loading = false;
@@ -34,7 +36,7 @@ const couriers = createSlice({
     });
     builder.addCase(getCourier.fulfilled, (state, action) => {
       state.loading = false;
-      state.courier = action.payload;
+      state.courier = action.payload?.payload;
     });
     builder.addCase(getCourier.rejected, (state) => {
       state.loading = false;
