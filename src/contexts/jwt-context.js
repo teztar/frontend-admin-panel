@@ -114,7 +114,7 @@ export const AuthProvider = (props) => {
       data: { email, password },
     });
 
-    const accessToken = loginResponse?.data?.token;
+    const accessToken = loginResponse?.data?.payload?.token;
     // const { accessToken } = await authApi.login({ email, password });
     const user = await authApi.me({ accessToken });
 

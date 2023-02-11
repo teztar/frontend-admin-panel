@@ -1,13 +1,7 @@
-import { useEffect, useState } from "react";
 import NextLink from "next/link";
 import PropTypes from "prop-types";
 import {
-  Avatar,
-  Box,
-  Button,
-  Checkbox,
   IconButton,
-  Link,
   Table,
   TableBody,
   TableCell,
@@ -16,9 +10,8 @@ import {
   TableRow,
 } from "@mui/material";
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
-import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
-import { format } from "date-fns";
+import TablePaginationActions from "@utils/tablePaginationActions";
 
 export const OrderListTable = (props) => {
   const {
@@ -30,117 +23,48 @@ export const OrderListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
-  const [selectedOrders, setSelectedOrders] = useState([]);
-
-  // Reset selected orders when orders change
-  useEffect(
-    () => {
-      if (selectedOrders.length) {
-        setSelectedOrders([]);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [orders]
-  );
-
-  const handleSelectAllOrders = (event) => {
-    setSelectedOrders(
-      event.target.checked ? orders.map((order) => order.id) : []
-    );
-  };
-
-  const handleSelectOneOrder = (event, orderId) => {
-    if (!selectedOrders.includes(orderId)) {
-      setSelectedOrders((prevSelected) => [...prevSelected, orderId]);
-    } else {
-      setSelectedOrders((prevSelected) =>
-        prevSelected.filter((id) => id !== orderId)
-      );
-    }
-  };
-
-  const enableBulkActions = selectedOrders.length > 0;
-  const selectedSomeOrders =
-    selectedOrders.length > 0 && selectedOrders.length < orders.length;
-  const selectedAllOrders = selectedOrders.length === orders.length;
 
   return (
     <div {...other}>
-      <Box
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
-          display: enableBulkActions ? "block" : "none",
-          px: 2,
-          py: 0.5,
-        }}
-      >
-        <Checkbox
-          checked={selectedAllOrders}
-          indeterminate={selectedSomeOrders}
-          onChange={handleSelectAllOrders}
-        />
-        <Button size="small" sx={{ ml: 2 }}>
-          Delete
-        </Button>
-        <Button size="small" sx={{ ml: 2 }}>
-          Edit
-        </Button>
-      </Box>
       <Scrollbar>
         <Table sx={{ minWidth: 700 }}>
-          <TableHead
-            sx={{ visibility: enableBulkActions ? "collapse" : "visible" }}
-          >
+          <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedAllOrders}
-                  indeterminate={selectedSomeOrders}
-                  onChange={handleSelectAllOrders}
-                />
-              </TableCell>
               <TableCell>Added From</TableCell>
               <TableCell>Amount</TableCell>
               <TableCell>Payment Option</TableCell>
+              <TableCell>Partner region</TableCell>
+              <TableCell>Partner Brand</TableCell>
+              <TableCell>Client Name</TableCell>
+              <TableCell>Client Phone</TableCell>
               <TableCell>Status</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => {
-              const isOrderSelected = selectedOrders.includes(order.id);
+            {orders.map((order) => (
+              <TableRow hover key={order.id}>
+                <TableCell>{order.addedFrom}</TableCell>
+                <TableCell>{order.amount}</TableCell>
+                <TableCell>{order.paymentOption}</TableCell>
+                <TableCell>{order.partner?.brand}</TableCell>
+                <TableCell>{order.partner?.brand}</TableCell>
+                <TableCell>{order.client?.name}</TableCell>
+                <TableCell>{order.client?.phone}</TableCell>
+                <TableCell>{order.status}</TableCell>
 
-              return (
-                <TableRow hover key={order.id} selected={isOrderSelected}>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isOrderSelected}
-                      onChange={(event) =>
-                        handleSelectOneOrder(event, order.id)
-                      }
-                      value={isOrderSelected}
-                    />
-                  </TableCell>
-
-                  <TableCell>{order.addedFrom}</TableCell>
-                  <TableCell>{order.amount}</TableCell>
-                  <TableCell>{order.paymentOption}</TableCell>
-                  <TableCell>{order.status}</TableCell>
-
-                  <TableCell align="right">
-                    <NextLink
-                      href={`/dashboard/orders/${order.id}/edit`}
-                      passHref
-                    >
-                      <IconButton component="a">
-                        <PencilAltIcon fontSize="small" />
-                      </IconButton>
-                    </NextLink>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                <TableCell align="right">
+                  <NextLink
+                    href={`/dashboard/orders/${order.id}/edit`}
+                    passHref
+                  >
+                    <IconButton component="a">
+                      <PencilAltIcon fontSize="small" />
+                    </IconButton>
+                  </NextLink>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </Scrollbar>
@@ -152,6 +76,7 @@ export const OrderListTable = (props) => {
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
+        ActionsComponent={TablePaginationActions}
       />
     </div>
   );

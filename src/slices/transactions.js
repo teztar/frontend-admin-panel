@@ -4,6 +4,7 @@ import { getTransaction, getTransactions } from "@services/index";
 const initialState = {
   transactions: [],
   transaction: {},
+  count: null,
   loading: true,
   error: null,
 };
@@ -18,7 +19,8 @@ const transactions = createSlice({
     });
     builder.addCase(getTransactions.fulfilled, (state, action) => {
       state.loading = false;
-      state.transactions = action.payload;
+      state.transactions = action.payload?.payload;
+      state.count = action.payload?.count;
     });
     builder.addCase(getTransactions.rejected, (state) => {
       state.loading = false;
@@ -29,7 +31,7 @@ const transactions = createSlice({
     });
     builder.addCase(getTransaction.fulfilled, (state, action) => {
       state.loading = false;
-      state.transaction = action.payload;
+      state.transaction = action.payload?.payload;
     });
     builder.addCase(getTransaction.rejected, (state) => {
       state.loading = false;

@@ -8,6 +8,7 @@ import {
 
 const initialState = {
   pushNotifications: [],
+  count: null,
   pushNotification: {},
   loading: true,
   error: null,
@@ -23,7 +24,8 @@ const pushNotifications = createSlice({
     });
     builder.addCase(getPushNotifications.fulfilled, (state, action) => {
       state.loading = false;
-      state.pushNotifications = action.payload;
+      state.pushNotifications = action.payload?.payload;
+      state.count = action.payload?.count;
     });
     builder.addCase(getPushNotifications.rejected, (state) => {
       state.loading = false;
@@ -34,7 +36,7 @@ const pushNotifications = createSlice({
     });
     builder.addCase(getPushNotification.fulfilled, (state, action) => {
       state.loading = false;
-      state.pushNotification = action.payload;
+      state.pushNotification = action.payload?.payload;
     });
     builder.addCase(getPushNotification.rejected, (state) => {
       state.loading = false;

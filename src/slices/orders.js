@@ -3,6 +3,7 @@ import { getOrder, getOrders, createOrder, updateOrder } from "@services/index";
 
 const initialState = {
   orders: [],
+  count: null,
   order: {},
   loading: true,
   error: null,
@@ -18,7 +19,8 @@ const orders = createSlice({
     });
     builder.addCase(getOrders.fulfilled, (state, action) => {
       state.loading = false;
-      state.orders = action.payload;
+      state.orders = action.payload?.payload;
+      state.count = action.payload?.count;
     });
     builder.addCase(getOrders.rejected, (state) => {
       state.loading = false;
@@ -29,7 +31,7 @@ const orders = createSlice({
     });
     builder.addCase(getOrder.fulfilled, (state, action) => {
       state.loading = false;
-      state.order = action.payload;
+      state.order = action.payload?.payload;
     });
     builder.addCase(getOrder.rejected, (state) => {
       state.loading = false;

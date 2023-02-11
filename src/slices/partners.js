@@ -8,6 +8,7 @@ import {
 
 const initialState = {
   partners: [],
+  count: null,
   partner: {},
   loading: true,
   error: null,
@@ -23,7 +24,8 @@ const partners = createSlice({
     });
     builder.addCase(getPartners.fulfilled, (state, action) => {
       state.loading = false;
-      state.partners = action.payload;
+      state.partners = action.payload?.payload;
+      state.count = action.payload?.count;
     });
     builder.addCase(getPartners.rejected, (state) => {
       state.loading = false;
@@ -34,7 +36,7 @@ const partners = createSlice({
     });
     builder.addCase(getPartner.fulfilled, (state, action) => {
       state.loading = false;
-      state.partner = action.payload;
+      state.partner = action.payload?.payload;
     });
     builder.addCase(getPartner.rejected, (state) => {
       state.loading = false;
@@ -43,7 +45,7 @@ const partners = createSlice({
     builder.addCase(createPartner.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(createPartner.fulfilled, (state, action) => {
+    builder.addCase(createPartner.fulfilled, (state) => {
       state.loading = false;
     });
     builder.addCase(createPartner.rejected, (state) => {
@@ -53,7 +55,7 @@ const partners = createSlice({
     builder.addCase(updatePartner.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(updatePartner.fulfilled, (state, action) => {
+    builder.addCase(updatePartner.fulfilled, (state) => {
       state.loading = false;
     });
     builder.addCase(updatePartner.rejected, (state) => {

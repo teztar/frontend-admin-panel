@@ -8,6 +8,7 @@ import {
 
 const initialState = {
   clients: [],
+  count: null,
   client: {},
   loading: true,
   error: null,
@@ -23,7 +24,8 @@ const clients = createSlice({
     });
     builder.addCase(getClients.fulfilled, (state, action) => {
       state.loading = false;
-      state.clients = action.payload;
+      state.clients = action.payload?.payload;
+      state.count = action.payload?.count;
     });
     builder.addCase(getClients.rejected, (state) => {
       state.loading = false;
@@ -34,7 +36,7 @@ const clients = createSlice({
     });
     builder.addCase(getClient.fulfilled, (state, action) => {
       state.loading = false;
-      state.client = action.payload;
+      state.client = action.payload?.payload;
     });
     builder.addCase(getClient.rejected, (state) => {
       state.loading = false;
