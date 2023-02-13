@@ -119,7 +119,6 @@ export const PartnerListTable = (props) => {
                 <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell></TableCell>
-                <TableCell></TableCell>
               </TableRow>
             )}
           </TableBody>

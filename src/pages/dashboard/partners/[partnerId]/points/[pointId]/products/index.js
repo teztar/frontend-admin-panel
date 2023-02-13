@@ -8,18 +8,19 @@ import {
   Card,
   Container,
   Grid,
-  InputAdornment,
-  TextField,
   Typography,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
-import { DashboardLayout } from "@components/dashboard/dashboard-layout";
-import { PointListTable } from "@components/dashboard/partner/point/point-list-table";
-import { Plus as PlusIcon } from "@icons/plus";
-import { Search as SearchIcon } from "@icons/search";
-import { useDispatch, useSelector } from "src/store";
-import { getPoints } from "@services/index";
 import { AuthGuard } from "@components/authentication/auth-guard";
-import { gtm } from "src/lib/gtm";
+import { DashboardLayout } from "@components/dashboard/dashboard-layout";
+import { ProductListTable } from "@components/dashboard/product/product-list-table";
+import { useMounted } from "@hooks/use-mounted";
+import { Search as SearchIcon } from "@icons/search";
+import { Plus as PlusIcon } from "@icons/plus";
+import { gtm } from "@lib/gtm";
+import { useDispatch, useSelector } from "src/store";
+import { getProducts } from "@services/index";
 
 const sortOptions = [
   {
@@ -40,15 +41,18 @@ const sortOptions = [
   },
 ];
 
-const PointList = () => {
+const ProductList = () => {
+  const isMounted = useMounted();
+
   const dispatch = useDispatch();
 
-  const { points, count } = useSelector((state) => state.points);
+  const { products, count } = useSelector((state) => state.products);
 
   const router = useRouter();
 
   const queryRef = useRef(null);
 
+  const pointId = router.query?.pointId;
   const partnerId = router.query?.partnerId;
 
   const queryParams = {
@@ -80,17 +84,16 @@ const PointList = () => {
 
   useEffect(() => {
     gtm.push({ event: "page_view" });
-    // dispatch(getPoints());
   }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/partners/${partnerId}/points?search=${search}&page=${page}&perPage=${rowsPerPage}`
+        `/dashboard/partners/${partnerId}/points/${pointId}/products?search=${search}&page=${page}&perPage=${rowsPerPage}`
       );
       dispatch(
-        getPoints({
-          partnerId: partnerId,
+        getProducts({
+          pointId: pointId,
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
@@ -104,7 +107,7 @@ const PointList = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Point List</title>
+        <title>Dashboard: Product List</title>
       </Head>
       <Box
         component="main"
@@ -117,11 +120,11 @@ const PointList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Points</Typography>
+                <Typography variant="h4">Products</Typography>
               </Grid>
               <Grid item>
                 <NextLink
-                  href={`/dashboard/partners/${partnerId}/points/new`}
+                  href={`/dashboard/partners/${partnerId}/points/${pointId}/products/new`}
                   passHref
                 >
                   <Button
@@ -162,7 +165,7 @@ const PointList = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder="Search points"
+                  placeholder="Search products"
                 />
               </Box>
               <TextField
@@ -181,13 +184,13 @@ const PointList = () => {
                 ))}
               </TextField>
             </Box>
-            <PointListTable
-              points={points}
-              pointsCount={count}
+            <ProductListTable
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              rowsPerPage={rowsPerPage}
               page={page}
+              products={products}
+              productsCount={count}
+              rowsPerPage={rowsPerPage}
             />
           </Card>
         </Container>
@@ -196,10 +199,10 @@ const PointList = () => {
   );
 };
 
-PointList.getLayout = (page) => (
+ProductList.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 
-export default PointList;
+export default ProductList;
