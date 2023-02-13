@@ -1,3 +1,5 @@
+export { getStats } from "./stats.service";
+
 export {
   getPartner,
   getPartners,
@@ -11,6 +13,13 @@ export {
   createPoint,
   updatePoint,
 } from "./partners/points.service";
+
+export {
+  getProduct,
+  getProducts,
+  createProduct,
+  updateProduct,
+} from "./partners/products.service";
 
 export {
   getRole,

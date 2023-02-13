@@ -3,6 +3,7 @@ import { getPoint, getPoints, createPoint, updatePoint } from "@services/index";
 
 const initialState = {
   points: [],
+  count: null,
   point: {},
   loading: true,
   error: null,
@@ -18,7 +19,8 @@ const points = createSlice({
     });
     builder.addCase(getPoints.fulfilled, (state, action) => {
       state.loading = false;
-      state.points = action.payload;
+      state.points = action.payload?.payload;
+      state.count = action.payload?.count;
     });
     builder.addCase(getPoints.rejected, (state) => {
       state.loading = false;
@@ -29,7 +31,7 @@ const points = createSlice({
     });
     builder.addCase(getPoint.fulfilled, (state, action) => {
       state.loading = false;
-      state.point = action.payload;
+      state.point = action.payload?.payload;
     });
     builder.addCase(getPoint.rejected, (state) => {
       state.loading = false;

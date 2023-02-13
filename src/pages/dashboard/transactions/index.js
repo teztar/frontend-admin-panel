@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import {
   Box,
-  Button,
   Card,
   Container,
   Grid,
@@ -15,7 +13,6 @@ import {
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { TransactionListTable } from "@components/dashboard/transaction/transaction-list-table";
-import { Plus as PlusIcon } from "@icons/plus";
 import { Search as SearchIcon } from "@icons/search";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
@@ -115,16 +112,6 @@ const TransactionList = () => {
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
                 <Typography variant="h4">Transactions</Typography>
-              </Grid>
-              <Grid item>
-                <NextLink href="/dashboard/transactions/new" passHref>
-                  <Button
-                    startIcon={<PlusIcon fontSize="small" />}
-                    variant="contained"
-                  >
-                    Add
-                  </Button>
-                </NextLink>
               </Grid>
             </Grid>
           </Box>

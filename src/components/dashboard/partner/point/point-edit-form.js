@@ -50,8 +50,6 @@ export const PointEditForm = (props) => {
     };
   });
 
-  38.47832551309211, 68.8106836001943;
-
   return (
     <Formik
       enableReinitialize
