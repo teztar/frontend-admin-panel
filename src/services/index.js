@@ -66,7 +66,11 @@ export {
   updateBonus,
 } from "./bonuses.service";
 
-export { getTransaction, getTransactions } from "./transactions.service";
+export {
+  getTransaction,
+  getTransactions,
+  downloadTransactionsFile,
+} from "./transactions.service";
 
 export { getCooperation, getCooperations } from "./cooperations.service";
 

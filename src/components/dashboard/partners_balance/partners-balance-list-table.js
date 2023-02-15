@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import NextLink from "next/link";
 import PropTypes from "prop-types";
 import {
-  Avatar,
-  Box,
-  Button,
-  Checkbox,
   IconButton,
-  Link,
   Table,
   TableBody,
   TableCell,
@@ -16,8 +11,9 @@ import {
   TableRow,
 } from "@mui/material";
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
-import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
+import TablePaginationActions from "@utils/tablePaginationActions";
+import { format } from "date-fns";
 
 export const PartnersBalanceListTable = (props) => {
   const {
@@ -72,114 +68,48 @@ export const PartnersBalanceListTable = (props) => {
 
   return (
     <div {...other}>
-      <Box
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
-          display: enableBulkActions ? "block" : "none",
-          px: 2,
-          py: 0.5,
-        }}
-      >
-        <Checkbox
-          checked={selectedAllPartnersBalances}
-          indeterminate={selectedSomePartnersBalances}
-          onChange={handleSelectAllPartnersBalances}
-        />
-        <Button size="small" sx={{ ml: 2 }}>
-          Delete
-        </Button>
-        <Button size="small" sx={{ ml: 2 }}>
-          Edit
-        </Button>
-      </Box>
       <Scrollbar>
         <Table sx={{ minWidth: 700 }}>
-          <TableHead
-            sx={{ visibility: enableBulkActions ? "collapse" : "visible" }}
-          >
+          <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedAllPartnersBalances}
-                  indeterminate={selectedSomePartnersBalances}
-                  onChange={handleSelectAllPartnersBalances}
-                />
-              </TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Email</TableCell>
+              <TableCell>Partner Name</TableCell>
+              <TableCell>Registration Date</TableCell>
+              <TableCell>Region</TableCell>
+              <TableCell>Count Of Points</TableCell>
+              <TableCell>Current Balance</TableCell>
+              <TableCell>Turnover</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {partnersBalance.map((partnersBalance) => {
-              const isPartnersBalanceSelected =
-                selectedPartnersBalances.includes(partnersBalance.id);
+            {partnersBalance.map((partnersBalance) => (
+              <TableRow hover key={partnersBalance.id}>
+                <TableCell>{partnersBalance.partnerName}</TableCell>
+                <TableCell>
+                  {format(
+                    new Date(partnersBalance.registrationDate),
+                    "dd-MM-yyyy"
+                  )}
+                </TableCell>
+                <TableCell>{partnersBalance.region}</TableCell>
+                <TableCell>{partnersBalance.countOfPoints}</TableCell>
+                <TableCell>{partnersBalance.currentBalance}</TableCell>
+                <TableCell>{partnersBalance.turnover}</TableCell>
+                <TableCell>{partnersBalance.status}</TableCell>
 
-              return (
-                <TableRow
-                  hover
-                  key={partnersBalance.id}
-                  selected={isPartnersBalanceSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isPartnersBalanceSelected}
-                      onChange={(event) =>
-                        handleSelectOnePartnersBalance(
-                          event,
-                          partnersBalance.id
-                        )
-                      }
-                      value={isPartnersBalanceSelected}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{
-                        alignItems: "center",
-                        display: "flex",
-                      }}
-                    >
-                      <Avatar
-                        src={partnersBalance.avatar}
-                        sx={{
-                          height: 42,
-                          width: 42,
-                        }}
-                      >
-                        {getInitials(partnersBalance.name)}
-                      </Avatar>
-                      <Box sx={{ ml: 1 }}>
-                        <NextLink
-                          href={`/dashboard/partnersBalance/${partnersBalance.id}/edit`}
-                          passHref
-                        >
-                          <Link color="inherit" variant="subtitle2">
-                            {partnersBalance.name}
-                          </Link>
-                        </NextLink>
-                      </Box>
-                    </Box>
-                  </TableCell>
-
-                  <TableCell>{partnersBalance.role?.name}</TableCell>
-                  <TableCell>{partnersBalance.email}</TableCell>
-
-                  <TableCell align="right">
-                    <NextLink
-                      href={`/dashboard/partnersBalance/${partnersBalance.id}/edit`}
-                      passHref
-                    >
-                      <IconButton component="a">
-                        <PencilAltIcon fontSize="small" />
-                      </IconButton>
-                    </NextLink>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                <TableCell align="right">
+                  <NextLink
+                    href={`/dashboard/partnersBalance/${partnersBalance.id}/edit`}
+                    passHref
+                  >
+                    <IconButton component="a">
+                      <PencilAltIcon fontSize="small" />
+                    </IconButton>
+                  </NextLink>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </Scrollbar>
@@ -191,6 +121,7 @@ export const PartnersBalanceListTable = (props) => {
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
+        ActionsComponent={TablePaginationActions}
       />
     </div>
   );

@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import toast from "react-hot-toast";
 
 export const getCooperations = createAsyncThunk(
   "cooperation/getCooperations",
@@ -11,6 +10,7 @@ export const getCooperations = createAsyncThunk(
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
           search: params?.search ?? "",
+          type: params?.type ?? "",
         },
       });
       return response.data;

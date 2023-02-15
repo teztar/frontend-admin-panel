@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import {
   Box,
   Card,
@@ -9,6 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { PartnersBalanceListTable } from "@components/dashboard/partners_balance/partners-balance-list-table";
@@ -16,26 +18,8 @@ import { Search as SearchIcon } from "@icons/search";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
 import { getPartnersBalance } from "@services/index";
-import { useRouter } from "next/router";
 
-const sortOptions = [
-  {
-    label: "Last update (newest)",
-    value: "updatedAt|desc",
-  },
-  {
-    label: "Last update (oldest)",
-    value: "updatedAt|asc",
-  },
-  {
-    label: "Total orders (highest)",
-    value: "totalOrders|desc",
-  },
-  {
-    label: "Total orders (lowest)",
-    value: "totalOrders|asc",
-  },
-];
+const STATUSES = ["DEBT", "PAID"];
 
 const PartnersBalanceList = () => {
   const dispatch = useDispatch();
@@ -48,24 +32,33 @@ const PartnersBalanceList = () => {
 
   const queryRef = useRef(null);
 
+  const { query } = router;
+
   const queryParams = {
-    page: router.query?.page ?? 0,
-    perPage: router.query?.perPage ?? 10,
-    search: router.query?.search ?? "",
+    page: query?.page ?? 0,
+    perPage: query?.perPage ?? 10,
+    search: query?.search ?? "",
+    status: query?.status ?? "",
+    dateTo: query?.dateTo ?? "",
+    dateFrom: query?.dateFrom ?? "",
   };
 
   const [search, setSearch] = useState(queryParams?.search);
+  const [dateTo, setDateTo] = useState(queryParams?.dateTo);
+  const [dateFrom, setDateFrom] = useState(queryParams?.dateFrom);
   const [page, setPage] = useState(+queryParams.page);
   const [rowsPerPage, setRowsPerPage] = useState(+queryParams?.perPage);
-  const [sort, setSort] = useState(sortOptions[0].value);
+  const [status, setStatus] = useState(queryParams?.status);
+
+  console.log({ dateTo, dateFrom });
 
   const handleQueryChange = (event) => {
     event.preventDefault();
     setSearch(queryRef.current?.value);
   };
 
-  const handleSortChange = (event) => {
-    setSort(event.target.value);
+  const handleStatusChange = (event) => {
+    setStatus(event.target.value);
   };
 
   const handlePageChange = (event, newPage) => {
@@ -83,19 +76,21 @@ const PartnersBalanceList = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/partners-balance?search=${search}&page=${page}&perPage=${rowsPerPage}`
+        `/dashboard/partners-balance?search=${search}&page=${page}&perPage=${rowsPerPage}&status=${status}&dateTo=${dateTo}&dateFrom=${dateFrom}`
       );
       dispatch(
         getPartnersBalance({
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
+          dateTo: dateTo,
+          dateFrom: dateFrom,
         })
       );
     }, 700);
 
     return () => clearTimeout(timer);
-  }, [page, rowsPerPage, search]);
+  }, [page, rowsPerPage, search, status, dateTo, dateFrom]);
 
   return (
     <>
@@ -148,21 +143,54 @@ const PartnersBalanceList = () => {
                   placeholder="Search partnersBalance"
                 />
               </Box>
-              <TextField
-                label="Sort By"
-                name="sort"
-                onChange={handleSortChange}
-                select
-                SelectProps={{ native: true }}
-                sx={{ m: 1.5 }}
-                value={sort}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexGrow: 1,
+                }}
               >
-                {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
+                <TextField
+                  label="Sort By"
+                  name="status"
+                  onChange={handleStatusChange}
+                  select
+                  fullWidth
+                  SelectProps={{ native: true }}
+                  sx={{ m: 1.5 }}
+                  value={status}
+                >
+                  <option>Choose</option>
+                  {STATUSES.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </TextField>
+
+                <DatePicker
+                  inputFormat="dd/MM/yyyy"
+                  label="Date from"
+                  onChange={(date) => {
+                    setDateFrom(date);
+                  }}
+                  renderInput={(inputProps) => (
+                    <TextField fullWidth {...inputProps} sx={{ m: 1.5 }} />
+                  )}
+                  value={dateFrom || null}
+                />
+                <DatePicker
+                  inputFormat="dd/MM/yyyy"
+                  label="Date to"
+                  onChange={(date) => {
+                    setDateTo(date);
+                  }}
+                  renderInput={(inputProps) => (
+                    <TextField fullWidth {...inputProps} sx={{ m: 1.5 }} />
+                  )}
+                  value={dateTo || null}
+                />
+              </Box>
             </Box>
             <PartnersBalanceListTable
               partnersBalance={partnersBalance}
