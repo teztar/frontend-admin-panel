@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import toast from "react-hot-toast";
 
 export const getPartnersBalance = createAsyncThunk(
   "partnersBalance/getPartnersBalance",
@@ -10,9 +9,9 @@ export const getPartnersBalance = createAsyncThunk(
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
-          dateFrom: params?.dateFrom || new Date(null),
-          dateTo: params?.dateTo || new Date(),
-          search: params?.search ?? "",
+          dateFrom: params?.dateFrom || "1970-10-10",
+          dateTo: params?.dateTo || "3030-10-10",
+          search: params?.search || "",
         },
       });
       return response.data;

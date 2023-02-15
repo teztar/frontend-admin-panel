@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import {
   Box,
+  Button,
   Card,
   Container,
   Grid,
@@ -16,25 +17,18 @@ import { TransactionListTable } from "@components/dashboard/transaction/transact
 import { Search as SearchIcon } from "@icons/search";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getTransactions } from "@services/index";
+import { downloadTransactionsFile, getTransactions } from "@services/index";
+import { Download } from "@icons/download";
 
-const sortOptions = [
-  {
-    label: "Last update (newest)",
-    value: "updatedAt|desc",
-  },
-  {
-    label: "Last update (oldest)",
-    value: "updatedAt|asc",
-  },
-  {
-    label: "Total orders (highest)",
-    value: "totalOrders|desc",
-  },
-  {
-    label: "Total orders (lowest)",
-    value: "totalOrders|asc",
-  },
+const ADDED_FROM = ["WEB", "APP"];
+
+const PAYMENT_OPTION = ["CASH", "CARD", "QR", "BONUS"];
+
+const STATUS = [
+  "ORDER_NEW",
+  "ORDER_ACCEPTED",
+  "ORDER_CANCELED",
+  "ORDER_DELIVERED",
 ];
 
 const TransactionList = () => {
@@ -46,24 +40,45 @@ const TransactionList = () => {
 
   const queryRef = useRef(null);
 
+  const { query } = router;
+
   const queryParams = {
-    page: router.query?.page ?? 0,
-    perPage: router.query?.perPage ?? 10,
-    search: router.query?.search ?? "",
+    page: query?.page ?? 0,
+    perPage: query?.perPage ?? 10,
+    search: query?.search ?? "",
+    status: query?.status ?? "",
+    addedFrom: query?.addedFrom ?? "",
+    paymentOption: query?.paymentOption ?? "",
   };
 
   const [search, setSearch] = useState(queryParams?.search);
+  const [transactionStatus, setTransactionStatus] = useState(
+    queryParams?.status
+  );
+  const [paymentOption, setPaymentOption] = useState(
+    queryParams?.paymentOption
+  );
+  const [addedFrom, setAddedFrom] = useState(queryParams?.addedFrom);
   const [page, setPage] = useState(+queryParams.page);
   const [rowsPerPage, setRowsPerPage] = useState(+queryParams?.perPage);
-  const [sort, setSort] = useState(sortOptions[0].value);
 
   const handleQueryChange = (event) => {
     event.preventDefault();
     setSearch(queryRef.current?.value);
   };
 
-  const handleSortChange = (event) => {
-    setSort(event.target.value);
+  const handlePaymentOptionChange = (event) => {
+    setPage(0);
+    setPaymentOption(event.target.value);
+  };
+  const handleAddedFromChange = (event) => {
+    setPage(0);
+    setAddedFrom(event.target.value);
+  };
+
+  const handleStatusChange = (event) => {
+    setPage(0);
+    setTransactionStatus(event.target.value);
   };
 
   const handlePageChange = (_, newPage) => {
@@ -74,6 +89,15 @@ const TransactionList = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
+  const downloadTransactions = () =>
+    dispatch(
+      downloadTransactionsFile({
+        addedFrom: addedFrom,
+        status: transactionStatus,
+        paymentOption: paymentOption,
+      })
+    );
+
   useEffect(() => {
     gtm.push({ event: "page_view" });
   }, []);
@@ -81,19 +105,22 @@ const TransactionList = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/transactions?search=${search}&page=${page}&perPage=${rowsPerPage}`
+        `/dashboard/transactions?search=${search}&page=${page}&perPage=${rowsPerPage}&status=${transactionStatus}&addedFrom=${addedFrom}&paymentOption=${paymentOption}`
       );
       dispatch(
         getTransactions({
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
+          addedFrom: addedFrom,
+          status: transactionStatus,
+          paymentOption: paymentOption,
         })
       );
     }, 700);
 
     return () => clearTimeout(timer);
-  }, [page, rowsPerPage, search]);
+  }, [page, rowsPerPage, search, transactionStatus, paymentOption, addedFrom]);
 
   return (
     <>
@@ -112,6 +139,15 @@ const TransactionList = () => {
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
                 <Typography variant="h4">Transactions</Typography>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  startIcon={<Download />}
+                  onClick={downloadTransactions}
+                >
+                  Download Transactions
+                </Button>
               </Grid>
             </Grid>
           </Box>
@@ -146,21 +182,64 @@ const TransactionList = () => {
                   placeholder="Search transactions"
                 />
               </Box>
-              <TextField
-                label="Sort By"
-                name="sort"
-                onChange={handleSortChange}
-                select
-                SelectProps={{ native: true }}
-                sx={{ m: 1.5 }}
-                value={sort}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexGrow: 1,
+                }}
               >
-                {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
+                <TextField
+                  label="Status"
+                  name="transactionStatus"
+                  onChange={handleStatusChange}
+                  select
+                  fullWidth
+                  SelectProps={{ native: true }}
+                  sx={{ m: 1.5 }}
+                  value={transactionStatus}
+                >
+                  <option></option>
+                  {STATUS.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </TextField>
+                <TextField
+                  label="Payment option"
+                  name="paymentOption"
+                  onChange={handlePaymentOptionChange}
+                  select
+                  fullWidth
+                  SelectProps={{ native: true }}
+                  sx={{ m: 1.5 }}
+                  value={paymentOption}
+                >
+                  <option></option>
+                  {PAYMENT_OPTION.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </TextField>
+                <TextField
+                  label="Added From"
+                  name="addedFrom"
+                  onChange={handleAddedFromChange}
+                  select
+                  fullWidth
+                  SelectProps={{ native: true }}
+                  sx={{ m: 1.5 }}
+                  value={addedFrom}
+                >
+                  <option></option>
+                  {ADDED_FROM.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </TextField>
+              </Box>
             </Box>
             <TransactionListTable
               transactions={transactions}

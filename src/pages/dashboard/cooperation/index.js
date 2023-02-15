@@ -21,24 +21,7 @@ import { getCooperations } from "@services/index";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 
-const sortOptions = [
-  {
-    label: "Last update (newest)",
-    value: "updatedAt|desc",
-  },
-  {
-    label: "Last update (oldest)",
-    value: "updatedAt|asc",
-  },
-  {
-    label: "Total orders (highest)",
-    value: "totalOrders|desc",
-  },
-  {
-    label: "Total orders (lowest)",
-    value: "totalOrders|asc",
-  },
-];
+const TYPES = ["PARTNER", "COURIER"];
 
 const CooperationList = () => {
   const dispatch = useDispatch();
@@ -49,24 +32,27 @@ const CooperationList = () => {
 
   const queryRef = useRef(null);
 
+  const { query } = router;
+
   const queryParams = {
-    page: router.query?.page ?? 0,
-    perPage: router.query?.perPage ?? 10,
-    search: router.query?.search ?? "",
+    page: query?.page ?? 0,
+    perPage: query?.perPage ?? 10,
+    search: query?.search ?? "",
+    type: query?.type ?? "",
   };
 
   const [search, setSearch] = useState(queryParams?.search);
   const [page, setPage] = useState(+queryParams.page);
   const [rowsPerPage, setRowsPerPage] = useState(+queryParams?.perPage);
-  const [sort, setSort] = useState(sortOptions[0].value);
+  const [type, setType] = useState(queryParams?.type);
 
   const handleQueryChange = (event) => {
     event.preventDefault();
     setSearch(queryRef.current?.value);
   };
 
-  const handleSortChange = (event) => {
-    setSort(event.target.value);
+  const handleTypeChange = (event) => {
+    setType(event.target.value);
   };
 
   const handlePageChange = (_, newPage) => {
@@ -84,19 +70,20 @@ const CooperationList = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/cooperation?search=${search}&page=${page}&perPage=${rowsPerPage}`
+        `/dashboard/cooperation?search=${search}&page=${page}&perPage=${rowsPerPage}&type=${type}`
       );
       dispatch(
         getCooperations({
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
+          type: type,
         })
       );
     }, 700);
 
     return () => clearTimeout(timer);
-  }, [page, rowsPerPage, search]);
+  }, [page, rowsPerPage, search, type]);
 
   return (
     <>
@@ -160,17 +147,18 @@ const CooperationList = () => {
                 />
               </Box>
               <TextField
-                label="Sort By"
-                name="sort"
-                onChange={handleSortChange}
+                label="Type By"
+                name="type"
+                onChange={handleTypeChange}
                 select
                 SelectProps={{ native: true }}
                 sx={{ m: 1.5 }}
-                value={sort}
+                value={type}
               >
-                {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+                <option></option>
+                {TYPES.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
                   </option>
                 ))}
               </TextField>
