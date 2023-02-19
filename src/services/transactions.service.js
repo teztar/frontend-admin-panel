@@ -40,13 +40,26 @@ export const downloadTransactionsFile = createAsyncThunk(
   "transactions/downloadTransactions",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/transactions/download/file", {
-        params: {
-          status: params?.status ?? "",
-          addedFrom: params?.addedFrom ?? "",
-          paymentOption: params?.paymentOption ?? "",
-        },
-      });
+      const response = await axios
+        .get("/transactions/download/file", {
+          params: {
+            status: params?.status ?? "",
+            addedFrom: params?.addedFrom ?? "",
+            paymentOption: params?.paymentOption ?? "",
+          },
+          headers: {
+            Accept: "multipart/form-data",
+            responseType: "blob",
+          },
+        })
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "file.xlsx");
+          document.body.appendChild(link);
+          link.click();
+        });
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

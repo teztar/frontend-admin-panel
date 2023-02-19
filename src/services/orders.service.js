@@ -11,6 +11,7 @@ export const getOrders = createAsyncThunk(
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
           search: params?.search ?? "",
+          status: params?.status ?? "",
         },
       });
       return response.data;
@@ -52,8 +53,8 @@ export const updateOrder = createAsyncThunk(
   "orders/updateOrder",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/orders/update", values);
-      toast.success("Заказ обнавлен");
+      const response = await axios.put("/orders/change/status", values);
+      toast.success("Статус заказа обнавлен");
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

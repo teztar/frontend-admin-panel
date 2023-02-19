@@ -3,28 +3,17 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import {
-  Box,
-  Button,
-  Chip,
-  Divider,
-  Drawer,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Divider, Drawer, Typography, useMediaQuery } from "@mui/material";
 import HandshakeIcon from "@mui/icons-material/Handshake";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import AssistWalkerIcon from "@mui/icons-material/AssistWalker";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 
 import { ChartBar as ChartBarIcon } from "../../icons/chart-bar";
-import { ChartPie as ChartPieIcon } from "../../icons/chart-pie";
 import { Home as HomeIcon } from "../../icons/home";
 import { LockClosed as LockClosedIcon } from "../../icons/lock-closed";
 import { Selector as SelectorIcon } from "../../icons/selector";
 import { ShoppingCart as ShoppingCartIcon } from "../../icons/shopping-cart";
-import { Truck as TruckIcon } from "../../icons/truck";
-import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import { Users as UsersIcon } from "../../icons/users";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import MoneyIcon from "@mui/icons-material/Money";
@@ -451,7 +440,7 @@ export const DashboardSidebar = (props) => {
               />
             ))}
           </Box>
-          <Divider
+          {/* <Divider
             sx={{
               borderColor: "#2D3748", // dark divider
             }}
@@ -474,7 +463,7 @@ export const DashboardSidebar = (props) => {
                 {t("Documentation")}
               </Button>
             </NextLink>
-          </Box>
+          </Box> */}
         </Box>
       </Scrollbar>
       <OrganizationPopover

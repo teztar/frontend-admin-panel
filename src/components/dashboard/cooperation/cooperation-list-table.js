@@ -16,6 +16,7 @@ import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
+import { SeverityPill } from "@components/severity-pill";
 
 export const CooperationListTable = (props) => {
   const {
@@ -72,16 +73,24 @@ export const CooperationListTable = (props) => {
                   </Box>
                 </TableCell>
                 <TableCell>{cooperation.phone}</TableCell>
-                <TableCell>{cooperation.type}</TableCell>
+                <TableCell>
+                  <SeverityPill
+                    color={
+                      cooperation.type === "PARTNER" ? "success" : "warning"
+                    }
+                  >
+                    {cooperation.type}
+                  </SeverityPill>
+                </TableCell>
                 <TableCell align="right">
-                  <NextLink
+                  {/* <NextLink
                     href={`/dashboard/cooperations/${cooperation.id}/edit`}
                     passHref
-                  >
-                    <IconButton component="a">
-                      <PencilAltIcon fontSize="small" />
-                    </IconButton>
-                  </NextLink>
+                  > */}
+                  <IconButton component="a">
+                    <PencilAltIcon fontSize="small" />
+                  </IconButton>
+                  {/* </NextLink> */}
                 </TableCell>
               </TableRow>
             ))}

@@ -7,9 +7,7 @@ export const getStats = createAsyncThunk(
     try {
       const response = await axios.get("/stats/all", {
         params: {
-          page: params?.page ?? 1,
-          perPage: params?.perPage ?? 10,
-          search: params?.search ?? "",
+          period: params?.period ?? "",
         },
       });
       return response.data;
