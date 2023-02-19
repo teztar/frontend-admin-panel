@@ -49,7 +49,7 @@ const PushNotificationEdit = () => {
       >
         <Container maxWidth="md">
           <Box sx={{ mb: 4, cursor: "pointer" }}>
-            <NextLink href="/dashboard/pushNotifications" passHref>
+            <NextLink href="/dashboard/push-notifications" passHref>
               <Link
                 color="textPrimary"
                 component="a"

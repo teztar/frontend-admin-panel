@@ -13,6 +13,7 @@ import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import { Scrollbar } from "../../scrollbar";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { format } from "date-fns";
+import { SeverityPill } from "@components/severity-pill";
 
 export const BonusListTable = (props) => {
   const {
@@ -59,7 +60,11 @@ export const BonusListTable = (props) => {
                 <TableCell>
                   {format(new Date(bonus.endDate), "dd-MM-yyyy")}
                 </TableCell>
-                <TableCell>{bonus.active ? "ACTIVE" : "INACTIVE"}</TableCell>
+                <TableCell>
+                  <SeverityPill color={bonus.active ? "success" : "error"}>
+                    {bonus.active ? "ACTIVE" : "INACTIVE"}
+                  </SeverityPill>
+                </TableCell>
 
                 <TableCell align="right">
                   <NextLink

@@ -22,22 +22,12 @@ import { getCouriers } from "@services/index";
 import { useRouter } from "next/router";
 
 const sortOptions = [
-  {
-    label: "Last update (newest)",
-    value: "updatedAt|desc",
-  },
-  {
-    label: "Last update (oldest)",
-    value: "updatedAt|asc",
-  },
-  {
-    label: "Total orders (highest)",
-    value: "totalOrders|desc",
-  },
-  {
-    label: "Total orders (lowest)",
-    value: "totalOrders|asc",
-  },
+  "COURIER_AVAILABLE",
+  "COURIER_ACCEPTED_ORDER",
+  "COURIER_GOING_TO_RESTAURANT",
+  "COURIER_TOOK_PRODUCT",
+  "COURIER_GOING_TO_CLIENT",
+  "COURIER_DELIVERED",
 ];
 
 const CourierList = () => {
@@ -53,12 +43,13 @@ const CourierList = () => {
     page: router.query?.page ?? 0,
     perPage: router.query?.perPage ?? 10,
     search: router.query?.search ?? "",
+    status: router.query?.status ?? "",
   };
 
   const [search, setSearch] = useState(queryParams?.search);
   const [page, setPage] = useState(+queryParams.page);
   const [rowsPerPage, setRowsPerPage] = useState(+queryParams?.perPage);
-  const [sort, setSort] = useState(sortOptions[0].value);
+  const [status, setStatus] = useState(queryParams.status);
 
   const handleQueryChange = (event) => {
     event.preventDefault();
@@ -66,7 +57,7 @@ const CourierList = () => {
   };
 
   const handleSortChange = (event) => {
-    setSort(event.target.value);
+    setStatus(event.target.value);
   };
 
   const handlePageChange = (_, newPage) => {
@@ -83,19 +74,20 @@ const CourierList = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/couriers?search=${search}&page=${page}&perPage=${rowsPerPage}`
+        `/dashboard/couriers?search=${search}&status=${status}&page=${page}&perPage=${rowsPerPage}`
       );
       dispatch(
         getCouriers({
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
+          status: status,
         })
       );
     }, 700);
 
     return () => clearTimeout(timer);
-  }, [page, rowsPerPage, search]);
+  }, [page, rowsPerPage, search, status]);
 
   return (
     <>
@@ -161,16 +153,17 @@ const CourierList = () => {
               </Box>
               <TextField
                 label="Sort By"
-                name="sort"
+                name="status"
                 onChange={handleSortChange}
                 select
                 SelectProps={{ native: true }}
                 sx={{ m: 1.5 }}
-                value={sort}
+                value={status}
               >
+                <option></option>
                 {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+                  <option key={option} value={option}>
+                    {option}
                   </option>
                 ))}
               </TextField>

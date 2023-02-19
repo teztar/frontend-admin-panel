@@ -55,6 +55,12 @@ export const updateBonus = createAsyncThunk(
       toast.success("Бонус обнавлен");
       return response.data;
     } catch (error) {
+      const errArray = Object.entries(error?.messages[0]?.error);
+
+      for (const [key, value] of errArray) {
+        toast.error(`${key}: ${value}`);
+      }
+      console.log(Object.entries(error.messages[0].error));
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.messages);
     }

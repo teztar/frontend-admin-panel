@@ -17,6 +17,7 @@ import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
 import { format } from "date-fns";
 import TablePaginationActions from "@utils/tablePaginationActions";
+import { SeverityPill } from "@components/severity-pill";
 
 export const CourierListTable = (props) => {
   const {
@@ -36,6 +37,8 @@ export const CourierListTable = (props) => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
+              <TableCell>Active</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell>Birthdate</TableCell>
               <TableCell>Phone</TableCell>
               <TableCell>Passport</TableCell>
@@ -77,6 +80,12 @@ export const CourierListTable = (props) => {
                     </Box>
                   </TableCell>
 
+                  <TableCell>
+                    <SeverityPill color={courier.active ? "success" : "error"}>
+                      {courier.active ? "ACTIVE" : "INACTIVE"}
+                    </SeverityPill>
+                  </TableCell>
+                  <TableCell>{courier.status}</TableCell>
                   <TableCell>
                     {format(new Date(courier.dateOfBirth), "dd-MM-yyyy")}
                   </TableCell>

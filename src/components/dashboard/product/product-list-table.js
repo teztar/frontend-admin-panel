@@ -73,7 +73,7 @@ export const ProductListTable = (props) => {
                   <TableCell>{product.name}</TableCell>
                   <TableCell>{product.category}</TableCell>
                   <TableCell>{product.ingredients}</TableCell>
-                  <TableCell>{product.price}</TableCell>
+                  <TableCell>{product.price?.toLocaleString("ru")}</TableCell>
                   <TableCell>{product.measuring}</TableCell>
                   <TableCell>{product.description}</TableCell>
                   <TableCell align="right">
