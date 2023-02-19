@@ -1,4 +1,4 @@
-import NextLink from "next/link";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import {
   IconButton,
@@ -12,6 +12,7 @@ import {
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import { Scrollbar } from "../../scrollbar";
 import TablePaginationActions from "@utils/tablePaginationActions";
+import { OrderStatusModal } from "./order-status-modal";
 
 export const OrderListTable = (props) => {
   const {
@@ -23,6 +24,15 @@ export const OrderListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
+
+  const [open, setOpen] = useState(false);
+
+  const [currentOrder, setCurrentOrder] = useState();
+
+  const toogleModal = (order) => {
+    setOpen((prevValue) => !prevValue);
+    setCurrentOrder(order);
+  };
 
   return (
     <div {...other}>
@@ -54,20 +64,27 @@ export const OrderListTable = (props) => {
                 <TableCell>{order.status}</TableCell>
 
                 <TableCell align="right">
-                  <NextLink
+                  {/* <NextLink
                     href={`/dashboard/orders/${order.id}/edit`}
                     passHref
-                  >
-                    <IconButton component="a">
-                      <PencilAltIcon fontSize="small" />
-                    </IconButton>
-                  </NextLink>
+                  > */}
+                  <IconButton component="a" onClick={() => toogleModal(order)}>
+                    <PencilAltIcon fontSize="small" />
+                  </IconButton>
+                  {/* </NextLink> */}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </Scrollbar>
+      {open && (
+        <OrderStatusModal
+          open={open}
+          handleClose={toogleModal}
+          order={currentOrder}
+        />
+      )}
       <TablePagination
         component="div"
         count={ordersCount}

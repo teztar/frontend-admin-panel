@@ -18,10 +18,18 @@ import { AnalyticsVisitsByCountry } from "../../components/dashboard/analytics/a
 import { AnalyticsTrafficSources } from "../../components/dashboard/analytics/analytics-traffic-sources";
 import { Reports as ReportsIcon } from "../../icons/reports";
 import { gtm } from "../../lib/gtm";
+import { useDispatch } from "src/store";
+import { getStats } from "@services/index";
 
 const Analytics = () => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     gtm.push({ event: "page_view" });
+  }, []);
+
+  useEffect(() => {
+    dispatch(getStats());
   }, []);
 
   return (

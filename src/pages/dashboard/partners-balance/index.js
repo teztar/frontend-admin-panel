@@ -18,6 +18,7 @@ import { Search as SearchIcon } from "@icons/search";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
 import { getPartnersBalance } from "@services/index";
+import { format } from "date-fns";
 
 const STATUSES = ["DEBT", "PAID"];
 
@@ -39,8 +40,8 @@ const PartnersBalanceList = () => {
     perPage: query?.perPage ?? 10,
     search: query?.search ?? "",
     status: query?.status ?? "",
-    dateTo: query?.dateTo ?? "",
-    dateFrom: query?.dateFrom ?? "",
+    dateTo: query?.dateTo ?? "2099-10-10",
+    dateFrom: query?.dateFrom ?? "2000-10-10",
   };
 
   const [search, setSearch] = useState(queryParams?.search);
@@ -50,7 +51,8 @@ const PartnersBalanceList = () => {
   const [rowsPerPage, setRowsPerPage] = useState(+queryParams?.perPage);
   const [status, setStatus] = useState(queryParams?.status);
 
-  console.log({ dateTo, dateFrom });
+  const formattedDateTo = format(new Date(dateTo), "yyyy-MM-dd");
+  const formattedDateFrom = format(new Date(dateFrom), "yyyy-MM-dd");
 
   const handleQueryChange = (event) => {
     event.preventDefault();
@@ -76,15 +78,16 @@ const PartnersBalanceList = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/partners-balance?search=${search}&page=${page}&perPage=${rowsPerPage}&status=${status}&dateTo=${dateTo}&dateFrom=${dateFrom}`
+        `/dashboard/partners-balance?search=${search}&page=${page}&perPage=${rowsPerPage}&status=${status}&dateFrom=${formattedDateFrom}&dateTo=${formattedDateTo}`
       );
       dispatch(
         getPartnersBalance({
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
-          dateTo: dateTo,
-          dateFrom: dateFrom,
+          status: status,
+          dateTo: formattedDateTo,
+          dateFrom: formattedDateFrom,
         })
       );
     }, 700);
@@ -167,7 +170,6 @@ const PartnersBalanceList = () => {
                     </option>
                   ))}
                 </TextField>
-
                 <DatePicker
                   inputFormat="dd/MM/yyyy"
                   label="Date from"

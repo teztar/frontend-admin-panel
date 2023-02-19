@@ -90,7 +90,11 @@ axios.interceptors.request.use(
     }
     const getUrl = "/api/admin" + config?.url;
 
-    const getUrlData = config.params ? getUrl + "?" + searchParams : getUrl;
+    const hasFilters = searchParams.toString().includes("&");
+
+    const getUrlData = config.params
+      ? getUrl + (hasFilters ? "?" : "") + searchParams
+      : getUrl;
 
     const request = config.data
       ? JSON.stringify(toSnakeCaseFormat(removeEmptyFieds))
@@ -101,7 +105,7 @@ axios.interceptors.request.use(
     const headers = {
       "X-RequestDigest": encryptedData,
       "Content-Type": "application/json",
-      Accept: "application/json",
+      Accept: config.headers["Accept"] || "application/json",
       Authorization: accessToken && `Bearer ${accessToken}`,
     };
 

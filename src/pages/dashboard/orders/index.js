@@ -9,25 +9,7 @@ import { Search as SearchIcon } from "@icons/search";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
 import { getOrders } from "@services/index";
-
-const sortOptions = [
-  {
-    label: "Last update (newest)",
-    value: "updatedAt|desc",
-  },
-  {
-    label: "Last update (oldest)",
-    value: "updatedAt|asc",
-  },
-  {
-    label: "Total orders (highest)",
-    value: "totalOrders|desc",
-  },
-  {
-    label: "Total orders (lowest)",
-    value: "totalOrders|asc",
-  },
-];
+import { orderStatuses } from "@constants/index";
 
 const OrderList = () => {
   const dispatch = useDispatch();
@@ -38,16 +20,24 @@ const OrderList = () => {
 
   const queryRef = useRef(null);
 
+  const { query } = router;
+
   const queryParams = {
-    page: router.query?.page ?? 0,
-    perPage: router.query?.perPage ?? 10,
-    search: router.query?.search ?? "",
+    page: query?.page ?? 0,
+    perPage: query?.perPage ?? 10,
+    search: query?.search ?? "",
+    status: query?.status ?? "",
   };
 
   const [search, setSearch] = useState(queryParams?.search);
   const [page, setPage] = useState(+queryParams.page);
   const [rowsPerPage, setRowsPerPage] = useState(+queryParams?.perPage);
-  const [sort, setSort] = useState(sortOptions[0].value);
+  const [status, setStatus] = useState(queryParams?.status);
+
+  const handleStatusChange = (event) => {
+    setPage(0);
+    setStatus(event.target.value);
+  };
 
   const handleQueryChange = (event) => {
     event.preventDefault();
@@ -73,19 +63,20 @@ const OrderList = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/orders?search=${search}&page=${page}&perPage=${rowsPerPage}`
+        `/dashboard/orders?search=${search}&status=${status}&page=${page}&perPage=${rowsPerPage}`
       );
       dispatch(
         getOrders({
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
+          status: status,
         })
       );
     }, 700);
 
     return () => clearTimeout(timer);
-  }, [page, rowsPerPage, search]);
+  }, [page, rowsPerPage, search, status]);
 
   return (
     <>
@@ -133,17 +124,18 @@ const OrderList = () => {
                 />
               </Box>
               <TextField
-                label="Sort By"
-                name="sort"
-                onChange={handleSortChange}
+                label="Status"
+                name="status"
+                onChange={handleStatusChange}
                 select
                 SelectProps={{ native: true }}
                 sx={{ m: 1.5 }}
-                value={sort}
+                value={status}
               >
-                {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+                <option></option>
+                {orderStatuses.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
                   </option>
                 ))}
               </TextField>

@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import {
   Box,
-  Button,
   Card,
   Container,
   Grid,
@@ -13,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import { CooperationListTable } from "@components/dashboard/cooperation/cooperation-list-table";
-import { Plus as PlusIcon } from "@icons/plus";
 import { Search as SearchIcon } from "@icons/search";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
@@ -102,16 +99,6 @@ const CooperationList = () => {
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
                 <Typography variant="h4">Cooperations</Typography>
-              </Grid>
-              <Grid item>
-                <NextLink href="/dashboard/cooperations/new" passHref>
-                  <Button
-                    startIcon={<PlusIcon fontSize="small" />}
-                    variant="contained"
-                  >
-                    Add
-                  </Button>
-                </NextLink>
               </Grid>
             </Grid>
           </Box>

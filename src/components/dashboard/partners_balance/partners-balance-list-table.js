@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import NextLink from "next/link";
-import PropTypes from "prop-types";
+import { useState } from "react";
+import { format } from "date-fns";
 import {
   IconButton,
   Table,
@@ -9,11 +8,13 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
-import { Scrollbar } from "../../scrollbar";
 import TablePaginationActions from "@utils/tablePaginationActions";
-import { format } from "date-fns";
+import { SeverityPill } from "@components/severity-pill";
+import { PartnersBalanceModal } from "./partners-balance-modal";
+import { Scrollbar } from "../../scrollbar";
 
 export const PartnersBalanceListTable = (props) => {
   const {
@@ -25,46 +26,12 @@ export const PartnersBalanceListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
-  const [selectedPartnersBalances, setSelectedPartnersBalances] = useState([]);
 
-  // Reset selected partnersBalance when partnersBalance change
-  useEffect(
-    () => {
-      if (selectedPartnersBalances.length) {
-        setSelectedPartnersBalances([]);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [partnersBalance]
-  );
+  const [open, setOpen] = useState(false);
 
-  const handleSelectAllPartnersBalances = (event) => {
-    setSelectedPartnersBalances(
-      event.target.checked
-        ? partnersBalance.map((partnersBalance) => partnersBalance.id)
-        : []
-    );
+  const toogleModal = () => {
+    setOpen((prevValue) => !prevValue);
   };
-
-  const handleSelectOnePartnersBalance = (event, partnersBalanceId) => {
-    if (!selectedPartnersBalances.includes(partnersBalanceId)) {
-      setSelectedPartnersBalances((prevSelected) => [
-        ...prevSelected,
-        partnersBalanceId,
-      ]);
-    } else {
-      setSelectedPartnersBalances((prevSelected) =>
-        prevSelected.filter((id) => id !== partnersBalanceId)
-      );
-    }
-  };
-
-  const enableBulkActions = selectedPartnersBalances.length > 0;
-  const selectedSomePartnersBalances =
-    selectedPartnersBalances.length > 0 &&
-    selectedPartnersBalances.length < partnersBalance.length;
-  const selectedAllPartnersBalances =
-    selectedPartnersBalances.length === partnersBalance.length;
 
   return (
     <div {...other}>
@@ -83,7 +50,7 @@ export const PartnersBalanceListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {partnersBalance.map((partnersBalance) => (
+            {partnersBalance?.map((partnersBalance) => (
               <TableRow hover key={partnersBalance.id}>
                 <TableCell>{partnersBalance.partnerName}</TableCell>
                 <TableCell>
@@ -96,23 +63,34 @@ export const PartnersBalanceListTable = (props) => {
                 <TableCell>{partnersBalance.countOfPoints}</TableCell>
                 <TableCell>{partnersBalance.currentBalance}</TableCell>
                 <TableCell>{partnersBalance.turnover}</TableCell>
-                <TableCell>{partnersBalance.status}</TableCell>
+                <TableCell>
+                  <SeverityPill
+                    color={
+                      partnersBalance.status === "PAID" ? "success" : "error"
+                    }
+                  >
+                    {partnersBalance.status}
+                  </SeverityPill>
+                </TableCell>
 
                 <TableCell align="right">
-                  <NextLink
+                  {/* <NextLink
                     href={`/dashboard/partnersBalance/${partnersBalance.id}/edit`}
                     passHref
-                  >
-                    <IconButton component="a">
+                  > */}
+                  <Tooltip title="Update status">
+                    <IconButton component="a" onClick={toogleModal}>
                       <PencilAltIcon fontSize="small" />
                     </IconButton>
-                  </NextLink>
+                  </Tooltip>
+                  {/* </NextLink> */}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </Scrollbar>
+      {open && <PartnersBalanceModal open={open} handleClose={toogleModal} />}
       <TablePagination
         component="div"
         count={partnersBalanceCount}
@@ -125,13 +103,4 @@ export const PartnersBalanceListTable = (props) => {
       />
     </div>
   );
-};
-
-PartnersBalanceListTable.propTypes = {
-  partnersBalance: PropTypes.array.isRequired,
-  partnersBalanceCount: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired,
-  onRowsPerPageChange: PropTypes.func,
-  page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
 };
