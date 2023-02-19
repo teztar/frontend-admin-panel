@@ -38,16 +38,16 @@ export const PushNotificationListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {pushNotifications.map((user) => (
-              <TableRow hover key={user.id}>
-                <TableCell>{user.format}</TableCell>
-                <TableCell>{user.title}</TableCell>
-                <TableCell>{user.body}</TableCell>
-                <TableCell>{user.status}</TableCell>
+            {pushNotifications.map((item) => (
+              <TableRow hover key={item.id}>
+                <TableCell>{item.format}</TableCell>
+                <TableCell>{item.title}</TableCell>
+                <TableCell>{item.body}</TableCell>
+                <TableCell>{item.status}</TableCell>
 
                 <TableCell align="right">
                   <NextLink
-                    href={`/dashboard/pushNotifications/${user.id}/edit`}
+                    href={`/dashboard/push-notifications/${item.id}/edit`}
                     passHref
                   >
                     <IconButton component="a">

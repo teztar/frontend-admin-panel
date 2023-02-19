@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
-import * as Yup from "yup";
 import { Formik } from "formik";
 import {
   Button,
@@ -73,9 +72,13 @@ export const BonusEditForm = (props) => {
         try {
           const newValues = {
             ...values,
+            partnerId: null,
+            pointId: mode === "edit" ? null : values.pointId,
             startDate: format(new Date(values.startDate), "yyyy-MM-dd"),
             endDate: format(new Date(values.endDate), "yyyy-MM-dd"),
           };
+
+          console.log({ newValues });
           if (mode === "create") {
             dispatch(createBonus(newValues));
           } else {

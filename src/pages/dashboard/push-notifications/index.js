@@ -22,23 +22,13 @@ import { useRouter } from "next/router";
 import { getPushNotifications } from "@services/pushNotifications.service";
 
 const sortOptions = [
-  {
-    label: "Last update (newest)",
-    value: "updatedAt|desc",
-  },
-  {
-    label: "Last update (oldest)",
-    value: "updatedAt|asc",
-  },
-  {
-    label: "Total orders (highest)",
-    value: "totalOrders|desc",
-  },
-  {
-    label: "Total orders (lowest)",
-    value: "totalOrders|asc",
-  },
+  "AGE",
+  "GENDER",
+  "AVERAGE_ORDER_CHECK",
+  "AVERAGE_ORDER_QUANTITY_PER_MONTH",
 ];
+
+const formats = ["GENERAL", "SELECTIVE"];
 
 const PushNotificationList = () => {
   const dispatch = useDispatch();
@@ -55,12 +45,15 @@ const PushNotificationList = () => {
     page: router.query?.page ?? 0,
     perPage: router.query?.perPage ?? 10,
     search: router.query?.search ?? "",
+    sort: router.query?.sort ?? "",
+    format: router.query?.format ?? "",
   };
 
-  const [search, setSearch] = useState(queryParams?.search);
+  const [search, setSearch] = useState(queryParams.search);
   const [page, setPage] = useState(+queryParams.page);
-  const [rowsPerPage, setRowsPerPage] = useState(+queryParams?.perPage);
-  const [sort, setSort] = useState(sortOptions[0].value);
+  const [rowsPerPage, setRowsPerPage] = useState(+queryParams.perPage);
+  const [sort, setSort] = useState(queryParams.sort);
+  const [format, setFormat] = useState(queryParams.format);
 
   const handleQueryChange = (event) => {
     event.preventDefault();
@@ -69,6 +62,10 @@ const PushNotificationList = () => {
 
   const handleSortChange = (event) => {
     setSort(event.target.value);
+  };
+
+  const handleFormatChange = (event) => {
+    setFormat(event.target.value);
   };
 
   const handlePageChange = (_, newPage) => {
@@ -86,19 +83,21 @@ const PushNotificationList = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/push-notifications?search=${search}&page=${page}&perPage=${rowsPerPage}`
+        `/dashboard/push-notifications?search=${search}&sort=${sort}&format=${format}&page=${page}&perPage=${rowsPerPage}`
       );
       dispatch(
         getPushNotifications({
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
+          sort: sort,
+          format: format,
         })
       );
     }, 700);
 
     return () => clearTimeout(timer);
-  }, [page, rowsPerPage, search]);
+  }, [page, rowsPerPage, search, sort, format]);
 
   return (
     <>
@@ -161,21 +160,47 @@ const PushNotificationList = () => {
                   placeholder="Search push notifications"
                 />
               </Box>
-              <TextField
-                label="Sort By"
-                name="sort"
-                onChange={handleSortChange}
-                select
-                SelectProps={{ native: true }}
-                sx={{ m: 1.5 }}
-                value={sort}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexGrow: 1,
+                }}
               >
-                {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
+                <TextField
+                  label="Sort By"
+                  name="sort"
+                  onChange={handleSortChange}
+                  select
+                  fullWidth
+                  SelectProps={{ native: true }}
+                  sx={{ m: 1.5 }}
+                  value={sort}
+                >
+                  <option></option>
+                  {sortOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </TextField>
+                <TextField
+                  label="Format"
+                  name="format"
+                  onChange={handleFormatChange}
+                  select
+                  fullWidth
+                  SelectProps={{ native: true }}
+                  sx={{ m: 1.5 }}
+                  value={format}
+                >
+                  <option></option>
+                  {formats.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </TextField>
+              </Box>
             </Box>
             <PushNotificationListTable
               pushNotifications={pushNotifications}

@@ -62,7 +62,9 @@ export const PointListTable = (props) => {
                       <Typography key={item}>{item}</Typography>
                     ))}
                   </TableCell>
-                  <TableCell>{point.minimumCheckAmount}</TableCell>
+                  <TableCell>
+                    {point.minimumCheckAmount?.toLocaleString("ru")}
+                  </TableCell>
                   <TableCell>{point.geolocationLatitude}</TableCell>
                   <TableCell>{point.geolocationLongitude}</TableCell>
                   <TableCell>{point.status}</TableCell>

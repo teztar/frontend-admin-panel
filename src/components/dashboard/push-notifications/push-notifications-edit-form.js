@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
@@ -15,9 +15,7 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
-  MenuItem,
   OutlinedInput,
-  Select,
   TextField,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
@@ -193,7 +191,7 @@ export const PushNotificationEditForm = (props) => {
               >
                 {mode === "create" ? "Create" : "Update"}
               </Button>
-              <NextLink href="/dashboard/pushNotifications" passHref>
+              <NextLink href="/dashboard/push-notifications" passHref>
                 <Button
                   component="a"
                   disabled={isSubmitting}

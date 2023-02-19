@@ -61,7 +61,9 @@ export const PartnersBalanceListTable = (props) => {
                 </TableCell>
                 <TableCell>{partnersBalance.region}</TableCell>
                 <TableCell>{partnersBalance.countOfPoints}</TableCell>
-                <TableCell>{partnersBalance.currentBalance}</TableCell>
+                <TableCell>
+                  {partnersBalance.currentBalance?.toLocaleString("ru")}
+                </TableCell>
                 <TableCell>{partnersBalance.turnover}</TableCell>
                 <TableCell>
                   <SeverityPill

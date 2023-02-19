@@ -55,7 +55,7 @@ export const OrderListTable = (props) => {
             {orders.map((order) => (
               <TableRow hover key={order.id}>
                 <TableCell>{order.addedFrom}</TableCell>
-                <TableCell>{order.amount}</TableCell>
+                <TableCell>{order.amount?.toLocaleString("ru")}</TableCell>
                 <TableCell>{order.paymentOption}</TableCell>
                 <TableCell>{order.partner?.brand}</TableCell>
                 <TableCell>{order.partner?.brand}</TableCell>

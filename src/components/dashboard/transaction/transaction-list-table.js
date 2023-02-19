@@ -50,14 +50,22 @@ export const TransactionListTable = (props) => {
                 <TableCell>{transaction.clientPhone}</TableCell>
                 <TableCell>{transaction.partnerName}</TableCell>
                 <TableCell>{transaction.partnerBrand}</TableCell>
-                <TableCell>{transaction.partnerAmount}</TableCell>
+                <TableCell>
+                  {transaction.partnerAmount?.toLocaleString("ru")}
+                </TableCell>
                 <TableCell>{transaction.addedFrom}</TableCell>
                 <TableCell>{transaction.amount.toLocaleString("ru")}</TableCell>
-                <TableCell>{transaction.amountFromDelivery}</TableCell>
+                <TableCell>
+                  {transaction.amountFromDelivery?.toLocaleString("ru")}
+                </TableCell>
                 <TableCell>{transaction.fixBonus}</TableCell>
                 <TableCell>{transaction.presentBonus}</TableCell>
-                <TableCell>{transaction.commissionAmount}</TableCell>
-                <TableCell>{transaction.courierAmount}</TableCell>
+                <TableCell>
+                  {transaction.commissionAmount?.toLocaleString("ru")}
+                </TableCell>
+                <TableCell>
+                  {transaction.courierAmount?.toLocaleString("ru")}
+                </TableCell>
                 <TableCell>{transaction.paymentOption}</TableCell>
                 <TableCell>{transaction.status}</TableCell>
               </TableRow>
