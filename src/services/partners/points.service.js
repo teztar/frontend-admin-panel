@@ -36,6 +36,19 @@ export const getPoint = createAsyncThunk(
   }
 );
 
+export const getPointImage = createAsyncThunk(
+  "points/getPointImage",
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/points/images/${params?.filePath}`);
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
 export const createPoint = createAsyncThunk(
   "points/createPoint",
   async (values, { rejectWithValue }) => {
