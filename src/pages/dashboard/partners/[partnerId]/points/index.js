@@ -50,8 +50,6 @@ const PointList = () => {
 
   const queryRef = useRef(null);
 
-  console.log({ partner });
-
   const partnerId = router.query?.partnerId;
 
   const queryParams = {

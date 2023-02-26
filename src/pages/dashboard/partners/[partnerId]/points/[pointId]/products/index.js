@@ -20,7 +20,7 @@ import { Search as SearchIcon } from "@icons/search";
 import { Plus as PlusIcon } from "@icons/plus";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getPoint, getProducts } from "@services/index";
+import { getPartner, getPoint, getProducts } from "@services/index";
 
 const sortOptions = [
   {
@@ -47,6 +47,8 @@ const ProductList = () => {
   const dispatch = useDispatch();
 
   const { products, count } = useSelector((state) => state.products);
+  const { partner } = useSelector((state) => state.partners);
+  const { point } = useSelector((state) => state.points);
 
   const router = useRouter();
 
@@ -83,6 +85,11 @@ const ProductList = () => {
   };
 
   useEffect(() => {
+    dispatch(
+      getPartner({
+        id: partnerId,
+      })
+    );
     dispatch(
       getPoint({
         partnerId,
@@ -126,7 +133,10 @@ const ProductList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Products</Typography>
+                <Typography variant="h4">
+                  {partner?.brand} - {partner?.region} - {point?.assortment}
+                  Products
+                </Typography>
               </Grid>
               <Grid item>
                 <NextLink

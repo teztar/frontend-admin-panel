@@ -90,7 +90,7 @@ axios.interceptors.request.use(
     }
     const getUrl = "/api/admin" + config?.url;
 
-    const hasFilters = searchParams.toString().includes("&");
+    const hasFilters = searchParams.toString().length > 0;
 
     const getUrlData = config.params
       ? getUrl + (hasFilters ? "?" : "") + searchParams
@@ -101,8 +101,6 @@ axios.interceptors.request.use(
       : getUrlData;
 
     const encryptedData = crypto.HmacSHA256(request, key);
-
-    console.log({ config });
 
     const headers = {
       "X-RequestDigest": encryptedData,
