@@ -34,7 +34,7 @@ export const UserListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell>Surname Name Patronymic</TableCell>
               <TableCell>Role</TableCell>
               <TableCell>Email</TableCell>
               <TableCell align="right">Actions</TableCell>
@@ -65,7 +65,7 @@ export const UserListTable = (props) => {
                         passHref
                       >
                         <Link color="inherit" variant="subtitle2">
-                          {user.name}
+                          {user.surname} {user.name} {user.patronymic}
                         </Link>
                       </NextLink>
                     </Box>

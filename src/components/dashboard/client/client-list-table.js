@@ -35,7 +35,7 @@ export const ClientListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell>Surname Name Patronymic</TableCell>
               <TableCell>Birthday</TableCell>
               <TableCell>Phone</TableCell>
               <TableCell>Gender</TableCell>
@@ -68,7 +68,7 @@ export const ClientListTable = (props) => {
                         passHref
                       >
                         <Link color="inherit" variant="subtitle2">
-                          {client.name}
+                          {client.surname} {client.name} {client.patronymic}
                         </Link>
                       </NextLink>
                     </Box>

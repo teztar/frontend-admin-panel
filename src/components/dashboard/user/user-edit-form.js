@@ -53,6 +53,8 @@ export const UserEditForm = (props) => {
         id: user?.id || "",
         roleId: user?.roleId || "",
         name: user?.name || "",
+        surname: user?.surname || "",
+        patronymic: user?.patronymic || "",
         email: user?.email || "",
         password: user?.password || "",
         submit: null,
@@ -87,7 +89,6 @@ export const UserEditForm = (props) => {
         handleBlur,
         handleChange,
         handleSubmit,
-        setFieldValue,
         isSubmitting,
         touched,
         values,
@@ -102,15 +103,41 @@ export const UserEditForm = (props) => {
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
                   <TextField
+                    error={Boolean(touched.surname && errors.surname)}
+                    fullWidth
+                    helperText={touched.surname && errors.surname}
+                    label="Surname"
+                    name="surname"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.surname}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
                     error={Boolean(touched.name && errors.name)}
                     fullWidth
                     helperText={touched.name && errors.name}
-                    label="User name"
+                    label="Name"
                     name="name"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     required
                     value={values.name}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.patronymic && errors.patronymic)}
+                    fullWidth
+                    helperText={touched.patronymic && errors.patronymic}
+                    label="Patronymic"
+                    name="patronymic"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.patronymic}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>

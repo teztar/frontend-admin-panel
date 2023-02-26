@@ -18,6 +18,7 @@ import { Users as UsersIcon } from "../../icons/users";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import MoneyIcon from "@mui/icons-material/Money";
 import CorporateFareIcon from "@mui/icons-material/CorporateFare";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import { Logo } from "../logo";
 import { Scrollbar } from "../scrollbar";
 import { DashboardSidebarSection } from "./dashboard-sidebar-section";
@@ -106,7 +107,7 @@ const getSections = (t) => [
       {
         title: t("Push Notifications"),
         path: "/dashboard/push-notifications",
-        icon: <CorporateFareIcon fontSize="small" />,
+        icon: <NotificationsActiveIcon fontSize="small" />,
       },
       {
         title: t("Users"),

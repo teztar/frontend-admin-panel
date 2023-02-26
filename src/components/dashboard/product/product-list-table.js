@@ -14,8 +14,15 @@ import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import { Scrollbar } from "@components/scrollbar";
 import { useRouter } from "next/router";
 import TablePaginationActions from "@utils/tablePaginationActions";
+import { useDispatch, useSelector } from "src/store";
+import { getProductImage } from "@services/index";
 
 export const ProductListTable = (props) => {
+  const dispatch = useDispatch();
+  const { query } = useRouter();
+
+  const { productImage } = useSelector((state) => state.products);
+
   const {
     products,
     productsCount,
@@ -26,7 +33,10 @@ export const ProductListTable = (props) => {
     ...other
   } = props;
 
-  const { query } = useRouter();
+  const handleGetProductImage = async (path) =>
+    await dispatch(getProductImage({ filePath: path }));
+
+  console.log({ productImage });
 
   const partnerId = query?.partnerId;
   const pointId = query?.pointId;
@@ -37,32 +47,13 @@ export const ProductListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              {/* {
-
-    "category": "Forward Data Facilitator",
-    "name": "Mitchell Haley",
-    "ingredients": "Maria Lockman",
-    "price": 832,
-
-    "measuring": "District Solutions Consultant",
-    "description": "Kay Krajcik Jr.",
-
-    "image": {
-        "id": "07fde3ed-ff4f-4c4f-981d-0919a510a718",
-        "product_id": "fa441cee-f48d-415a-b0ec-da9958d25aa8",
-        "original_name": "1.jpg",
-        "name": "06e5de12-b583-4b67-9e76-95fe4c5a0194.jpg",
-        "created_at": "2023-02-11T14:36:09Z",
-        "updated_at": "2023-02-11T14:36:09Z"
-    }
-} */}
-
               <TableCell>Name</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Ingredients</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Measuring</TableCell>
               <TableCell>Description</TableCell>
+              <TableCell>Image</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -76,6 +67,11 @@ export const ProductListTable = (props) => {
                   <TableCell>{product.price?.toLocaleString("ru")}</TableCell>
                   <TableCell>{product.measuring}</TableCell>
                   <TableCell>{product.description}</TableCell>
+                  <TableCell
+                    onClick={() => handleGetProductImage(product?.image?.name)}
+                  >
+                    {productImage && <img src={productImage} alt="image" />}
+                  </TableCell>
                   <TableCell align="right">
                     <NextLink
                       href={`/dashboard/partners/${partnerId}/points/${pointId}/products/${product.id}/edit`}

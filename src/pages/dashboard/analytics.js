@@ -29,7 +29,7 @@ const Analytics = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(getStats());
+    dispatch(getStats({ period: "YEAR" }));
   }, []);
 
   return (

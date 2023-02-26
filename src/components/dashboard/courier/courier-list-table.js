@@ -36,7 +36,7 @@ export const CourierListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell>Surname Name Patronymic</TableCell>
               <TableCell>Active</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Birthdate</TableCell>
@@ -73,7 +73,8 @@ export const CourierListTable = (props) => {
                           passHref
                         >
                           <Link color="inherit" variant="subtitle2">
-                            {courier.name}
+                            {courier.surname} {courier.name}{" "}
+                            {courier.patronymic}
                           </Link>
                         </NextLink>
                       </Box>

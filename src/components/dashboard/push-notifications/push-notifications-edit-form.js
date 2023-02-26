@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
@@ -12,57 +12,98 @@ import {
   Divider,
   FormControl,
   Grid,
-  IconButton,
-  InputAdornment,
+  Select,
   InputLabel,
-  OutlinedInput,
+  MenuItem,
   TextField,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useDispatch } from "src/store";
 import {
   createPushNotification,
   updatePushNotification,
 } from "@services/index";
+import { DatePicker } from "@mui/x-date-pickers";
+import { UploadFile } from "@mui/icons-material";
+import { Box } from "@mui/system";
+
+const sortBys = [
+  "AGE",
+  "GENDER",
+  "AVERAGE_ORDER_CHECK",
+  "AVERAGE_ORDER_QUANTITY_PER_MONTH",
+];
+
+const formats = ["GENERAL", "SELECTIVE"];
 
 export const PushNotificationEditForm = (props) => {
   const dispatch = useDispatch();
 
   const { pushNotification, mode = "edit", ...other } = props;
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [webImage, setWebImage] = useState(pushNotification?.webImage);
+  const [appImage, setAppImage] = useState(pushNotification?.appImage);
+  const [webImageUrl, setWebImageUrl] = useState(null);
+  const [appImageUrl, setAppImageUrl] = useState(null);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const formData = new FormData();
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+  const appImageRef = useRef(null);
+  const webImageRef = useRef(null);
+
+  useEffect(() => {
+    if (webImage) {
+      setWebImageUrl(URL.createObjectURL(webImage));
+    }
+  }, [webImage]);
+
+  useEffect(() => {
+    if (appImage) {
+      setAppImageUrl(URL.createObjectURL(appImage));
+    }
+  }, [appImage]);
 
   return (
     <Formik
-      enableReinitialize={true}
+      enableReinitialize={mode === "edit" ? true : false}
       initialValues={{
         id: pushNotification?.id || "",
-        roleId: pushNotification?.roleId || "",
-        name: pushNotification?.name || "",
-        email: pushNotification?.email || "",
-        password: pushNotification?.password || "",
+        title: pushNotification?.title || "",
+        body: pushNotification?.body || "",
+        dispatchDate: pushNotification?.dispatchDate || null,
+        format: pushNotification?.format || "",
+        sortBy: pushNotification?.sortBy || "",
+        sortValue: pushNotification?.sortValue || "",
+        webImage: webImage || "",
+        appImage: appImage || "",
         submit: null,
       }}
       validationSchema={Yup.object().shape({
-        name: Yup.string().min(4).max(255),
-        email: Yup.string()
-          .email("Must be a valid email")
-          .max(255)
-          .required("Email is required"),
+        body: Yup.string().min(4).max(255),
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
+          let data = {};
+
+          if (values.id) {
+            formData.append("id", values.id);
+          }
+          formData.append("title", values.title);
+          formData.append("body", values.body);
+          formData.append("dispatchDate", values.dispatchDate);
+          formData.append("format", values.format);
+          formData.append("sortBy", values.sortBy);
+          formData.append("sortValue", values.sortValue);
+          formData.append("webImage", webImage);
+          formData.append("appImage", appImage);
+
+          for (let pair of formData.entries()) {
+            console.log("pair: ", (data[pair[0]] = pair[1]));
+            data[pair[0]] = pair[1];
+          }
           if (mode === "create") {
-            dispatch(createPushNotification(values));
+            dispatch(createPushNotification(formData));
           } else {
-            dispatch(updatePushNotification(values));
+            dispatch(updatePushNotification(formData));
           }
           setStatus({ success: true });
           setSubmitting(false);
@@ -97,84 +138,153 @@ export const PushNotificationEditForm = (props) => {
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
                   <TextField
-                    error={Boolean(touched.name && errors.name)}
+                    error={Boolean(touched.title && errors.title)}
                     fullWidth
-                    helperText={touched.name && errors.name}
-                    label="Push Notification name"
-                    name="name"
+                    helperText={touched.title && errors.title}
+                    label="Title"
+                    name="title"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     required
-                    value={values.name}
+                    value={values.title}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
-                    error={Boolean(touched.email && errors.email)}
+                    error={Boolean(touched.body && errors.body)}
                     fullWidth
-                    helperText={touched.email && errors.email}
-                    label="Email"
-                    name="email"
-                    type="email"
+                    helperText={touched.body && errors.body}
+                    label="Body"
+                    name="body"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     required
-                    value={values.email}
+                    value={values.body}
                   />
                 </Grid>
-                {mode === "create" && (
-                  <Grid item md={6} xs={12}>
-                    <FormControl fullWidth variant="outlined">
-                      <InputLabel htmlFor="outlined-adornment-password">
-                        Password
-                      </InputLabel>
-                      <OutlinedInput
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        required
-                        name="password"
-                        value={values?.password}
-                        id="outlined-adornment-password"
-                        type={showPassword ? "text" : "password"}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                              edge="end"
-                            >
-                              {showPassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                        label="Password"
-                      />
-                    </FormControl>
-                  </Grid>
-                )}
-                {/* <Grid item md={6} xs={12}>
+
+                <Grid item md={6} xs={12}>
+                  <DatePicker
+                    inputFormat="dd/MM/yyyy"
+                    label="Dispatch date"
+                    onChange={(date) => {
+                      setFieldValue("dispatchDate", date);
+                    }}
+                    renderInput={(inputProps) => (
+                      <TextField fullWidth {...inputProps} />
+                    )}
+                    value={values.dispatchDate}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
                   <FormControl fullWidth>
-                    <InputLabel id="role-label">Role</InputLabel>
+                    <InputLabel id="format-label">Format</InputLabel>
                     <Select
-                      labelId="role-label"
-                      value={values.roleId}
-                      label="Role"
-                      name="roleId"
+                      labelId="format-label"
+                      value={values.format}
+                      label="Sort by"
+                      name="format"
                       onChange={handleChange}
                     >
-                      {roles.map((role) => (
-                        <MenuItem key={role.id} value={role.id}>
-                          {role.name}
+                      {formats.map((format) => (
+                        <MenuItem key={format} value={format}>
+                          {format}
                         </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
-                </Grid> */}
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="sort-label">Sort By</InputLabel>
+                    <Select
+                      labelId="sort-label"
+                      value={values.sortBy}
+                      label="Sort By"
+                      name="sortBy"
+                      onChange={handleChange}
+                    >
+                      {sortBys.map((sort) => (
+                        <MenuItem key={sort} value={sort}>
+                          {sort}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.sortValue && errors.sortValue)}
+                    fullWidth
+                    helperText={touched.sortValue && errors.sortValue}
+                    label="Sort value"
+                    name="sortValue"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.sortValue}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <input
+                    hidden
+                    type="file"
+                    accept="image/*"
+                    ref={webImageRef}
+                    onChange={(e) => setWebImage(e.target.files[0])}
+                  />
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    startIcon={<UploadFile />}
+                    onClick={() => webImageRef?.current?.click()}
+                  >
+                    Web image
+                  </Button>
+                  {webImageUrl && webImage && (
+                    <Box mt={3}>
+                      <img
+                        src={webImageUrl}
+                        style={{
+                          width: 250,
+                          height: 250,
+                        }}
+                      />
+                    </Box>
+                  )}
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <input
+                    hidden
+                    type="file"
+                    accept="image/*"
+                    ref={appImageRef}
+                    onChange={(e) => setAppImage(e.target.files[0])}
+                  />
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    startIcon={<UploadFile />}
+                    onClick={() => appImageRef?.current?.click()}
+                  >
+                    App image
+                  </Button>
+                  {appImageUrl && appImage && (
+                    <Box mt={3}>
+                      <img
+                        src={appImageUrl}
+                        style={{
+                          width: 250,
+                          height: 250,
+                        }}
+                      />
+                    </Box>
+                  )}
+                </Grid>
               </Grid>
             </CardContent>
             <CardActions
