@@ -35,9 +35,8 @@ export const BonusListTable = (props) => {
               <TableCell>Product category</TableCell>
               <TableCell>Type</TableCell>
               <TableCell>Commission</TableCell>
-              <TableCell>Fix bonus</TableCell>
-              <TableCell>Present bonus percent</TableCell>
-              <TableCell>Our bonus percent</TableCell>
+              <TableCell>Bonus From Our Side</TableCell>
+              <TableCell>Bonus From Partner</TableCell>
               <TableCell>Start date</TableCell>
               <TableCell>End date</TableCell>
               <TableCell>Active</TableCell>
@@ -51,9 +50,8 @@ export const BonusListTable = (props) => {
                 <TableCell>{bonus.productCategory}</TableCell>
                 <TableCell>{bonus.type}</TableCell>
                 <TableCell>{bonus.commission}</TableCell>
-                <TableCell>{bonus.fixBonus}</TableCell>
-                <TableCell>{bonus.presentBonusPercent}</TableCell>
-                <TableCell>{bonus.ourBonusPercent}</TableCell>
+                <TableCell>{bonus.bonusFromOurSide}</TableCell>
+                <TableCell>{bonus.bonusFromPartner}</TableCell>
                 <TableCell>
                   {format(new Date(bonus.startDate), "dd-MM-yyyy")}
                 </TableCell>

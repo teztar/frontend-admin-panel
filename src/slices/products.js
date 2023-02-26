@@ -4,12 +4,14 @@ import {
   getProducts,
   createProduct,
   updateProduct,
+  getProductImage,
 } from "@services/index";
 
 const initialState = {
   products: [],
   count: null,
   product: {},
+  productImage: null,
   loading: true,
   error: null,
 };
@@ -39,6 +41,17 @@ const products = createSlice({
       state.product = action.payload?.payload;
     });
     builder.addCase(getProduct.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(getProductImage.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getProductImage.fulfilled, (state, action) => {
+      state.loading = false;
+      state.productImage = action.payload;
+    });
+    builder.addCase(getProductImage.rejected, (state) => {
       state.loading = false;
     });
 

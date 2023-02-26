@@ -17,7 +17,7 @@ import { PointListTable } from "@components/dashboard/partner/point/point-list-t
 import { Plus as PlusIcon } from "@icons/plus";
 import { Search as SearchIcon } from "@icons/search";
 import { useDispatch, useSelector } from "src/store";
-import { getPoints } from "@services/index";
+import { getPartner, getPoints } from "@services/index";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { gtm } from "src/lib/gtm";
 
@@ -43,11 +43,14 @@ const sortOptions = [
 const PointList = () => {
   const dispatch = useDispatch();
 
+  const { partner } = useSelector((state) => state.partners);
   const { points, count } = useSelector((state) => state.points);
 
   const router = useRouter();
 
   const queryRef = useRef(null);
+
+  console.log({ partner });
 
   const partnerId = router.query?.partnerId;
 
@@ -79,6 +82,11 @@ const PointList = () => {
   };
 
   useEffect(() => {
+    dispatch(
+      getPartner({
+        id: partnerId,
+      })
+    );
     gtm.push({ event: "page_view" });
     // dispatch(getPoints());
   }, []);
@@ -117,7 +125,9 @@ const PointList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Points</Typography>
+                <Typography variant="h4">
+                  {partner?.brand} - {partner?.region} - Points
+                </Typography>
               </Grid>
               <Grid item>
                 <NextLink

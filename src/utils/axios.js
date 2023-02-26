@@ -102,9 +102,11 @@ axios.interceptors.request.use(
 
     const encryptedData = crypto.HmacSHA256(request, key);
 
+    console.log({ config });
+
     const headers = {
       "X-RequestDigest": encryptedData,
-      "Content-Type": "application/json",
+      "Content-Type": config.headers["Content-Type"] || "application/json",
       Accept: config.headers["Accept"] || "application/json",
       Authorization: accessToken && `Bearer ${accessToken}`,
     };

@@ -37,6 +37,19 @@ export const getProduct = createAsyncThunk(
   }
 );
 
+export const getProductImage = createAsyncThunk(
+  "products/getProductImage",
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/products/images/${params?.filePath}`);
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
 export const createProduct = createAsyncThunk(
   "products/createProduct",
   async (values, { rejectWithValue }) => {

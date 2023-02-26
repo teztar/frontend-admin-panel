@@ -20,7 +20,7 @@ import { Search as SearchIcon } from "@icons/search";
 import { Plus as PlusIcon } from "@icons/plus";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getProducts } from "@services/index";
+import { getPoint, getProducts } from "@services/index";
 
 const sortOptions = [
   {
@@ -83,6 +83,12 @@ const ProductList = () => {
   };
 
   useEffect(() => {
+    dispatch(
+      getPoint({
+        partnerId,
+        pointId,
+      })
+    );
     gtm.push({ event: "page_view" });
   }, []);
 

@@ -12,6 +12,7 @@ export {
   getPoints,
   createPoint,
   updatePoint,
+  getPointImage,
 } from "./partners/points.service";
 
 export {
@@ -19,6 +20,7 @@ export {
   getProducts,
   createProduct,
   updateProduct,
+  getProductImage,
 } from "./partners/products.service";
 
 export {

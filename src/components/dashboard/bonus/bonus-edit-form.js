@@ -30,6 +30,8 @@ import { format } from "date-fns";
 
 const categories = ["FIX", "PRESENT", "OUR"];
 
+const types = ["CONSTANT", "TEMPORARY", "FOR_FIRST_ORDER"];
+
 export const BonusEditForm = (props) => {
   const dispatch = useDispatch();
 
@@ -61,9 +63,9 @@ export const BonusEditForm = (props) => {
         startDate: bonus?.startDate || null,
         endDate: bonus?.endDate || null,
         fixBonus: bonus?.fixBonus || "",
-        ourBonusPercent: bonus?.ourBonusPercent || "",
+        bonusFromOurSide: bonus?.bonusFromOurSide || "",
+        bonusFromPartner: bonus?.bonusFromPartner || "",
         pointId: bonus?.pointId || "",
-        presentBonusPercent: bonus?.presentBonusPercent || "",
         productCategory: bonus?.productCategory || "",
         type: bonus?.type || "",
         submit: null,
@@ -144,49 +146,35 @@ export const BonusEditForm = (props) => {
                     required
                     fullWidth
                     type="number"
-                    error={Boolean(touched.fixBonus && errors.fixBonus)}
-                    helperText={touched.fixBonus && errors.fixBonus}
-                    name="fixBonus"
-                    label="Fix bonus"
+                    error={Boolean(
+                      touched.bonusFromOurSide && errors.bonusFromOurSide
+                    )}
+                    helperText={
+                      touched.bonusFromOurSide && errors.bonusFromOurSide
+                    }
+                    name="bonusFromOurSide"
+                    label="Bonus From Our Side"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.fixBonus}
+                    value={values.bonusFromOurSide}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
                     required
                     fullWidth
+                    type="number"
                     error={Boolean(
-                      touched.ourBonusPercent && errors.ourBonusPercent
+                      touched.bonusFromPartner && errors.bonusFromPartner
                     )}
                     helperText={
-                      touched.ourBonusPercent && errors.ourBonusPercent
+                      touched.bonusFromPartner && errors.bonusFromPartner
                     }
-                    label="Our bonus percent"
-                    name="ourBonusPercent"
-                    type="number"
+                    name="bonusFromPartner"
+                    label="Bonus From Partner"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.ourBonusPercent}
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    error={Boolean(
-                      touched.presentBonusPercent && errors.presentBonusPercent
-                    )}
-                    helperText={
-                      touched.presentBonusPercent && errors.presentBonusPercent
-                    }
-                    label="Present bonus percent"
-                    name="presentBonusPercent"
-                    type="number"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.presentBonusPercent}
+                    value={values.bonusFromPartner}
                   />
                 </Grid>
 
@@ -214,26 +202,6 @@ export const BonusEditForm = (props) => {
                 </Grid>
 
                 <Grid item md={6} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel id="productCategory-label">
-                      Product Category
-                    </InputLabel>
-                    <Select
-                      labelId="productCategory-label"
-                      value={values.productCategory}
-                      label="Product Category"
-                      name="productCategory"
-                      onChange={handleChange}
-                    >
-                      {categories.map((productCategory) => (
-                        <MenuItem key={productCategory} value={productCategory}>
-                          {productCategory}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item md={6} xs={12}>
                   <FormControl fullWidth disabled={!partnerId}>
                     <InputLabel id="point-label">Point</InputLabel>
                     <Select
@@ -253,17 +221,43 @@ export const BonusEditForm = (props) => {
                 </Grid>
 
                 <Grid item md={6} xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    error={Boolean(touched.type && errors.type)}
-                    helperText={touched.type && errors.type}
-                    name="type"
-                    label="Type"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.type}
-                  />
+                  <FormControl fullWidth>
+                    <InputLabel id="productCategory-label">
+                      Product Category
+                    </InputLabel>
+                    <Select
+                      labelId="productCategory-label"
+                      value={values.productCategory}
+                      label="Product Category"
+                      name="productCategory"
+                      onChange={handleChange}
+                    >
+                      {categories.map((productCategory) => (
+                        <MenuItem key={productCategory} value={productCategory}>
+                          {productCategory}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="productType-label">Product Type</InputLabel>
+                    <Select
+                      labelId="productType-label"
+                      value={values.type}
+                      label="Product Type"
+                      name="productType"
+                      onChange={handleChange}
+                    >
+                      {types.map((productType) => (
+                        <MenuItem key={productType} value={productType}>
+                          {productType}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
 
                 <Grid item md={6} xs={12}>
