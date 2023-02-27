@@ -13,6 +13,7 @@ import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import { Scrollbar } from "../../scrollbar";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { OrderStatusModal } from "./order-status-modal";
+import { SeverityPill } from "@components/severity-pill";
 
 export const OrderListTable = (props) => {
   const {
@@ -61,7 +62,18 @@ export const OrderListTable = (props) => {
                 <TableCell>{order.partner?.brand}</TableCell>
                 <TableCell>{order.client?.name}</TableCell>
                 <TableCell>{order.client?.phone}</TableCell>
-                <TableCell>{order.status}</TableCell>
+                <TableCell>
+                  <SeverityPill
+                    color={
+                      (order.status === "ORDER_NEW" && "primary") ||
+                      (order.status === "ORDER_ACCEPTED" && "success") ||
+                      (order.status === "ORDER_CANCELED" && "error") ||
+                      "info"
+                    }
+                  >
+                    {order.status}
+                  </SeverityPill>
+                </TableCell>
 
                 <TableCell align="right">
                   {/* <NextLink
