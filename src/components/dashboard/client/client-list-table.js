@@ -17,6 +17,7 @@ import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
 import { format } from "date-fns";
 import TablePaginationActions from "@utils/tablePaginationActions";
+import { SeverityPill } from "@components/severity-pill";
 
 export const ClientListTable = (props) => {
   const {
@@ -80,7 +81,15 @@ export const ClientListTable = (props) => {
                 </TableCell>
                 <TableCell>{client.phone}</TableCell>
                 <TableCell>{client.gender}</TableCell>
-                <TableCell>{client.status}</TableCell>
+                <TableCell>
+                  <SeverityPill
+                    color={
+                      client.status === "CLIENT_NEW" ? "primary" : "success"
+                    }
+                  >
+                    {client.status}
+                  </SeverityPill>
+                </TableCell>
 
                 <TableCell align="right">
                   <NextLink

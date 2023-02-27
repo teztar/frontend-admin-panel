@@ -248,7 +248,7 @@ export const BonusEditForm = (props) => {
                       labelId="productType-label"
                       value={values.type}
                       label="Product Type"
-                      name="productType"
+                      name="type"
                       onChange={handleChange}
                     >
                       {types.map((productType) => (

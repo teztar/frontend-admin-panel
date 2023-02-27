@@ -3,6 +3,7 @@ import NextLink from "next/link";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import { format } from "date-fns";
 import {
   Button,
   Card,
@@ -89,12 +90,15 @@ export const PushNotificationEditForm = (props) => {
           }
           formData.append("title", values.title);
           formData.append("body", values.body);
-          formData.append("dispatchDate", values.dispatchDate);
           formData.append("format", values.format);
-          formData.append("sortBy", values.sortBy);
-          formData.append("sortValue", values.sortValue);
-          formData.append("webImage", webImage);
-          formData.append("appImage", appImage);
+          formData.append(
+            "dispatch_date",
+            format(new Date(values.dispatchDate), "dd-MM-yyyy")
+          );
+          formData.append("sort_by", values.sortBy);
+          formData.append("sort_value", values.sortValue);
+          formData.append("web_image", webImage);
+          formData.append("app_image", appImage);
 
           for (let pair of formData.entries()) {
             console.log("pair: ", (data[pair[0]] = pair[1]));
