@@ -1,10 +1,11 @@
 import axios from "axios";
 import crypto from "crypto-js";
+import { toast } from "react-hot-toast";
 import { API_URL } from "./apiUrl";
 import { toCamelCaseFormat, toSnakeCaseFormat } from "./case-style";
 
 const key =
-  "JDJhJDEwJFR1VEN6cGlBVlAwdllocTJVSVVlSWVqQXBJOVo1Yzl3ejBBdkhCYW9MdUZjVm9QTUVBbWI2";
+  "JDJhJDEwJGFuQWJBcm01N2hWazlTU1RrMXFiai51Rkh2SktVaGZaZk9TTTdVSlEzdjZxL3ZYVlRIcDgu";
 
 export const cleanEmtpyFields = (obj) => {
   if (obj.data !== undefined) {
@@ -114,8 +115,11 @@ axios.interceptors.request.use(
       url: API_URL + config.url,
       data: toSnakeCaseFormat(config.data),
       params: toSnakeCaseFormat(config.params),
+      responseType: config.responseType || "json",
       headers: cleanEmtpyFields(headers),
     };
+
+    console.log({ updatedConfig });
 
     return cleanEmtpyFields(updatedConfig);
   },
@@ -132,6 +136,7 @@ axios.interceptors.response.use(
   (error) => {
     if (error.response) {
       if (error.response.status === 401) {
+        toast.error("UNAUTHORIZED");
         localStorage.clear();
         history.push("/#/");
         window.location.reload();

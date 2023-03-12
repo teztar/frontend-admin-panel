@@ -58,8 +58,8 @@ export const TransactionListTable = (props) => {
                 <TableCell>
                   {transaction.amountFromDelivery?.toLocaleString("ru")}
                 </TableCell>
-                <TableCell>{transaction.fixBonus}</TableCell>
-                <TableCell>{transaction.presentBonus}</TableCell>
+                <TableCell>{transaction.fixBonusFromOurSide}</TableCell>
+                <TableCell>{transaction.presentBonusFromOurSide}</TableCell>
                 <TableCell>
                   {transaction.commissionAmount?.toLocaleString("ru")}
                 </TableCell>

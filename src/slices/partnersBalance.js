@@ -1,8 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getPartnersBalance, downloadPartnersBalance } from "@services/index";
+import {
+  getPartnersBalance,
+  downloadPartnersBalance,
+  getPartnersBalancePoints,
+} from "@services/index";
 
 const initialState = {
   partnersBalance: [],
+  partnersBalancePoints: [],
   count: null,
   downloadedPartnersBalance: {},
   loading: true,
@@ -23,6 +28,18 @@ const partnersBalance = createSlice({
       state.count = action.payload?.count;
     });
     builder.addCase(getPartnersBalance.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(getPartnersBalancePoints.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getPartnersBalancePoints.fulfilled, (state, action) => {
+      state.loading = false;
+      state.partnersBalancePoints = action.payload?.payload;
+      state.count = action.payload?.count;
+    });
+    builder.addCase(getPartnersBalancePoints.rejected, (state) => {
       state.loading = false;
     });
 

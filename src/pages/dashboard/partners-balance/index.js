@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import {
   Box,
+  Button,
   Card,
   Container,
   Grid,
@@ -15,9 +16,10 @@ import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { PartnersBalanceListTable } from "@components/dashboard/partners_balance/partners-balance-list-table";
 import { Search as SearchIcon } from "@icons/search";
+import { Download } from "@icons/download";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getPartnersBalance } from "@services/index";
+import { downloadPartnersBalance, getPartnersBalance } from "@services/index";
 import { format } from "date-fns";
 
 const STATUSES = ["DEBT", "PAID"];
@@ -71,6 +73,15 @@ const PartnersBalanceList = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
+  const downloadPartnersBalanceFile = () =>
+    dispatch(
+      downloadPartnersBalance({
+        status: status,
+        dateTo: formattedDateTo,
+        dateFrom: formattedDateFrom,
+      })
+    );
+
   useEffect(() => {
     gtm.push({ event: "page_view" });
   }, []);
@@ -112,6 +123,15 @@ const PartnersBalanceList = () => {
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
                 <Typography variant="h4">Partners Balance</Typography>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  startIcon={<Download />}
+                  onClick={downloadPartnersBalanceFile}
+                >
+                  Download Partners Balances
+                </Button>
               </Grid>
             </Grid>
           </Box>

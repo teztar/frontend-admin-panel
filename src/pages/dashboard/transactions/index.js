@@ -99,6 +99,7 @@ const TransactionList = () => {
     );
 
   useEffect(() => {
+    // dispatch(getApplicationTypes());
     gtm.push({ event: "page_view" });
   }, []);
 

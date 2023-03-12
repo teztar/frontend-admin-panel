@@ -47,16 +47,13 @@ export const downloadTransactionsFile = createAsyncThunk(
             addedFrom: params?.addedFrom ?? "",
             paymentOption: params?.paymentOption ?? "",
           },
-          headers: {
-            Accept: "multipart/form-data",
-            responseType: "blob",
-          },
+          responseType: "arraybuffer",
         })
         .then((response) => {
           const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "file.xlsx");
+          link.setAttribute("download", "transactions.xlsx");
           document.body.appendChild(link);
           link.click();
         });
