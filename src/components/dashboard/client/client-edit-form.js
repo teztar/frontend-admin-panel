@@ -44,6 +44,8 @@ export const ClientEditForm = (props) => {
       initialValues={{
         id: client?.id || "",
         name: client?.name || "",
+        surname: client?.surname || "",
+        patronymic: client?.patronymic || "",
         birthday: client?.birthday || null,
         password: client?.password || "",
         phone: client?.phone?.substring(4) || "",
@@ -96,15 +98,41 @@ export const ClientEditForm = (props) => {
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
                   <TextField
+                    error={Boolean(touched.surname && errors.surname)}
+                    fullWidth
+                    helperText={touched.surname && errors.surname}
+                    label="Surname"
+                    name="surname"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.surname}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
                     error={Boolean(touched.name && errors.name)}
                     fullWidth
                     helperText={touched.name && errors.name}
-                    label="Client name"
+                    label="Name"
                     name="name"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     required
                     value={values.name}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.patronymic && errors.patronymic)}
+                    fullWidth
+                    helperText={touched.patronymic && errors.patronymic}
+                    label="Patronymic"
+                    name="patronymic"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.patronymic}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>

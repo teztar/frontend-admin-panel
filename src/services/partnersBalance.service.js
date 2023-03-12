@@ -23,13 +23,50 @@ export const getPartnersBalance = createAsyncThunk(
   }
 );
 
+export const getPartnersBalancePoints = createAsyncThunk(
+  "partnersBalance/getPartnersBalancePoints",
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/partners_balance/points/all", {
+        params: {
+          page: params?.page ?? 1,
+          perPage: params?.perPage ?? 10,
+          partnerId: params?.partnerId ?? 10,
+          dateFrom: params?.dateFrom || "2000-10-10",
+          dateTo: params?.dateTo || "2099-10-10",
+          search: params?.search || "",
+          status: params?.status || "",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
 export const downloadPartnersBalance = createAsyncThunk(
   "partnersBalance/downloadPartnersBalance",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `/partners_balance/download/file${params}`
-      );
+      const response = await axios
+        .get(`/partners_balance/download/file`, {
+          params: {
+            status: params?.status ?? "",
+            dateTo: params?.dateTo ?? "",
+            dateFrom: params?.dateFrom ?? "",
+          },
+          responseType: "arraybuffer",
+        })
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "partnersBalances.xlsx");
+          document.body.appendChild(link);
+          link.click();
+        });
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

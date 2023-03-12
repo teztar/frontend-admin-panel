@@ -1,4 +1,5 @@
 import { useState } from "react";
+import NextLink from "next/link";
 import { format } from "date-fns";
 import {
   IconButton,
@@ -8,9 +9,8 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
 } from "@mui/material";
-import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
+import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { SeverityPill } from "@components/severity-pill";
 import { PartnersBalanceModal } from "./partners-balance-modal";
@@ -51,7 +51,7 @@ export const PartnersBalanceListTable = (props) => {
           </TableHead>
           <TableBody>
             {partnersBalance?.map((partnersBalance) => (
-              <TableRow hover key={partnersBalance.id}>
+              <TableRow hover key={partnersBalance.partnerId}>
                 <TableCell>{partnersBalance.partnerName}</TableCell>
                 <TableCell>
                   {format(
@@ -80,12 +80,20 @@ export const PartnersBalanceListTable = (props) => {
                     href={`/dashboard/partnersBalance/${partnersBalance.id}/edit`}
                     passHref
                   > */}
-                  <Tooltip title="Update status">
+                  {/* <Tooltip title="Update status">
                     <IconButton component="a" onClick={toogleModal}>
                       <PencilAltIcon fontSize="small" />
                     </IconButton>
-                  </Tooltip>
+                  </Tooltip> */}
                   {/* </NextLink> */}
+                  <NextLink
+                    href={`/dashboard/partners-balance/${partnersBalance.partnerId}/points`}
+                    passHref
+                  >
+                    <IconButton component="a">
+                      <ArrowRightIcon fontSize="small" />
+                    </IconButton>
+                  </NextLink>
                 </TableCell>
               </TableRow>
             ))}

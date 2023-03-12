@@ -57,6 +57,7 @@ export const OrderStatusModal = (props) => {
     dispatch(updateOrder({ id: order.id, status: status }));
   };
 
+  console.log({ status });
   return (
     <BootstrapDialog
       onClose={handleClose}

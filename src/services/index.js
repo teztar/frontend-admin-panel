@@ -79,4 +79,26 @@ export { getCooperation, getCooperations } from "./cooperations.service";
 export {
   getPartnersBalance,
   downloadPartnersBalance,
+  getPartnersBalancePoints,
 } from "./partnersBalance.service";
+
+export {
+  getApplicationTypes,
+  getBonusCategories,
+  getBonusTypes,
+  getClientBonusOperationTypes,
+  getClientStatuses,
+  getCooperationRequestStatuses,
+  getCooperationRequestTypes,
+  getCourierStatuses,
+  getGenders,
+  getNotificationFormats,
+  getNotificationSortedFields,
+  getNotificationStatuses,
+  getOrderPaymentOptions,
+  getOrderStatuses,
+  getPartnerPointsBalanceStatuses,
+  getPeriods,
+  getPointStatuses,
+  getPrefixes,
+} from "./handbooks.service";
