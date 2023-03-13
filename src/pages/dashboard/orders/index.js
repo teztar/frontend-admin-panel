@@ -8,13 +8,14 @@ import { OrderListTable } from "@components/dashboard/order/order-list-table";
 import { Search as SearchIcon } from "@icons/search";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getOrders } from "@services/index";
-import { orderStatuses } from "@constants/index";
+import { getOrders, getOrderStatuses } from "@services/index";
 
 const OrderList = () => {
   const dispatch = useDispatch();
 
   const { orders, count } = useSelector((state) => state.orders);
+
+  const { orderStatuses } = useSelector((state) => state.handbooks);
 
   const router = useRouter();
 
@@ -44,10 +45,6 @@ const OrderList = () => {
     setSearch(queryRef.current?.value);
   };
 
-  const handleSortChange = (event) => {
-    setSort(event.target.value);
-  };
-
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
@@ -57,6 +54,7 @@ const OrderList = () => {
   };
 
   useEffect(() => {
+    dispatch(getOrderStatuses());
     gtm.push({ event: "page_view" });
   }, []);
 
@@ -134,8 +132,8 @@ const OrderList = () => {
               >
                 <option></option>
                 {orderStatuses.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
+                  <option key={option.key} value={option.key}>
+                    {option.value}
                   </option>
                 ))}
               </TextField>

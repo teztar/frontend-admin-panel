@@ -17,24 +17,22 @@ import { TransactionListTable } from "@components/dashboard/transaction/transact
 import { Search as SearchIcon } from "@icons/search";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { downloadTransactionsFile, getTransactions } from "@services/index";
+import {
+  downloadTransactionsFile,
+  getApplicationTypes,
+  getOrderPaymentOptions,
+  getOrderStatuses,
+  getTransactions,
+} from "@services/index";
 import { Download } from "@icons/download";
-
-const ADDED_FROM = ["WEB", "APP"];
-
-const PAYMENT_OPTION = ["CASH", "CARD", "QR", "BONUS"];
-
-const STATUS = [
-  "ORDER_NEW",
-  "ORDER_ACCEPTED",
-  "ORDER_CANCELED",
-  "ORDER_DELIVERED",
-];
 
 const TransactionList = () => {
   const dispatch = useDispatch();
 
   const { transactions, count } = useSelector((state) => state.transactions);
+  const { orderStatuses, orderPaymentOptions, applicationTypes } = useSelector(
+    (state) => state.handbooks
+  );
 
   const router = useRouter();
 
@@ -89,7 +87,7 @@ const TransactionList = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const downloadTransactions = () =>
+  const downloadTransactions = () => {
     dispatch(
       downloadTransactionsFile({
         addedFrom: addedFrom,
@@ -97,9 +95,12 @@ const TransactionList = () => {
         paymentOption: paymentOption,
       })
     );
+  };
 
   useEffect(() => {
-    // dispatch(getApplicationTypes());
+    dispatch(getOrderStatuses());
+    dispatch(getOrderPaymentOptions());
+    dispatch(getApplicationTypes());
     gtm.push({ event: "page_view" });
   }, []);
 
@@ -200,9 +201,9 @@ const TransactionList = () => {
                   value={transactionStatus}
                 >
                   <option></option>
-                  {STATUS.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                  {orderStatuses?.map((option) => (
+                    <option key={option.key} value={option.key}>
+                      {option.value}
                     </option>
                   ))}
                 </TextField>
@@ -217,9 +218,9 @@ const TransactionList = () => {
                   value={paymentOption}
                 >
                   <option></option>
-                  {PAYMENT_OPTION.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                  {orderPaymentOptions?.map((option) => (
+                    <option key={option.key} value={option.key}>
+                      {option.value}
                     </option>
                   ))}
                 </TextField>
@@ -234,9 +235,9 @@ const TransactionList = () => {
                   value={addedFrom}
                 >
                   <option></option>
-                  {ADDED_FROM.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                  {applicationTypes?.map((option) => (
+                    <option key={option.key} value={option.key}>
+                      {option.value}
                     </option>
                   ))}
                 </TextField>

@@ -14,11 +14,9 @@ import { CooperationListTable } from "@components/dashboard/cooperation/cooperat
 import { Search as SearchIcon } from "@icons/search";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getCooperations } from "@services/index";
+import { getCooperationRequestTypes, getCooperations } from "@services/index";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
-
-const TYPES = ["PARTNER", "COURIER"];
 
 const CooperationList = () => {
   const dispatch = useDispatch();
@@ -26,6 +24,8 @@ const CooperationList = () => {
   const router = useRouter();
 
   const { cooperations, count } = useSelector((state) => state.cooperations);
+
+  const { cooperationRequestTypes } = useSelector((state) => state.handbooks);
 
   const queryRef = useRef(null);
 
@@ -61,6 +61,7 @@ const CooperationList = () => {
   };
 
   useEffect(() => {
+    dispatch(getCooperationRequestTypes());
     gtm.push({ event: "page_view" });
   }, []);
 
@@ -143,9 +144,9 @@ const CooperationList = () => {
                 value={type}
               >
                 <option></option>
-                {TYPES.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
+                {cooperationRequestTypes?.map((option) => (
+                  <option key={option.key} value={option.key}>
+                    {option.value}
                   </option>
                 ))}
               </TextField>

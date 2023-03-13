@@ -22,6 +22,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch, useSelector } from "src/store";
 import {
   createBonus,
+  getBonusCategories,
+  getBonusTypes,
   getPartners,
   getPoints,
   updateBonus,
@@ -37,6 +39,10 @@ export const BonusEditForm = (props) => {
 
   const { partners } = useSelector((state) => state.partners);
 
+  const { bonusCategories, bonusTypes } = useSelector(
+    (state) => state.handbooks
+  );
+
   const { points } = useSelector((state) => state.points);
 
   const { bonus, mode = "edit", ...other } = props;
@@ -44,6 +50,8 @@ export const BonusEditForm = (props) => {
   const [partnerId, setPartnerId] = useState();
 
   useEffect(() => {
+    dispatch(getBonusTypes());
+    dispatch(getBonusCategories());
     dispatch(getPartners());
   }, []);
 
@@ -232,9 +240,12 @@ export const BonusEditForm = (props) => {
                       name="productCategory"
                       onChange={handleChange}
                     >
-                      {categories.map((productCategory) => (
-                        <MenuItem key={productCategory} value={productCategory}>
-                          {productCategory}
+                      {bonusCategories?.map((productCategory) => (
+                        <MenuItem
+                          key={productCategory.key}
+                          value={productCategory.key}
+                        >
+                          {productCategory.value}
                         </MenuItem>
                       ))}
                     </Select>
@@ -251,9 +262,9 @@ export const BonusEditForm = (props) => {
                       name="type"
                       onChange={handleChange}
                     >
-                      {types.map((productType) => (
-                        <MenuItem key={productType} value={productType}>
-                          {productType}
+                      {bonusTypes.map((productType) => (
+                        <MenuItem key={productType.key} value={productType.key}>
+                          {productType.value}
                         </MenuItem>
                       ))}
                     </Select>
