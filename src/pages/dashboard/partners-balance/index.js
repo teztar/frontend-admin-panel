@@ -19,16 +19,22 @@ import { Search as SearchIcon } from "@icons/search";
 import { Download } from "@icons/download";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { downloadPartnersBalance, getPartnersBalance } from "@services/index";
+import {
+  downloadPartnersBalance,
+  getPartnerPointsBalanceStatuses,
+  getPartnersBalance,
+} from "@services/index";
 import { format } from "date-fns";
-
-const STATUSES = ["DEBT", "PAID"];
 
 const PartnersBalanceList = () => {
   const dispatch = useDispatch();
 
   const { partnersBalance, count } = useSelector(
     (state) => state.partnersBalance
+  );
+
+  const { partnerPointsBalanceStatuses } = useSelector(
+    (state) => state.handbooks
   );
 
   const router = useRouter();
@@ -83,6 +89,7 @@ const PartnersBalanceList = () => {
     );
 
   useEffect(() => {
+    dispatch(getPartnerPointsBalanceStatuses());
     gtm.push({ event: "page_view" });
   }, []);
 
@@ -184,9 +191,9 @@ const PartnersBalanceList = () => {
                   value={status}
                 >
                   <option>Choose</option>
-                  {STATUSES.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                  {partnerPointsBalanceStatuses?.map((option) => (
+                    <option key={option.key} value={option.key}>
+                      {option.value}
                     </option>
                   ))}
                 </TextField>

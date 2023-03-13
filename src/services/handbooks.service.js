@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const getApplicationTypes = createAsyncThunk(
-  "handbook/getApplicationTypes",
+  "handbooks/getApplicationTypes",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/application_types");
@@ -15,7 +15,7 @@ export const getApplicationTypes = createAsyncThunk(
 );
 
 export const getBonusCategories = createAsyncThunk(
-  "handbook/getBonusCategories",
+  "handbooks/getBonusCategories",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/bonus_categories");
@@ -28,7 +28,7 @@ export const getBonusCategories = createAsyncThunk(
 );
 
 export const getBonusTypes = createAsyncThunk(
-  "handbook/getBonusTypes",
+  "handbooks/getBonusTypes",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/bonus_types");
@@ -41,7 +41,7 @@ export const getBonusTypes = createAsyncThunk(
 );
 
 export const getClientBonusOperationTypes = createAsyncThunk(
-  "handbook/getClientBonusOperationTypes",
+  "handbooks/getClientBonusOperationTypes",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
@@ -56,7 +56,7 @@ export const getClientBonusOperationTypes = createAsyncThunk(
 );
 
 export const getClientStatuses = createAsyncThunk(
-  "handbook/getClientStatuses",
+  "handbooks/getClientStatuses",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/client_statuses");
@@ -69,7 +69,7 @@ export const getClientStatuses = createAsyncThunk(
 );
 
 export const getCooperationRequestStatuses = createAsyncThunk(
-  "handbook/getCooperationRequestStatuses",
+  "handbooks/getCooperationRequestStatuses",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
@@ -84,7 +84,7 @@ export const getCooperationRequestStatuses = createAsyncThunk(
 );
 
 export const getCooperationRequestTypes = createAsyncThunk(
-  "handbook/getCooperationRequestTypes",
+  "handbooks/getCooperationRequestTypes",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/cooperation_request_types");
@@ -97,7 +97,7 @@ export const getCooperationRequestTypes = createAsyncThunk(
 );
 
 export const getCourierStatuses = createAsyncThunk(
-  "handbook/getCourierStatuses",
+  "handbooks/getCourierStatuses",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/courier_statuses");
@@ -110,7 +110,7 @@ export const getCourierStatuses = createAsyncThunk(
 );
 
 export const getGenders = createAsyncThunk(
-  "handbook/getGenders",
+  "handbooks/getGenders",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/genders");
@@ -123,7 +123,7 @@ export const getGenders = createAsyncThunk(
 );
 
 export const getNotificationFormats = createAsyncThunk(
-  "handbook/getNotificationFormats",
+  "handbooks/getNotificationFormats",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/notification_formats");
@@ -136,7 +136,7 @@ export const getNotificationFormats = createAsyncThunk(
 );
 
 export const getNotificationSortedFields = createAsyncThunk(
-  "handbook/getNotificationSortedFields",
+  "handbooks/getNotificationSortedFields",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/notification_sorted_fields");
@@ -149,7 +149,7 @@ export const getNotificationSortedFields = createAsyncThunk(
 );
 
 export const getNotificationStatuses = createAsyncThunk(
-  "handbook/getNotificationStatuses",
+  "handbooks/getNotificationStatuses",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/notification_statuses");
@@ -162,7 +162,7 @@ export const getNotificationStatuses = createAsyncThunk(
 );
 
 export const getOrderPaymentOptions = createAsyncThunk(
-  "handbook/getOrderPaymentOptions",
+  "handbooks/getOrderPaymentOptions",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/order_payment_options");
@@ -175,7 +175,7 @@ export const getOrderPaymentOptions = createAsyncThunk(
 );
 
 export const getOrderStatuses = createAsyncThunk(
-  "handbook/getOrderStatuses",
+  "handbooks/getOrderStatuses",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/order_statuses");
@@ -188,7 +188,7 @@ export const getOrderStatuses = createAsyncThunk(
 );
 
 export const getPartnerPointsBalanceStatuses = createAsyncThunk(
-  "handbook/getPartnerPointsBalanceStatuses",
+  "handbooks/getPartnerPointsBalanceStatuses",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
@@ -203,7 +203,7 @@ export const getPartnerPointsBalanceStatuses = createAsyncThunk(
 );
 
 export const getPeriods = createAsyncThunk(
-  "handbook/getPeriods",
+  "handbooks/getPeriods",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/periods");
@@ -216,7 +216,7 @@ export const getPeriods = createAsyncThunk(
 );
 
 export const getPointStatuses = createAsyncThunk(
-  "handbook/getPointStatuses",
+  "handbooks/getPointStatuses",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/point_statuses");
@@ -228,7 +228,7 @@ export const getPointStatuses = createAsyncThunk(
   }
 );
 export const getPrefixes = createAsyncThunk(
-  "handbook/getPrefixes",
+  "handbooks/getPrefixes",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/handbook/prefixes");
