@@ -170,7 +170,7 @@ const PartnersBalanceList = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder="Search partnersBalance"
+                  placeholder="Search partners balance"
                 />
               </Box>
               <Box

@@ -8,7 +8,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
 } from "@mui/material";
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import { Scrollbar } from "@components/scrollbar";
@@ -58,45 +57,31 @@ export const ProductListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products && products.length > 0 ? (
-              products.map((product) => (
-                <TableRow hover key={product.id}>
-                  <TableCell>{product.name}</TableCell>
-                  <TableCell>{product.category}</TableCell>
-                  <TableCell>{product.ingredients}</TableCell>
-                  <TableCell>{product.price?.toLocaleString("ru")}</TableCell>
-                  <TableCell>{product.measuring}</TableCell>
-                  <TableCell>{product.description}</TableCell>
-                  <TableCell
-                    onClick={() => handleGetProductImage(product?.image?.name)}
-                  >
-                    {productImage && <img src={productImage} alt="image" />}
-                  </TableCell>
-                  <TableCell align="right">
-                    <NextLink
-                      href={`/dashboard/partners/${partnerId}/points/${pointId}/products/${product.id}/edit`}
-                      passHref
-                    >
-                      <IconButton component="a">
-                        <PencilAltIcon fontSize="small" />
-                      </IconButton>
-                    </NextLink>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell>
-                  <Typography>No Products</Typography>
+            {products.map((product) => (
+              <TableRow hover key={product.id}>
+                <TableCell>{product.name}</TableCell>
+                <TableCell>{product.category}</TableCell>
+                <TableCell>{product.ingredients}</TableCell>
+                <TableCell>{product.price?.toLocaleString("ru")}</TableCell>
+                <TableCell>{product.measuring}</TableCell>
+                <TableCell>{product.description}</TableCell>
+                <TableCell
+                  onClick={() => handleGetProductImage(product?.image?.name)}
+                >
+                  {productImage && <img src={productImage} alt="image" />}
                 </TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
+                <TableCell align="right">
+                  <NextLink
+                    href={`/dashboard/partners/${partnerId}/points/${pointId}/products/${product.id}/edit`}
+                    passHref
+                  >
+                    <IconButton component="a">
+                      <PencilAltIcon fontSize="small" />
+                    </IconButton>
+                  </NextLink>
+                </TableCell>
               </TableRow>
-            )}
+            ))}
           </TableBody>
         </Table>
       </Scrollbar>

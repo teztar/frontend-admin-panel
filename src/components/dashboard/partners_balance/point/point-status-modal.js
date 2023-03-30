@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
@@ -7,15 +8,15 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
-import { orderStatuses } from "@constants/index";
-import { useDispatch } from "src/store";
-import { updateOrder } from "@services/index";
-import { useState } from "react";
+import { useDispatch, useSelector } from "src/store";
+import { updatePartnersBalancePoint } from "@services/index";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiPaper-root": {
+    width: "50vw",
+  },
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
-    minWidth: "50vw",
   },
   "& .MuiDialogActions-root": {
     padding: theme.spacing(1),
@@ -46,48 +47,49 @@ function BootstrapDialogTitle(props) {
   );
 }
 
-export const ClientDetailsModal = (props) => {
+export const PointStatusModal = (props) => {
   const dispatch = useDispatch();
+  const { partnerPointsBalanceStatuses } = useSelector(
+    (state) => state.handbooks
+  );
 
-  const { open, handleClose, order } = props;
+  const { open, handleClose, point } = props;
 
-  const [status, setStatus] = useState(order.status);
+  const [status, setStatus] = useState(point.status);
 
-  const updateOrderStatus = () => {
-    dispatch(updateOrder({ id: order.id, status: status }));
+  const updatePointStatus = () => {
+    dispatch(
+      updatePartnersBalancePoint({
+        partner_id: point.partnerId,
+        status: status,
+      })
+    );
   };
 
   return (
-    <BootstrapDialog
-      onClose={handleClose}
-      aria-labelledby="customized-dialog-title"
-      open={open}
-      sx={{
-        minWidth: "50vw",
-      }}
-    >
-      <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-        Update order status
+    <BootstrapDialog onClose={handleClose} open={open}>
+      <BootstrapDialogTitle onClose={handleClose}>
+        Update point status
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <TextField
+          select
+          fullWidth
           label="Status"
           name="status"
           onChange={(e) => setStatus(e.target.value)}
-          select
-          SelectProps={{ native: true }}
-          sx={{ m: 1.5 }}
           value={status}
+          SelectProps={{ native: true }}
         >
-          {orderStatuses.map((option) => (
-            <option key={option} value={option}>
-              {option}
+          {partnerPointsBalanceStatuses?.map((option) => (
+            <option key={option.key} value={option.key}>
+              {option.value}
             </option>
           ))}
         </TextField>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={updateOrderStatus}>
+        <Button autoFocus onClick={updatePointStatus}>
           Save changes
         </Button>
       </DialogActions>

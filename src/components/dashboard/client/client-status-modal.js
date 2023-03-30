@@ -1,6 +1,6 @@
-import { useState } from "react";
-import Button from "@mui/material/Button";
+import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import IconButton from "@mui/material/IconButton";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -9,7 +9,7 @@ import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "src/store";
-import { updateOrder } from "@services/index";
+import { getClientStatuses, updateClientStatus } from "@services/index";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -47,22 +47,27 @@ function BootstrapDialogTitle(props) {
   );
 }
 
-export const OrderStatusModal = (props) => {
+export const ClientStatusModal = (props) => {
   const dispatch = useDispatch();
-  const { orderStatuses } = useSelector((state) => state.handbooks);
 
-  const { open, handleClose, order } = props;
+  const { clientStatuses } = useSelector((state) => state.handbooks);
 
-  const [status, setStatus] = useState(order.status);
+  const { open, handleClose, client } = props;
 
-  const updateOrderStatus = () => {
-    dispatch(updateOrder({ id: order.id, status: status }));
+  const [status, setStatus] = useState(client.status);
+
+  const handleUpdateClientStatus = () => {
+    dispatch(updateClientStatus({ id: client.id, status: status }));
   };
+
+  useEffect(() => {
+    dispatch(getClientStatuses());
+  }, []);
 
   return (
     <BootstrapDialog onClose={handleClose} open={open}>
       <BootstrapDialogTitle onClose={handleClose}>
-        Update order status
+        Update client status
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <TextField
@@ -74,7 +79,7 @@ export const OrderStatusModal = (props) => {
           value={status}
           SelectProps={{ native: true }}
         >
-          {orderStatuses?.map((option) => (
+          {clientStatuses?.map((option) => (
             <option key={option.key} value={option.key}>
               {option.value}
             </option>
@@ -82,7 +87,7 @@ export const OrderStatusModal = (props) => {
         </TextField>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={updateOrderStatus}>
+        <Button autoFocus onClick={handleUpdateClientStatus}>
           Save changes
         </Button>
       </DialogActions>

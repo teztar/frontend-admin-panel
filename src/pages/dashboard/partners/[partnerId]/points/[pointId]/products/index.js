@@ -134,7 +134,7 @@ const ProductList = () => {
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
                 <Typography variant="h4">
-                  {partner?.brand} - {partner?.region} - {point?.assortment}
+                  {partner?.brand} - {partner?.region} - {point?.assortment}{" "}
                   Products
                 </Typography>
               </Grid>
@@ -200,14 +200,20 @@ const ProductList = () => {
                 ))}
               </TextField>
             </Box>
-            <ProductListTable
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              page={page}
-              products={products}
-              productsCount={count}
-              rowsPerPage={rowsPerPage}
-            />
+            {products?.length > 0 ? (
+              <ProductListTable
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                page={page}
+                products={products}
+                productsCount={count}
+                rowsPerPage={rowsPerPage}
+              />
+            ) : (
+              <Box ml={3} mb={3}>
+                No Products
+              </Box>
+            )}
           </Card>
         </Container>
       </Box>

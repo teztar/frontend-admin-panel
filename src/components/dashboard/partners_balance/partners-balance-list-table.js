@@ -1,4 +1,3 @@
-import { useState } from "react";
 import NextLink from "next/link";
 import { format } from "date-fns";
 import {
@@ -13,7 +12,6 @@ import {
 import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { SeverityPill } from "@components/severity-pill";
-import { PartnersBalanceModal } from "./partners-balance-modal";
 import { Scrollbar } from "../../scrollbar";
 
 export const PartnersBalanceListTable = (props) => {
@@ -26,12 +24,6 @@ export const PartnersBalanceListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
-
-  const [open, setOpen] = useState(false);
-
-  const toogleModal = () => {
-    setOpen((prevValue) => !prevValue);
-  };
 
   return (
     <div {...other}>
@@ -76,16 +68,6 @@ export const PartnersBalanceListTable = (props) => {
                 </TableCell>
 
                 <TableCell align="right">
-                  {/* <NextLink
-                    href={`/dashboard/partnersBalance/${partnersBalance.id}/edit`}
-                    passHref
-                  > */}
-                  {/* <Tooltip title="Update status">
-                    <IconButton component="a" onClick={toogleModal}>
-                      <PencilAltIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip> */}
-                  {/* </NextLink> */}
                   <NextLink
                     href={`/dashboard/partners-balance/${partnersBalance.partnerId}/points`}
                     passHref
@@ -100,7 +82,6 @@ export const PartnersBalanceListTable = (props) => {
           </TableBody>
         </Table>
       </Scrollbar>
-      {open && <PartnersBalanceModal open={open} handleClose={toogleModal} />}
       <TablePagination
         component="div"
         count={partnersBalanceCount}

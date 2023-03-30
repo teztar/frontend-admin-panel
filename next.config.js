@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const config = {
-  swcMinify: false,
+  swcMinify: true,
   reactStrictMode: false,
   output: "standalone",
   webpack(config) {
@@ -13,14 +13,22 @@ const config = {
   async redirects() {
     return [
       {
-        source: "/",
-        destination: "/dashboard",
+        source: "/docs",
+        destination: "/docs/welcome",
         permanent: true,
       },
     ];
   },
 };
 
-process.on("unhandledRejection", (error) => {
-  console.log("unhandledRejection", error);
-});
+// Remove this if you're not using Fullcalendar features
+const withTM = require("next-transpile-modules")([
+  "@fullcalendar/common",
+  "@fullcalendar/react",
+  "@fullcalendar/daygrid",
+  "@fullcalendar/list",
+  "@fullcalendar/timegrid",
+  "@fullcalendar/timeline",
+]);
+
+module.exports = withTM(config);

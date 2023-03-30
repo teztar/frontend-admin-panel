@@ -11,37 +11,26 @@ import {
   Typography,
 } from "@mui/material";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
-import { PointListTable } from "@components/dashboard/partner/point/point-list-table";
+import { PointListTable } from "@components/dashboard/partners_balance/point/point-list-table";
 import { Search as SearchIcon } from "@icons/search";
 import { useDispatch, useSelector } from "src/store";
-import { getPartnersBalancePoints } from "@services/index";
+import {
+  getPartnerPointsBalanceStatuses,
+  getPartnersBalancePoints,
+} from "@services/index";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { gtm } from "src/lib/gtm";
-
-const sortOptions = [
-  {
-    label: "Last update (newest)",
-    value: "updatedAt|desc",
-  },
-  {
-    label: "Last update (oldest)",
-    value: "updatedAt|asc",
-  },
-  {
-    label: "Total orders (highest)",
-    value: "totalOrders|desc",
-  },
-  {
-    label: "Total orders (lowest)",
-    value: "totalOrders|asc",
-  },
-];
 
 const PointList = () => {
   const dispatch = useDispatch();
 
-  const { partner } = useSelector((state) => state.partners);
-  const { points, count } = useSelector((state) => state.points);
+  const { partnerPointsBalanceStatuses } = useSelector(
+    (state) => state.handbooks
+  );
+
+  const { partnersBalancePoints, count } = useSelector(
+    (state) => state.partnersBalance
+  );
 
   const router = useRouter();
 
@@ -53,11 +42,12 @@ const PointList = () => {
     page: router.query?.page ?? 0,
     perPage: router.query?.perPage ?? 10,
     search: router.query?.search ?? "",
+    status: router.query?.status ?? "",
   };
   const [search, setSearch] = useState(queryParams?.search);
   const [page, setPage] = useState(+queryParams.page);
   const [rowsPerPage, setRowsPerPage] = useState(+queryParams?.perPage);
-  const [sort, setSort] = useState(sortOptions[0].value);
+  const [status, setStatus] = useState(queryParams?.status);
 
   const handleQueryChange = (event) => {
     event.preventDefault();
@@ -65,7 +55,8 @@ const PointList = () => {
   };
 
   const handleSortChange = (event) => {
-    setSort(event.target.value);
+    setPage(0);
+    setStatus(event.target.value);
   };
 
   const handlePageChange = (_, newPage) => {
@@ -77,26 +68,28 @@ const PointList = () => {
   };
 
   useEffect(() => {
+    dispatch(getPartnerPointsBalanceStatuses());
     gtm.push({ event: "page_view" });
   }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      // router.push(
-      //   `/dashboard/partners-balance/${partnerId}/points?search=${search}&page=${page}&perPage=${rowsPerPage}`
-      // );
+      router.push(
+        `/dashboard/partners-balance/${partnerId}/points?search=${search}&page=${page}&perPage=${rowsPerPage}&status=${status}`
+      );
       dispatch(
         getPartnersBalancePoints({
           partnerId: partnerId,
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
+          status: status,
         })
       );
     }, 700);
 
     return () => clearTimeout(timer);
-  }, [page, rowsPerPage, search]);
+  }, [page, rowsPerPage, search, status]);
 
   return (
     <>
@@ -150,23 +143,24 @@ const PointList = () => {
                 />
               </Box>
               <TextField
-                label="Sort By"
-                name="sort"
+                label="Status"
+                name="status"
                 onChange={handleSortChange}
                 select
                 SelectProps={{ native: true }}
                 sx={{ m: 1.5 }}
-                value={sort}
+                value={status}
               >
-                {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+                <option></option>
+                {partnerPointsBalanceStatuses.map((option) => (
+                  <option key={option.key} value={option.key}>
+                    {option.value}
                   </option>
                 ))}
               </TextField>
             </Box>
             <PointListTable
-              points={points}
+              points={partnersBalancePoints}
               pointsCount={count}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
