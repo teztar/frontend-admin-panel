@@ -1,3 +1,4 @@
+import { useState } from "react";
 import NextLink from "next/link";
 import PropTypes from "prop-types";
 import {
@@ -11,13 +12,17 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
 } from "@mui/material";
+import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
+import EditIcon from "@mui/icons-material/Edit";
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
 import { format } from "date-fns";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { SeverityPill } from "@components/severity-pill";
+import { ClientStatusModal } from "./client-status-modal";
 
 export const ClientListTable = (props) => {
   const {
@@ -29,6 +34,15 @@ export const ClientListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
+
+  const [open, setOpen] = useState(false);
+
+  const [currentClient, setCurrentClient] = useState();
+
+  const toggleModal = (point) => {
+    setOpen((prevValue) => !prevValue);
+    setCurrentClient(point);
+  };
 
   return (
     <div {...other}>
@@ -92,13 +106,34 @@ export const ClientListTable = (props) => {
                 </TableCell>
 
                 <TableCell align="right">
+                  <Tooltip title="Change status">
+                    <IconButton
+                      component="a"
+                      onClick={() => toggleModal(client)}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
                   <NextLink
                     href={`/dashboard/clients/${client.id}/edit`}
                     passHref
                   >
-                    <IconButton component="a">
-                      <PencilAltIcon fontSize="small" />
-                    </IconButton>
+                    <Tooltip title="Edit client">
+                      <IconButton component="a">
+                        <PencilAltIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </NextLink>
+
+                  <NextLink
+                    href={`/dashboard/clients/${client.id}/orders`}
+                    passHref
+                  >
+                    <Tooltip title="Client orders">
+                      <IconButton component="a">
+                        <ArrowRightIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
                   </NextLink>
                 </TableCell>
               </TableRow>
@@ -106,6 +141,13 @@ export const ClientListTable = (props) => {
           </TableBody>
         </Table>
       </Scrollbar>
+      {open && (
+        <ClientStatusModal
+          open={open}
+          handleClose={toggleModal}
+          client={currentClient}
+        />
+      )}
       <TablePagination
         component="div"
         count={clientsCount}

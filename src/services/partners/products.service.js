@@ -42,7 +42,12 @@ export const getProductImage = createAsyncThunk(
   async (params, { rejectWithValue }) => {
     try {
       const response = await axios.get(`/products/images/${params?.filePath}`);
-      return response.data;
+      const imageBlob = await response.blob();
+      console.log({ imageBlob });
+      const imageObjectURL = URL.createObjectURL(imageBlob);
+      console.log({ imageObjectURL });
+      return imageObjectURL;
+      // return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.error);

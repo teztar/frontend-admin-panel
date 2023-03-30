@@ -1,22 +1,17 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
 import {
-  IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
 } from "@mui/material";
-import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
-import { Scrollbar } from "../../scrollbar";
+import { Scrollbar } from "../../../scrollbar";
 import TablePaginationActions from "@utils/tablePaginationActions";
-import { OrderStatusModal } from "./order-status-modal";
 import { SeverityPill } from "@components/severity-pill";
 
-export const OrderListTable = (props) => {
+export const ClientOrderListTable = (props) => {
   const {
     orders,
     ordersCount,
@@ -26,15 +21,6 @@ export const OrderListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
-
-  const [open, setOpen] = useState(false);
-
-  const [currentOrder, setCurrentOrder] = useState();
-
-  const toggleModal = (order) => {
-    setOpen((prevValue) => !prevValue);
-    setCurrentOrder(order);
-  };
 
   return (
     <div {...other}>
@@ -50,7 +36,6 @@ export const OrderListTable = (props) => {
               <TableCell>Client Name</TableCell>
               <TableCell>Client Phone</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -75,34 +60,12 @@ export const OrderListTable = (props) => {
                     {order.status}
                   </SeverityPill>
                 </TableCell>
-
-                <TableCell align="right">
-                  {/* <NextLink
-                    href={`/dashboard/orders/${order.id}/edit`}
-                    passHref
-                  > */}
-                  <Tooltip title="Change status">
-                    <IconButton
-                      component="a"
-                      onClick={() => toggleModal(order)}
-                    >
-                      <PencilAltIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                  {/* </NextLink> */}
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </Scrollbar>
-      {open && (
-        <OrderStatusModal
-          open={open}
-          handleClose={toggleModal}
-          order={currentOrder}
-        />
-      )}
+
       <TablePagination
         component="div"
         count={ordersCount}
@@ -117,7 +80,7 @@ export const OrderListTable = (props) => {
   );
 };
 
-OrderListTable.propTypes = {
+ClientOrderListTable.propTypes = {
   orders: PropTypes.array.isRequired,
   ordersCount: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,

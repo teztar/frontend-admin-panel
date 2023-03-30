@@ -4,12 +4,14 @@ import {
   getClients,
   createClient,
   updateClient,
+  getClientOrders,
 } from "@services/index";
 
 const initialState = {
   clients: [],
   count: null,
   client: {},
+  clientOrders: [],
   loading: true,
   error: null,
 };
@@ -39,6 +41,17 @@ const clients = createSlice({
       state.client = action.payload?.payload;
     });
     builder.addCase(getClient.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(getClientOrders.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getClientOrders.fulfilled, (state, action) => {
+      state.loading = false;
+      state.clientOrders = action.payload?.payload;
+    });
+    builder.addCase(getClientOrders.rejected, (state) => {
       state.loading = false;
     });
 

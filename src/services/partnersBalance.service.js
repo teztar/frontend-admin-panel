@@ -46,6 +46,23 @@ export const getPartnersBalancePoints = createAsyncThunk(
   }
 );
 
+export const updatePartnersBalancePoint = createAsyncThunk(
+  "partnersBalance/updatePartnersBalancePoint",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        "/partners_balance/points/change/status",
+        values
+      );
+      toast.success("Статус точки обнавлен");
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.messages);
+    }
+  }
+);
+
 export const downloadPartnersBalance = createAsyncThunk(
   "partnersBalance/downloadPartnersBalance",
   async (params, { rejectWithValue }) => {

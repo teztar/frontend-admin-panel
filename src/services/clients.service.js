@@ -34,6 +34,19 @@ export const getClient = createAsyncThunk(
   }
 );
 
+export const getClientOrders = createAsyncThunk(
+  "clients/getClientOrders",
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/clients/orders/${params?.id}`);
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
 export const createClient = createAsyncThunk(
   "clients/createClient",
   async (values, { rejectWithValue }) => {
@@ -54,6 +67,20 @@ export const updateClient = createAsyncThunk(
     try {
       const response = await axios.put("/clients/update", values);
       toast.success("Клиент обнавлен");
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.messages);
+    }
+  }
+);
+
+export const updateClientStatus = createAsyncThunk(
+  "clients/updateClientStatus",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.put("/clients/change/status", values);
+      toast.success("Статус клеинта обнавлен");
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

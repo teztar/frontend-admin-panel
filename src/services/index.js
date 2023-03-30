@@ -45,6 +45,8 @@ export {
   getClients,
   createClient,
   updateClient,
+  getClientOrders,
+  updateClientStatus,
 } from "./clients.service";
 
 export {
@@ -80,6 +82,7 @@ export {
   getPartnersBalance,
   downloadPartnersBalance,
   getPartnersBalancePoints,
+  updatePartnersBalancePoint,
 } from "./partnersBalance.service";
 
 export {
