@@ -50,6 +50,7 @@ const clients = createSlice({
     builder.addCase(getClientOrders.fulfilled, (state, action) => {
       state.loading = false;
       state.clientOrders = action.payload?.payload;
+      state.count = action.payload?.count;
     });
     builder.addCase(getClientOrders.rejected, (state) => {
       state.loading = false;

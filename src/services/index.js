@@ -21,6 +21,7 @@ export {
   createProduct,
   updateProduct,
   getProductImage,
+  getProductCategories,
 } from "./partners/products.service";
 
 export {

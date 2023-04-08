@@ -11,6 +11,7 @@ export const getProducts = createAsyncThunk(
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
           search: params?.search ?? "",
+          category: params?.category ?? "",
           pointId: params?.pointId,
         },
       });
@@ -37,17 +38,28 @@ export const getProduct = createAsyncThunk(
   }
 );
 
+export const getProductCategories = createAsyncThunk(
+  "products/getProductCategories",
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `/products/categories/${params?.pointId}`
+      );
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
 export const getProductImage = createAsyncThunk(
   "products/getProductImage",
   async (params, { rejectWithValue }) => {
     try {
       const response = await axios.get(`/products/images/${params?.filePath}`);
-      const imageBlob = await response.blob();
-      console.log({ imageBlob });
-      const imageObjectURL = URL.createObjectURL(imageBlob);
-      console.log({ imageObjectURL });
-      return imageObjectURL;
-      // return response.data;
+
+      return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
       return rejectWithValue(error.error);

@@ -74,6 +74,7 @@ export const BonusEditForm = (props) => {
         bonusFromOurSide: bonus?.bonusFromOurSide || "",
         bonusFromPartner: bonus?.bonusFromPartner || "",
         pointId: bonus?.pointId || "",
+        productId: bonus?.productId || "",
         productCategory: bonus?.productCategory || "",
         type: bonus?.type || "",
         submit: null,

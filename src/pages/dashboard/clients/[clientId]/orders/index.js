@@ -7,12 +7,13 @@ import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { ClientOrderListTable } from "@components/dashboard/client/order/client-order-list-table";
 import { Search as SearchIcon } from "@icons/search";
 import { useDispatch, useSelector } from "src/store";
-import { getClientOrders } from "@services/index";
+import { getClientOrders, getOrderStatuses } from "@services/index";
 
 const ClientOrderList = () => {
   const dispatch = useDispatch();
 
-  const { orders, count } = useSelector((state) => state.orders);
+  const { clientOrders, count } = useSelector((state) => state.clients);
+  const { orderStatuses } = useSelector((state) => state.handbooks);
 
   const router = useRouter();
 
@@ -26,15 +27,22 @@ const ClientOrderList = () => {
     page: query?.page ?? 0,
     perPage: query?.perPage ?? 10,
     search: query?.search ?? "",
+    status: query?.status ?? "",
   };
 
   const [search, setSearch] = useState(queryParams?.search);
   const [page, setPage] = useState(+queryParams.page);
   const [rowsPerPage, setRowsPerPage] = useState(+queryParams?.perPage);
+  const [status, setStatus] = useState(queryParams?.status);
 
   const handleQueryChange = (event) => {
     event.preventDefault();
     setSearch(queryRef.current?.value);
+  };
+
+  const handleStatusChange = (event) => {
+    setPage(0);
+    setStatus(event.target.value);
   };
 
   const handlePageChange = (event, newPage) => {
@@ -46,9 +54,13 @@ const ClientOrderList = () => {
   };
 
   useEffect(() => {
+    dispatch(getOrderStatuses());
+  }, []);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/clients/${clientId}/orders?search=${search}&page=${page}&perPage=${rowsPerPage}`
+        `/dashboard/clients/${clientId}/orders?search=${search}&status=${status}&page=${page}&perPage=${rowsPerPage}`
       );
       dispatch(
         getClientOrders({
@@ -56,12 +68,13 @@ const ClientOrderList = () => {
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
+          status: status,
         })
       );
     }, 700);
 
     return () => clearTimeout(timer);
-  }, [page, rowsPerPage, search]);
+  }, [page, rowsPerPage, search, status]);
 
   return (
     <>
@@ -108,11 +121,27 @@ const ClientOrderList = () => {
                   placeholder="Search client orders"
                 />
               </Box>
+              <TextField
+                label="Status"
+                name="status"
+                onChange={handleStatusChange}
+                select
+                SelectProps={{ native: true }}
+                sx={{ m: 1.5 }}
+                value={status}
+              >
+                <option></option>
+                {orderStatuses.map((option) => (
+                  <option key={option.key} value={option.key}>
+                    {option.value}
+                  </option>
+                ))}
+              </TextField>
             </Box>
 
-            {orders?.length > 0 ? (
+            {clientOrders?.length > 0 ? (
               <ClientOrderListTable
-                orders={orders}
+                orders={clientOrders}
                 ordersCount={count}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}

@@ -1,15 +1,22 @@
 import PropTypes from "prop-types";
 import {
+  Button,
+  IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
+  Tooltip,
   TableRow,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { Scrollbar } from "../../../scrollbar";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { SeverityPill } from "@components/severity-pill";
+import { showInMap } from "@utils/showInMap";
+import { ClientOrderedProductsModal } from "./client-order-products-modal";
+import { useState } from "react";
 
 export const ClientOrderListTable = (props) => {
   const {
@@ -22,6 +29,15 @@ export const ClientOrderListTable = (props) => {
     ...other
   } = props;
 
+  const [open, setOpen] = useState(false);
+
+  const [currentOrderedProducts, setCurrentOrderedProducts] = useState();
+
+  const toggleModal = (point) => {
+    setOpen((prevValue) => !prevValue);
+    setCurrentOrderedProducts(point);
+  };
+
   return (
     <div {...other}>
       <Scrollbar>
@@ -30,12 +46,13 @@ export const ClientOrderListTable = (props) => {
             <TableRow>
               <TableCell>Added From</TableCell>
               <TableCell>Amount</TableCell>
+              <TableCell>Delivery Amount</TableCell>
               <TableCell>Payment Option</TableCell>
               <TableCell>Partner region</TableCell>
               <TableCell>Partner Brand</TableCell>
-              <TableCell>Client Name</TableCell>
-              <TableCell>Client Phone</TableCell>
+              <TableCell>In map</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -43,11 +60,24 @@ export const ClientOrderListTable = (props) => {
               <TableRow hover key={order.id}>
                 <TableCell>{order.addedFrom}</TableCell>
                 <TableCell>{order.amount?.toLocaleString("ru")}</TableCell>
+                <TableCell>
+                  {order.deliveryAmount?.toLocaleString("ru")}
+                </TableCell>
                 <TableCell>{order.paymentOption}</TableCell>
                 <TableCell>{order.partner?.brand}</TableCell>
                 <TableCell>{order.partner?.brand}</TableCell>
-                <TableCell>{order.client?.name}</TableCell>
-                <TableCell>{order.client?.phone}</TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() =>
+                      showInMap(
+                        order.geolocationLatitude,
+                        order.geolocationLongitude
+                      )
+                    }
+                  >
+                    Show in map
+                  </Button>
+                </TableCell>
                 <TableCell>
                   <SeverityPill
                     color={
@@ -60,11 +90,28 @@ export const ClientOrderListTable = (props) => {
                     {order.status}
                   </SeverityPill>
                 </TableCell>
+                <TableCell align="right">
+                  <Tooltip title="Ordered Products">
+                    <IconButton
+                      component="a"
+                      onClick={() => toggleModal(order.orderProducts)}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </Scrollbar>
+      {open && (
+        <ClientOrderedProductsModal
+          open={open}
+          handleClose={toggleModal}
+          orderedProducts={currentOrderedProducts}
+        />
+      )}
 
       <TablePagination
         component="div"

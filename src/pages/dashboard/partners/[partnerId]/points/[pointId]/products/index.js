@@ -15,38 +15,23 @@ import {
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { ProductListTable } from "@components/dashboard/product/product-list-table";
-import { useMounted } from "@hooks/use-mounted";
 import { Search as SearchIcon } from "@icons/search";
 import { Plus as PlusIcon } from "@icons/plus";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getPartner, getPoint, getProducts } from "@services/index";
-
-const sortOptions = [
-  {
-    label: "Last update (newest)",
-    value: "updatedAt|desc",
-  },
-  {
-    label: "Last update (oldest)",
-    value: "updatedAt|asc",
-  },
-  {
-    label: "Total orders (highest)",
-    value: "totalOrders|desc",
-  },
-  {
-    label: "Total orders (lowest)",
-    value: "totalOrders|asc",
-  },
-];
+import {
+  getPartner,
+  getPoint,
+  getProductCategories,
+  getProducts,
+} from "@services/index";
 
 const ProductList = () => {
-  const isMounted = useMounted();
-
   const dispatch = useDispatch();
 
-  const { products, count } = useSelector((state) => state.products);
+  const { products, productCategories, count } = useSelector(
+    (state) => state.products
+  );
   const { partner } = useSelector((state) => state.partners);
   const { point } = useSelector((state) => state.points);
 
@@ -61,11 +46,12 @@ const ProductList = () => {
     page: router.query?.page ?? 0,
     perPage: router.query?.perPage ?? 10,
     search: router.query?.search ?? "",
+    category: router.query?.category ?? "",
   };
   const [search, setSearch] = useState(queryParams?.search);
+  const [category, setCategory] = useState(queryParams?.category);
   const [page, setPage] = useState(+queryParams.page);
   const [rowsPerPage, setRowsPerPage] = useState(+queryParams?.perPage);
-  const [sort, setSort] = useState(sortOptions[0].value);
 
   const handleQueryChange = (event) => {
     event.preventDefault();
@@ -73,7 +59,7 @@ const ProductList = () => {
   };
 
   const handleSortChange = (event) => {
-    setSort(event.target.value);
+    setCategory(event.target.value);
   };
 
   const handlePageChange = (_, newPage) => {
@@ -96,13 +82,14 @@ const ProductList = () => {
         pointId,
       })
     );
+    dispatch(getProductCategories({ pointId }));
     gtm.push({ event: "page_view" });
   }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/partners/${partnerId}/points/${pointId}/products?search=${search}&page=${page}&perPage=${rowsPerPage}`
+        `/dashboard/partners/${partnerId}/points/${pointId}/products?search=${search}&page=${page}&perPage=${rowsPerPage}&category=${category}`
       );
       dispatch(
         getProducts({
@@ -110,12 +97,13 @@ const ProductList = () => {
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
+          category: category,
         })
       );
     }, 700);
 
     return () => clearTimeout(timer);
-  }, [page, rowsPerPage, search]);
+  }, [page, rowsPerPage, search, category]);
 
   return (
     <>
@@ -186,16 +174,17 @@ const ProductList = () => {
               </Box>
               <TextField
                 label="Sort By"
-                name="sort"
+                name="category"
                 onChange={handleSortChange}
                 select
                 SelectProps={{ native: true }}
                 sx={{ m: 1.5 }}
-                value={sort}
+                value={category}
               >
-                {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+                <option>Choose</option>
+                {productCategories?.categories?.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
                   </option>
                 ))}
               </TextField>

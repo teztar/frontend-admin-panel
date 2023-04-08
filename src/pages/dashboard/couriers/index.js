@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import {
   Box,
   Button,
@@ -18,22 +19,13 @@ import { Plus as PlusIcon } from "@icons/plus";
 import { Search as SearchIcon } from "@icons/search";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getCouriers } from "@services/index";
-import { useRouter } from "next/router";
-
-const sortOptions = [
-  "COURIER_AVAILABLE",
-  "COURIER_ACCEPTED_ORDER",
-  "COURIER_GOING_TO_RESTAURANT",
-  "COURIER_TOOK_PRODUCT",
-  "COURIER_GOING_TO_CLIENT",
-  "COURIER_DELIVERED",
-];
+import { getCourierStatuses, getCouriers } from "@services/index";
 
 const CourierList = () => {
   const dispatch = useDispatch();
 
   const { couriers, count } = useSelector((state) => state.couriers);
+  const { courierStatuses } = useSelector((state) => state.handbooks);
 
   const router = useRouter();
 
@@ -68,6 +60,7 @@ const CourierList = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
   useEffect(() => {
+    dispatch(getCourierStatuses());
     gtm.push({ event: "page_view" });
   }, []);
 
@@ -161,21 +154,27 @@ const CourierList = () => {
                 value={status}
               >
                 <option></option>
-                {sortOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
+                {courierStatuses.map((option) => (
+                  <option key={option.key} value={option.key}>
+                    {option.value}
                   </option>
                 ))}
               </TextField>
             </Box>
-            <CourierListTable
-              couriers={couriers}
-              couriersCount={count}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              rowsPerPage={rowsPerPage}
-              page={page}
-            />
+            {couriers?.length > 0 ? (
+              <CourierListTable
+                couriers={couriers}
+                couriersCount={count}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                rowsPerPage={rowsPerPage}
+                page={page}
+              />
+            ) : (
+              <Box ml={3} mb={3}>
+                No couriers found
+              </Box>
+            )}
           </Card>
         </Container>
       </Box>
