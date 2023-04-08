@@ -3,6 +3,7 @@ import NextLink from "next/link";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import { format } from "date-fns";
 import {
   Button,
   Card,
@@ -17,13 +18,16 @@ import {
   InputLabel,
   OutlinedInput,
   TextField,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useDispatch } from "src/store";
 import { createClient, updateClient } from "@services/index";
-import { format } from "date-fns";
+
+const GENDERS = ["MALE", "FEMALE"];
 
 export const ClientEditForm = (props) => {
   const dispatch = useDispatch();
@@ -46,6 +50,7 @@ export const ClientEditForm = (props) => {
         name: client?.name || "",
         surname: client?.surname || "",
         patronymic: client?.patronymic || "",
+        gender: client?.gender || "",
         birthday: client?.birthday || null,
         password: client?.password || "",
         phone: client?.phone?.substring(4) || "",
@@ -134,6 +139,24 @@ export const ClientEditForm = (props) => {
                     required
                     value={values.patronymic}
                   />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="gender-label">Gender</InputLabel>
+                    <Select
+                      labelId="gender-label"
+                      value={values.gender}
+                      label="Gender"
+                      name="gender"
+                      onChange={handleChange}
+                    >
+                      {GENDERS.map((gender) => (
+                        <MenuItem key={gender} value={gender}>
+                          {gender}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField

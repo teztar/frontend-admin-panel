@@ -1,3 +1,4 @@
+import { useState } from "react";
 import NextLink from "next/link";
 import PropTypes from "prop-types";
 import {
@@ -11,13 +12,16 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
+import EditIcon from "@mui/icons-material/Edit";
 import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
 import { format } from "date-fns";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { SeverityPill } from "@components/severity-pill";
+import { CourierStatusModal } from "./courier-status-modal";
 
 export const CourierListTable = (props) => {
   const {
@@ -30,13 +34,23 @@ export const CourierListTable = (props) => {
     ...other
   } = props;
 
+  const [open, setOpen] = useState(false);
+
+  const [currentCourier, setCurrentCourier] = useState();
+
+  const toggleModal = (courier) => {
+    console.log({ courier });
+    setOpen((prevValue) => !prevValue);
+    setCurrentCourier(courier);
+  };
+
   return (
     <div {...other}>
       <Scrollbar>
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Surname Name Patronymic</TableCell>
+              <TableCell>FIO</TableCell>
               <TableCell>Active</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Birthdate</TableCell>
@@ -96,6 +110,14 @@ export const CourierListTable = (props) => {
                   <TableCell>{courier.endWorkTime}</TableCell>
 
                   <TableCell align="right">
+                    <Tooltip title="Change status">
+                      <IconButton
+                        component="a"
+                        onClick={() => toggleModal(courier)}
+                      >
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
                     <NextLink
                       href={`/dashboard/couriers/${courier.id}/edit`}
                       passHref
@@ -111,6 +133,13 @@ export const CourierListTable = (props) => {
           </TableBody>
         </Table>
       </Scrollbar>
+      {open && (
+        <CourierStatusModal
+          open={open}
+          handleClose={toggleModal}
+          courier={currentCourier}
+        />
+      )}
       <TablePagination
         component="div"
         count={couriersCount}

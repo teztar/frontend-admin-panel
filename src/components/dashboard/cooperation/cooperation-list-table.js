@@ -1,10 +1,8 @@
-import NextLink from "next/link";
 import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
-  IconButton,
-  Link,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -12,11 +10,12 @@ import {
   TablePagination,
   TableRow,
 } from "@mui/material";
-import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
 import { SeverityPill } from "@components/severity-pill";
+import { format } from "date-fns";
+import { showInMap } from "@utils/showInMap";
 
 export const CooperationListTable = (props) => {
   const {
@@ -35,10 +34,12 @@ export const CooperationListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Phone</TableCell>
+              <TableCell>FIO</TableCell>
               <TableCell>Type</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell>Birth date</TableCell>
+              <TableCell>Show in map</TableCell>
+              <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -61,18 +62,11 @@ export const CooperationListTable = (props) => {
                       {getInitials(cooperation.name)}
                     </Avatar>
                     <Box sx={{ ml: 1 }}>
-                      <NextLink
-                        href={`/dashboard/cooperations/${cooperation.id}/edit`}
-                        passHref
-                      >
-                        <Link color="inherit" variant="subtitle2">
-                          {cooperation.name}
-                        </Link>
-                      </NextLink>
+                      {cooperation.surname} {cooperation.name}{" "}
+                      {cooperation.patronymic}
                     </Box>
                   </Box>
                 </TableCell>
-                <TableCell>{cooperation.phone}</TableCell>
                 <TableCell>
                   <SeverityPill
                     color={
@@ -82,15 +76,31 @@ export const CooperationListTable = (props) => {
                     {cooperation.type}
                   </SeverityPill>
                 </TableCell>
-                <TableCell align="right">
-                  {/* <NextLink
-                    href={`/dashboard/cooperations/${cooperation.id}/edit`}
-                    passHref
-                  > */}
-                  <IconButton component="a">
-                    <PencilAltIcon fontSize="small" />
-                  </IconButton>
-                  {/* </NextLink> */}
+                <TableCell>{cooperation.phone}</TableCell>
+                <TableCell>
+                  {format(new Date(cooperation.dateOfBirth), "dd-MM-yyyy")}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() =>
+                      showInMap(
+                        cooperation.geolocationLatitude,
+                        cooperation.geolocationLongitude
+                      )
+                    }
+                  >
+                    Show in map
+                  </Button>
+                </TableCell>
+
+                <TableCell>
+                  <SeverityPill
+                    color={
+                      cooperation.status !== "PENDING" ? "success" : "warning"
+                    }
+                  >
+                    {cooperation.status}
+                  </SeverityPill>
                 </TableCell>
               </TableRow>
             ))}

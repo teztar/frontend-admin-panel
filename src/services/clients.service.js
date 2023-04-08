@@ -38,7 +38,14 @@ export const getClientOrders = createAsyncThunk(
   "clients/getClientOrders",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/clients/orders/${params?.id}`);
+      const response = await axios.get(`/clients/orders/${params.id}`, {
+        params: {
+          page: params?.page ?? 1,
+          perPage: params?.perPage ?? 10,
+          search: params?.search ?? "",
+          status: params?.status ?? "",
+        },
+      });
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
