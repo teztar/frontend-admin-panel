@@ -68,7 +68,9 @@ export const ProductListTable = (props) => {
                 <TableCell
                   onClick={() => handleGetProductImage(product?.image?.name)}
                 >
-                  {productImage && <img src={productImage} alt="image" />}
+                  {productImage && (
+                    <img src={productImage} alt="image" id="image" />
+                  )}
                 </TableCell>
                 <TableCell align="right">
                   <NextLink
