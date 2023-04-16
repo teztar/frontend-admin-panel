@@ -1,18 +1,14 @@
 import {
-  Avatar,
   Box,
-  Button,
   Card,
   CardActions,
   Divider,
   Grid,
   Typography,
 } from "@mui/material";
-import { alpha, useTheme } from "@mui/material/styles";
-import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
-import { ChevronDown as ChevronDownIcon } from "@icons/chevron-down";
-import { ChevronUp as ChevronUpIcon } from "@icons/chevron-up";
+import { useTheme } from "@mui/material/styles";
 import { Chart } from "../../chart";
+import { useSelector } from "src/store";
 
 const LineChart = () => {
   const theme = useTheme();
@@ -137,170 +133,189 @@ const BarChart = () => {
   );
 };
 
-export const AnalyticsGeneralOverview = () => (
-  <Grid container spacing={4}>
-    <Grid item md={3} sm={6} xs={12}>
-      <Card>
-        <Box
-          sx={{
-            alignItems: "center",
-            display: "flex",
-            justifyContent: "space-between",
-            px: 3,
-            py: 2,
-          }}
-        >
-          <div>
-            <Typography color="textSecondary" variant="body2">
-              Impressions
-            </Typography>
-            <Typography sx={{ mt: 1 }} variant="h5">
-              1.9M
-            </Typography>
-          </div>
-          <LineChart />
-        </Box>
-        <Divider />
-        <CardActions>
-          <Button endIcon={<ArrowRightIcon fontSize="small" />}>
-            See all visits
-          </Button>
-        </CardActions>
-      </Card>
-    </Grid>
-    <Grid item md={3} sm={6} xs={12}>
-      <Card>
-        <Box
-          sx={{
-            alignItems: "center",
-            display: "flex",
-            justifyContent: "space-between",
-            px: 3,
-            py: 2,
-          }}
-        >
-          <div>
-            <Typography color="textSecondary" variant="body2">
-              Spent
-            </Typography>
-            <Typography sx={{ mt: 1 }} variant="h5">
-              $41.2K
-            </Typography>
-          </div>
-          <LineChart />
-        </Box>
-        <Divider />
-        <CardActions
-          sx={{
-            alignItems: "center",
-            display: "flex",
-          }}
-        >
-          <Avatar
+export const AnalyticsGeneralOverview = () => {
+  const { stats } = useSelector((state) => state.stats);
+  const { clients, orders, partners } = stats;
+
+  console.log({ stats });
+  return (
+    <Grid container spacing={4}>
+      <Grid item md={4} sm={6} xs={12}>
+        <Card>
+          <Box
             sx={{
-              backgroundColor: (theme) =>
-                alpha(theme.palette.success.main, 0.08),
-              color: "success.main",
-              height: 36,
-              width: 36,
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "space-between",
+              px: 3,
+              py: 2,
             }}
           >
-            <ChevronUpIcon fontSize="small" />
-          </Avatar>
-          <Typography color="textSecondary" sx={{ ml: 1 }} variant="caption">
-            12% more then last month
-          </Typography>
-        </CardActions>
-      </Card>
-    </Grid>
-    <Grid item md={3} sm={6} xs={12}>
-      <Card>
-        <Box
-          sx={{
-            alignItems: "center",
-            display: "flex",
-            justifyContent: "space-between",
-            px: 3,
-            py: 2,
-          }}
-        >
-          <div>
-            <Typography color="textSecondary" variant="body2">
-              Engagements
-            </Typography>
-            <Typography sx={{ mt: 1 }} variant="h5">
-              36,6K
-            </Typography>
-          </div>
-          <LineChart />
-        </Box>
-        <Divider />
-        <CardActions
-          sx={{
-            alignItems: "center",
-            display: "flex",
-          }}
-        >
-          <Avatar
+            <div>
+              <Typography color="textSecondary" variant="h6">
+                Clients
+              </Typography>
+              <Typography sx={{ mt: 1 }} variant="h5">
+                {clients?.count?.toLocaleString("ru-RU")}
+              </Typography>
+            </div>
+            <LineChart />
+          </Box>
+          <Divider />
+          <CardActions
             sx={{
-              backgroundColor: (theme) => alpha(theme.palette.error.main, 0.08),
-              color: "error.main",
-              height: 36,
-              width: 36,
+              alignItems: "center",
+              display: "flex",
             }}
           >
-            <ChevronDownIcon fontSize="small" />
-          </Avatar>
-          <Typography color="textSecondary" sx={{ ml: 1 }} variant="caption">
-            30% less then last month
-          </Typography>
-        </CardActions>
-      </Card>
-    </Grid>
-    <Grid item md={3} sm={6} xs={12}>
-      <Card>
-        <Box
-          sx={{
-            alignItems: "center",
-            display: "flex",
-            justifyContent: "space-between",
-            px: 3,
-            py: 2,
-          }}
-        >
-          <div>
-            <Typography color="textSecondary" variant="body2">
-              Conversions
+            <Typography color="textSecondary" sx={{ ml: 1 }} variant="caption">
+              Per day:{" "}
+              {clients?.countPerDay &&
+                Object.values(clients?.countPerDay)[0]?.toLocaleString("ru-RU")}
             </Typography>
-            <Typography sx={{ mt: 1 }} variant="h5">
-              131,3K
-            </Typography>
-          </div>
-          <BarChart />
-        </Box>
-        <Divider />
-        <CardActions
-          sx={{
-            alignItems: "center",
-            display: "flex",
-          }}
-        >
-          <Avatar
+          </CardActions>
+        </Card>
+      </Grid>
+      <Grid item md={4} sm={6} xs={12}>
+        <Card>
+          <Box
             sx={{
-              backgroundColor: (theme) =>
-                alpha(theme.palette.success.main, 0.08),
-              color: "success.main",
-              height: 36,
-              width: 36,
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "space-between",
+              px: 3,
+              py: 2,
             }}
           >
-            <ChevronUpIcon fontSize="small" />
-          </Avatar>
-          <Typography color="textSecondary" sx={{ ml: 1 }} variant="caption">
-            12% more then last month
-          </Typography>
-        </CardActions>
-      </Card>
+            <div>
+              <Typography color="textSecondary" variant="h6">
+                Orders
+              </Typography>
+              <Typography sx={{ mt: 1 }} variant="h5">
+                {orders?.count?.toLocaleString("ru-RU")}
+              </Typography>
+            </div>
+            <LineChart />
+          </Box>
+          <Divider />
+          <CardActions
+            sx={{
+              alignItems: "center",
+              display: "flex",
+            }}
+          >
+            <Typography color="textSecondary" sx={{ ml: 1 }} variant="caption">
+              Per day:{" "}
+              {orders?.countPerDay &&
+                Object.values(orders?.countPerDay)[0]?.toLocaleString("ru-RU")}
+            </Typography>
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{
+                ml: 1,
+              }}
+            />
+
+            <Typography color="textSecondary" sx={{ ml: 1 }} variant="caption">
+              Amount: {orders?.amount?.toLocaleString("ru-RU")}с.
+            </Typography>
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{
+                ml: 1,
+              }}
+            />
+            <Typography color="textSecondary" sx={{ ml: 1 }} variant="caption">
+              Processed: {orders?.countOfProcessed?.toLocaleString("ru-RU")}
+            </Typography>
+          </CardActions>
+        </Card>
+      </Grid>
+      <Grid item md={4} sm={6} xs={12}>
+        <Card>
+          <Box
+            sx={{
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "space-between",
+              px: 3,
+              py: 2,
+            }}
+          >
+            <div>
+              <Typography color="textSecondary" variant="h6">
+                Partners
+              </Typography>
+              <Typography sx={{ mt: 1 }} variant="h5">
+                {partners?.count?.toLocaleString("ru-RU")}
+              </Typography>
+            </div>
+            <LineChart />
+          </Box>
+          <Divider />
+          <CardActions
+            sx={{
+              alignItems: "center",
+              display: "flex",
+            }}
+          >
+            <Typography color="textSecondary" sx={{ ml: 1 }} variant="caption">
+              Per day:{" "}
+              {partners?.countPerDay &&
+                Object.values(partners?.countPerDay)[0]?.toLocaleString(
+                  "ru-RU"
+                )}
+            </Typography>
+          </CardActions>
+        </Card>
+      </Grid>
+      {/* <Grid item md={4} sm={6} xs={12}>
+        <Card>
+          <Box
+            sx={{
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "space-between",
+              px: 3,
+              py: 2,
+            }}
+          >
+            <div>
+              <Typography color="textSecondary" variant="h6">
+                Conversions
+              </Typography>
+              <Typography sx={{ mt: 1 }} variant="h5">
+                131,3K
+              </Typography>
+            </div>
+            <BarChart />
+          </Box>
+          <Divider />
+          <CardActions
+            sx={{
+              alignItems: "center",
+              display: "flex",
+            }}
+          >
+            <Avatar
+              sx={{
+                backgroundColor: (theme) =>
+                  alpha(theme.palette.success.main, 0.08),
+                color: "success.main",
+                height: 36,
+                width: 36,
+              }}
+            >
+              <ChevronUpIcon fontSize="small" />
+            </Avatar>
+            <Typography color="textSecondary" sx={{ ml: 1 }} variant="caption">
+              12% more then last month
+            </Typography>
+          </CardActions>
+        </Card>
+      </Grid> */}
     </Grid>
-  </Grid>
-);
+  );
+};

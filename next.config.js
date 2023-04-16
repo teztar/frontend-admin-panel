@@ -17,6 +17,11 @@ const config = {
         destination: "/docs/welcome",
         permanent: true,
       },
+      {
+        source: "/",
+        destination: "/dashboard",
+        permanent: true,
+      },
     ];
   },
 };
