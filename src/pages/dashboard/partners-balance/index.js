@@ -108,7 +108,7 @@ const PartnersBalanceList = () => {
           dateFrom: formattedDateFrom,
         })
       );
-    }, 700);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [page, rowsPerPage, search, status, dateTo, dateFrom]);
@@ -221,14 +221,18 @@ const PartnersBalanceList = () => {
                 />
               </Box>
             </Box>
-            <PartnersBalanceListTable
-              partnersBalance={partnersBalance}
-              partnersBalanceCount={count}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              rowsPerPage={rowsPerPage}
-              page={page}
-            />
+            {partnersBalance.length > 0 ? (
+              <PartnersBalanceListTable
+                partnersBalance={partnersBalance}
+                partnersBalanceCount={count}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                rowsPerPage={rowsPerPage}
+                page={page}
+              />
+            ) : (
+              <Box sx={{ m: 3 }}>No partners balance found</Box>
+            )}
           </Card>
         </Container>
       </Box>

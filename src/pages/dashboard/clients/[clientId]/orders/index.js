@@ -71,7 +71,7 @@ const ClientOrderList = () => {
           status: status,
         })
       );
-    }, 700);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [page, rowsPerPage, search, status]);

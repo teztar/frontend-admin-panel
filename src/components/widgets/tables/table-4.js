@@ -193,7 +193,7 @@ export const Table4 = () => (
         onRowsPerPageChange={() => {}}
         page={0}
         rowsPerPage={5}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 25, 50, 100]}
       />
     </Card>
   </Box>

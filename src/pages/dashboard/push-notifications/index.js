@@ -94,7 +94,7 @@ const PushNotificationList = () => {
           format: format,
         })
       );
-    }, 700);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [page, rowsPerPage, search, sort, format]);

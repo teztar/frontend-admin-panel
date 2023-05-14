@@ -55,6 +55,7 @@ export {
   getCouriers,
   createCourier,
   updateCourier,
+  getCourierBalances,
 } from "./couriers.service";
 
 export {
@@ -84,6 +85,7 @@ export {
   downloadPartnersBalance,
   getPartnersBalancePoints,
   updatePartnersBalancePoint,
+  getPartnersBalancePointsTransactions,
 } from "./partnersBalance.service";
 
 export {

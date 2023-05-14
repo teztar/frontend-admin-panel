@@ -17,6 +17,7 @@ import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
+import TablePaginationActions from "@utils/tablePaginationActions";
 
 export const PartnerListTable = (props) => {
   const {
@@ -131,7 +132,8 @@ export const PartnerListTable = (props) => {
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 25, 50, 100]}
+        ActionsComponent={TablePaginationActions}
       />
     </div>
   );

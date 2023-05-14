@@ -15,6 +15,8 @@ import { useRouter } from "next/router";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { useDispatch, useSelector } from "src/store";
 import { getProductImage } from "@services/index";
+import { useState } from "react";
+import axios from "axios";
 
 export const ProductListTable = (props) => {
   const dispatch = useDispatch();
@@ -32,10 +34,20 @@ export const ProductListTable = (props) => {
     ...other
   } = props;
 
+  const [image, setImage] = useState(null);
   const handleGetProductImage = async (path) =>
     await dispatch(getProductImage({ filePath: path }));
 
-  console.log({ productImage });
+  const getImage = async (path) => {
+    try {
+      const response = await axios.get(`/products/images/${path}`);
+      console.log("daromad: ", response.data);
+      setImage(response.data);
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      console.log("error: ", error);
+    }
+  };
 
   const partnerId = query?.partnerId;
   const pointId = query?.pointId;
@@ -65,12 +77,8 @@ export const ProductListTable = (props) => {
                 <TableCell>{product.price?.toLocaleString("ru")}</TableCell>
                 <TableCell>{product.measuring}</TableCell>
                 <TableCell>{product.description}</TableCell>
-                <TableCell
-                  onClick={() => handleGetProductImage(product?.image?.name)}
-                >
-                  {productImage && (
-                    <img src={productImage} alt="image" id="image" />
-                  )}
+                <TableCell onClick={() => getImage(product?.image?.name)}>
+                  {image && <img src={image} alt="image" id="image" />}
                 </TableCell>
                 <TableCell align="right">
                   <NextLink
@@ -94,7 +102,7 @@ export const ProductListTable = (props) => {
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 25, 50, 100]}
         ActionsComponent={TablePaginationActions}
       />
     </div>

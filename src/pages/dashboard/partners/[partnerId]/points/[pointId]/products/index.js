@@ -100,7 +100,7 @@ const ProductList = () => {
           category: category,
         })
       );
-    }, 700);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [page, rowsPerPage, search, category]);

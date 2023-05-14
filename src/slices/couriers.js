@@ -4,10 +4,12 @@ import {
   getCouriers,
   createCourier,
   updateCourier,
+  getCourierBalances,
 } from "@services/index";
 
 const initialState = {
   couriers: [],
+  courierBalances: [],
   count: null,
   courier: {},
   loading: true,
@@ -39,6 +41,17 @@ const couriers = createSlice({
       state.courier = action.payload?.payload;
     });
     builder.addCase(getCourier.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(getCourierBalances.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getCourierBalances.fulfilled, (state, action) => {
+      state.loading = false;
+      state.courierBalances = action.payload?.payload;
+    });
+    builder.addCase(getCourierBalances.rejected, (state) => {
       state.loading = false;
     });
 

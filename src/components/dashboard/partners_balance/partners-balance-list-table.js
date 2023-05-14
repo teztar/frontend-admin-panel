@@ -35,8 +35,10 @@ export const PartnersBalanceListTable = (props) => {
               <TableCell>Registration Date</TableCell>
               <TableCell>Region</TableCell>
               <TableCell>Count Of Points</TableCell>
-              <TableCell>Current Balance</TableCell>
-              <TableCell>Turnover</TableCell>
+              <TableCell>debt amount for this period</TableCell>
+              <TableCell>total debt amount</TableCell>
+              <TableCell>income amount for this period</TableCell>
+              <TableCell>total income amount</TableCell>
               <TableCell>Status</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
@@ -54,9 +56,21 @@ export const PartnersBalanceListTable = (props) => {
                 <TableCell>{partnersBalance.region}</TableCell>
                 <TableCell>{partnersBalance.countOfPoints}</TableCell>
                 <TableCell>
-                  {partnersBalance.currentBalance?.toLocaleString("ru")}
+                  {partnersBalance.debtAmountForThisPeriod?.toLocaleString(
+                    "ru"
+                  )}
                 </TableCell>
-                <TableCell>{partnersBalance.turnover}</TableCell>
+                <TableCell>
+                  {partnersBalance.totalDebtAmount?.toLocaleString("ru")}
+                </TableCell>
+                <TableCell>
+                  {partnersBalance.incomeAmountForThisPeriod?.toLocaleString(
+                    "ru"
+                  )}
+                </TableCell>
+                <TableCell>
+                  {partnersBalance.totalIncomeAmount?.toLocaleString("ru")}
+                </TableCell>
                 <TableCell>
                   <SeverityPill
                     color={
@@ -89,7 +103,7 @@ export const PartnersBalanceListTable = (props) => {
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 25, 50, 100]}
         ActionsComponent={TablePaginationActions}
       />
     </div>

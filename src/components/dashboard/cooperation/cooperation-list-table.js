@@ -38,6 +38,7 @@ export const CooperationListTable = (props) => {
               <TableCell>Type</TableCell>
               <TableCell>Phone</TableCell>
               <TableCell>Birth date</TableCell>
+              <TableCell>Address</TableCell>
               <TableCell>Show in map</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
@@ -80,16 +81,17 @@ export const CooperationListTable = (props) => {
                 <TableCell>
                   {format(new Date(cooperation.dateOfBirth), "dd-MM-yyyy")}
                 </TableCell>
+                <TableCell>{cooperation.address.name}</TableCell>
                 <TableCell>
                   <Button
                     onClick={() =>
                       showInMap(
-                        cooperation.geolocationLatitude,
-                        cooperation.geolocationLongitude
+                        cooperation?.address?.geolocationLatitude,
+                        cooperation?.address?.geolocationLongitude
                       )
                     }
                   >
-                    Show in map
+                    Open in map
                   </Button>
                 </TableCell>
 
@@ -112,7 +114,7 @@ export const CooperationListTable = (props) => {
         count={cooperationsCount}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 25, 50, 100]}
         page={page}
         rowsPerPage={rowsPerPage}
         ActionsComponent={TablePaginationActions}

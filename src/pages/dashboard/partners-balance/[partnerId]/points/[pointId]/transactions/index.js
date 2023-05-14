@@ -13,38 +13,33 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
-import { PointListTable } from "@components/dashboard/partners_balance/point/point-list-table";
 import { Search as SearchIcon } from "@icons/search";
 import { useDispatch, useSelector } from "src/store";
 import {
   getPartnerPointsBalanceStatuses,
-  getPartnersBalancePoints,
+  getPartnersBalancePointsTransactions,
 } from "@services/index";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { gtm } from "src/lib/gtm";
+import { PartnersBalancePointTransactionListTable } from "@components/dashboard/partners_balance/point/transaction/transaction-list-table";
 
-const PointList = () => {
+const PointTransactionsList = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
-  const { partnerPointsBalanceStatuses } = useSelector(
-    (state) => state.handbooks
-  );
-
-  const { partnersBalancePoints, count } = useSelector(
+  const { partnersBalancePointsTransactions, count } = useSelector(
     (state) => state.partnersBalance
   );
-
-  const router = useRouter();
 
   const queryRef = useRef(null);
 
   const partnerId = router.query?.partnerId;
+  const pointId = router.query?.pointId;
 
   const queryParams = {
     page: router.query?.page ?? 0,
     perPage: router.query?.perPage ?? 10,
     search: router.query?.search ?? "",
-    status: router.query?.status ?? "",
     dateTo: router.query?.dateTo ?? "2099-10-10",
     dateFrom: router.query?.dateFrom ?? "2000-10-10",
   };
@@ -53,7 +48,6 @@ const PointList = () => {
   const [dateFrom, setDateFrom] = useState(queryParams?.dateFrom);
   const [page, setPage] = useState(+queryParams.page);
   const [rowsPerPage, setRowsPerPage] = useState(+queryParams?.perPage);
-  const [status, setStatus] = useState(queryParams?.status);
 
   const formattedDateTo = format(new Date(dateTo), "yyyy-MM-dd");
   const formattedDateFrom = format(new Date(dateFrom), "yyyy-MM-dd");
@@ -61,11 +55,6 @@ const PointList = () => {
   const handleQueryChange = (event) => {
     event.preventDefault();
     setSearch(queryRef.current?.value);
-  };
-
-  const handleSortChange = (event) => {
-    setPage(0);
-    setStatus(event.target.value);
   };
 
   const handlePageChange = (_, newPage) => {
@@ -84,15 +73,14 @@ const PointList = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/partners-balance/${partnerId}/points?search=${search}&page=${page}&perPage=${rowsPerPage}&status=${status}&dateFrom=${formattedDateFrom}&dateTo=${formattedDateTo}`
+        `/dashboard/partners-balance/${partnerId}/points/${pointId}/transactions?search=${search}&page=${page}&perPage=${rowsPerPage}&dateFrom=${formattedDateFrom}&dateTo=${formattedDateTo}`
       );
       dispatch(
-        getPartnersBalancePoints({
-          partnerId: partnerId,
+        getPartnersBalancePointsTransactions({
+          pointId: pointId,
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
-          status: status,
           dateTo: formattedDateTo,
           dateFrom: formattedDateFrom,
         })
@@ -100,12 +88,12 @@ const PointList = () => {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [page, rowsPerPage, search, status]);
+  }, [page, rowsPerPage, search, formattedDateFrom, formattedDateTo]);
 
   return (
     <>
       <Head>
-        <title>Dashboard: Partners Balance Points</title>
+        <title>Dashboard: Partners Balance Points Transactions</title>
       </Head>
       <Box
         component="main"
@@ -118,7 +106,9 @@ const PointList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Partners Balance Points</Typography>
+                <Typography variant="h4">
+                  Partners Balance Points Transactions
+                </Typography>
               </Grid>
             </Grid>
           </Box>
@@ -150,7 +140,7 @@ const PointList = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder="Search partners balance points"
+                  placeholder="Search partners balance points transactions"
                 />
               </Box>
               <Box
@@ -182,36 +172,21 @@ const PointList = () => {
                   )}
                   value={dateTo || null}
                 />
-                <TextField
-                  label="Status"
-                  name="status"
-                  onChange={handleSortChange}
-                  select
-                  fullWidth
-                  SelectProps={{ native: true }}
-                  sx={{ m: 1.5 }}
-                  value={status}
-                >
-                  <option></option>
-                  {partnerPointsBalanceStatuses.map((option) => (
-                    <option key={option.key} value={option.key}>
-                      {option.value}
-                    </option>
-                  ))}
-                </TextField>
               </Box>
             </Box>
-            {partnersBalancePoints.length > 0 ? (
-              <PointListTable
-                points={partnersBalancePoints}
-                pointsCount={count}
+            {partnersBalancePointsTransactions.length > 0 ? (
+              <PartnersBalancePointTransactionListTable
+                transactions={partnersBalancePointsTransactions}
+                transactionsCount={count}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={rowsPerPage}
                 page={page}
               />
             ) : (
-              <Box sx={{ m: 3 }}>No partners balance points found</Box>
+              <Box sx={{ m: 3 }}>
+                No partners balance points transactions found
+              </Box>
             )}
           </Card>
         </Container>
@@ -220,10 +195,10 @@ const PointList = () => {
   );
 };
 
-PointList.getLayout = (page) => (
+PointTransactionsList.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 
-export default PointList;
+export default PointTransactionsList;

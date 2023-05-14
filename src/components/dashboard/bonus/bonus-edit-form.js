@@ -30,10 +30,6 @@ import {
 } from "@services/index";
 import { format } from "date-fns";
 
-const categories = ["FIX", "PRESENT", "OUR"];
-
-const types = ["CONSTANT", "TEMPORARY", "FOR_FIRST_ORDER"];
-
 export const BonusEditForm = (props) => {
   const dispatch = useDispatch();
 

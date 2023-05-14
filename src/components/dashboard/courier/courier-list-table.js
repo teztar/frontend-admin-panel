@@ -16,11 +16,12 @@ import {
 } from "@mui/material";
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import EditIcon from "@mui/icons-material/Edit";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
 import { format } from "date-fns";
 import TablePaginationActions from "@utils/tablePaginationActions";
-import { SeverityPill } from "@components/severity-pill";
+import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import { CourierStatusModal } from "./courier-status-modal";
 
 export const CourierListTable = (props) => {
@@ -35,12 +36,17 @@ export const CourierListTable = (props) => {
   } = props;
 
   const [open, setOpen] = useState(false);
+  const [openStats, setOpenStats] = useState(false);
 
   const [currentCourier, setCurrentCourier] = useState();
 
   const toggleModal = (courier) => {
-    console.log({ courier });
     setOpen((prevValue) => !prevValue);
+    setCurrentCourier(courier);
+  };
+
+  const toggleStatsModal = (courier) => {
+    setOpenStats((prevValue) => !prevValue);
     setCurrentCourier(courier);
   };
 
@@ -51,7 +57,7 @@ export const CourierListTable = (props) => {
           <TableHead>
             <TableRow>
               <TableCell>FIO</TableCell>
-              <TableCell>Active</TableCell>
+
               <TableCell>Status</TableCell>
               <TableCell>Birthdate</TableCell>
               <TableCell>Phone</TableCell>
@@ -62,74 +68,87 @@ export const CourierListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {couriers.map((courier) => {
-              return (
-                <TableRow hover key={courier.id}>
-                  <TableCell>
-                    <Box
+            {couriers.map((courier) => (
+              <TableRow hover key={courier.id}>
+                <TableCell>
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      display: "flex",
+                    }}
+                  >
+                    <Avatar
+                      src={courier.avatar}
                       sx={{
-                        alignItems: "center",
-                        display: "flex",
+                        height: 42,
+                        width: 42,
                       }}
                     >
-                      <Avatar
-                        src={courier.avatar}
-                        sx={{
-                          height: 42,
-                          width: 42,
-                        }}
+                      {getInitials(courier.name)}
+                    </Avatar>
+                    <Box sx={{ ml: 1 }}>
+                      <NextLink
+                        href={`/dashboard/couriers/${courier.id}/edit`}
+                        passHref
                       >
-                        {getInitials(courier.name)}
-                      </Avatar>
-                      <Box sx={{ ml: 1 }}>
-                        <NextLink
-                          href={`/dashboard/couriers/${courier.id}/edit`}
-                          passHref
-                        >
-                          <Link color="inherit" variant="subtitle2">
-                            {courier.surname} {courier.name}{" "}
-                            {courier.patronymic}
-                          </Link>
-                        </NextLink>
-                      </Box>
+                        <Link color="inherit" variant="subtitle2">
+                          {courier.surname} {courier.name} {courier.patronymic}
+                        </Link>
+                      </NextLink>
                     </Box>
-                  </TableCell>
+                  </Box>
+                </TableCell>
 
-                  <TableCell>
-                    <SeverityPill color={courier.active ? "success" : "error"}>
-                      {courier.active ? "ACTIVE" : "INACTIVE"}
-                    </SeverityPill>
-                  </TableCell>
-                  <TableCell>{courier.status}</TableCell>
-                  <TableCell>
-                    {format(new Date(courier.dateOfBirth), "dd-MM-yyyy")}
-                  </TableCell>
-                  <TableCell>{courier.phoneNumber}</TableCell>
-                  <TableCell>{courier.passportSeries}</TableCell>
-                  <TableCell>{courier.startWorkTime}</TableCell>
-                  <TableCell>{courier.endWorkTime}</TableCell>
+                {/* <TableCell>
+                  <SeverityPill color={courier.active ? "success" : "error"}>
+                    {courier.active ? "ACTIVE" : "INACTIVE"}
+                  </SeverityPill>
+                </TableCell> */}
+                <TableCell>{courier.status}</TableCell>
+                <TableCell>
+                  {format(new Date(courier.dateOfBirth), "dd-MM-yyyy")}
+                </TableCell>
+                <TableCell>{courier.phoneNumber}</TableCell>
+                <TableCell>{courier.passportSeries}</TableCell>
+                <TableCell>{courier.startWorkTime}</TableCell>
+                <TableCell>{courier.endWorkTime}</TableCell>
 
-                  <TableCell align="right">
-                    <Tooltip title="Change status">
-                      <IconButton
-                        component="a"
-                        onClick={() => toggleModal(courier)}
-                      >
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                    <NextLink
-                      href={`/dashboard/couriers/${courier.id}/edit`}
-                      passHref
+                <TableCell align="right" sx={{}}>
+                  <Tooltip title="Change status">
+                    <IconButton
+                      component="a"
+                      onClick={() => toggleModal(courier)}
                     >
-                      <IconButton component="a">
-                        <PencilAltIcon fontSize="small" />
-                      </IconButton>
-                    </NextLink>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Stats">
+                    <IconButton
+                      component="a"
+                      onClick={() => toggleModal(courier)}
+                    >
+                      <QueryStatsIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <NextLink
+                    href={`/dashboard/couriers/${courier.id}/edit`}
+                    passHref
+                  >
+                    <IconButton component="a">
+                      <PencilAltIcon fontSize="small" />
+                    </IconButton>
+                  </NextLink>
+                  <NextLink
+                    href={`/dashboard/couriers/${courier.id}/balance`}
+                    passHref
+                  >
+                    <IconButton component="a">
+                      <AccountBalanceWalletIcon fontSize="small" />
+                    </IconButton>
+                  </NextLink>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </Scrollbar>
@@ -140,6 +159,13 @@ export const CourierListTable = (props) => {
           courier={currentCourier}
         />
       )}
+      {openStats && (
+        <CourierStatsModal
+          open={openStats}
+          handleClose={toggleStatsModal}
+          courier={currentCourier}
+        />
+      )}
       <TablePagination
         component="div"
         count={couriersCount}
@@ -147,7 +173,7 @@ export const CourierListTable = (props) => {
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 25, 50, 100]}
         ActionsComponent={TablePaginationActions}
       />
     </div>

@@ -34,6 +34,24 @@ export const getCourier = createAsyncThunk(
   }
 );
 
+export const getCourierBalances = createAsyncThunk(
+  "couriers/getCourierBalances",
+  async (params, { rejectWithValue }) => {
+    console.log({ params });
+    try {
+      const response = await axios.get("/couriers/balance", {
+        params: {
+          courierId: params?.id,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
 export const createCourier = createAsyncThunk(
   "couriers/createCourier",
   async (values, { rejectWithValue }) => {
