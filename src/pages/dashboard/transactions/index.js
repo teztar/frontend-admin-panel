@@ -119,7 +119,7 @@ const TransactionList = () => {
           paymentOption: paymentOption,
         })
       );
-    }, 700);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [page, rowsPerPage, search, transactionStatus, paymentOption, addedFrom]);

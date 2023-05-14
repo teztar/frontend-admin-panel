@@ -46,6 +46,32 @@ export const getPartnersBalancePoints = createAsyncThunk(
   }
 );
 
+export const getPartnersBalancePointsTransactions = createAsyncThunk(
+  "partnersBalance/getPartnersBalancePointsTransactions",
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        "/partners_balance/points/transactions/all",
+        {
+          params: {
+            page: params?.page ?? 1,
+            perPage: params?.perPage ?? 10,
+            pointId: params?.pointId ?? 10,
+            dateFrom: params?.dateFrom || "2000-10-10",
+            dateTo: params?.dateTo || "2099-10-10",
+            search: params?.search || "",
+            status: params?.status || "",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
 export const updatePartnersBalancePoint = createAsyncThunk(
   "partnersBalance/updatePartnersBalancePoint",
   async (values, { rejectWithValue }) => {

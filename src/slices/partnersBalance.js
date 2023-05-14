@@ -3,11 +3,13 @@ import {
   getPartnersBalance,
   downloadPartnersBalance,
   getPartnersBalancePoints,
+  getPartnersBalancePointsTransactions,
 } from "@services/index";
 
 const initialState = {
   partnersBalance: [],
   partnersBalancePoints: [],
+  partnersBalancePointsTransactions: [],
   count: null,
   downloadedPartnersBalance: {},
   loading: true,
@@ -40,6 +42,21 @@ const partnersBalance = createSlice({
       state.count = action.payload?.count;
     });
     builder.addCase(getPartnersBalancePoints.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(getPartnersBalancePointsTransactions.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      getPartnersBalancePointsTransactions.fulfilled,
+      (state, action) => {
+        state.loading = false;
+        state.partnersBalancePointsTransactions = action.payload?.payload;
+        state.count = action.payload?.count;
+      }
+    );
+    builder.addCase(getPartnersBalancePointsTransactions.rejected, (state) => {
       state.loading = false;
     });
 

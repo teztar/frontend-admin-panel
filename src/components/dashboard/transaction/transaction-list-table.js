@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { Scrollbar } from "../../scrollbar";
+import { SeverityPill } from "@components/severity-pill";
 
 export const TransactionListTable = (props) => {
   const {
@@ -67,7 +68,23 @@ export const TransactionListTable = (props) => {
                   {transaction.courierAmount?.toLocaleString("ru")}
                 </TableCell>
                 <TableCell>{transaction.paymentOption}</TableCell>
-                <TableCell>{transaction.status}</TableCell>
+                <TableCell>
+                  <SeverityPill
+                    color={
+                      (transaction.status === "ORDER_NEW" && "error") ||
+                      (transaction.status === "ORDER_ACCEPTED" && "success") ||
+                      (transaction.status ===
+                        "ORDER_WAITING_FOR_COURIER_TO_ACCEPT" &&
+                        "warning") ||
+                      (transaction.status === "ORDER_WITH_COURIER" && "info") ||
+                      (transaction.status === "ORDER_CANCELED" &&
+                        "secondary") ||
+                      (transaction.status === "ORDER_DELIVERED" && "primary")
+                    }
+                  >
+                    {transaction.status}
+                  </SeverityPill>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -80,7 +97,7 @@ export const TransactionListTable = (props) => {
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 25, 50, 100]}
         ActionsComponent={TablePaginationActions}
       />
     </div>

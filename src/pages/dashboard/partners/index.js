@@ -69,7 +69,7 @@ const PartnerList = () => {
           search: search,
         })
       );
-    }, 700);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [page, rowsPerPage, search]);

@@ -78,7 +78,7 @@ const CooperationList = () => {
           type: type,
         })
       );
-    }, 700);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [page, rowsPerPage, search, type]);
