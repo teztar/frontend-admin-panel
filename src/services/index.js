@@ -55,6 +55,7 @@ export {
   getCouriers,
   createCourier,
   updateCourier,
+  getCourierStats,
   getCourierBalances,
 } from "./couriers.service";
 
@@ -71,6 +72,14 @@ export {
   createBonus,
   updateBonus,
 } from "./bonuses.service";
+
+export {
+  getBanner,
+  getBanners,
+  createBanner,
+  deleteBanner,
+  updateBanner,
+} from "./banners.service";
 
 export {
   getTransaction,

@@ -23,6 +23,7 @@ import { format } from "date-fns";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import { CourierStatusModal } from "./courier-status-modal";
+import { CourierStatsModal } from "./courier-stats-modal";
 
 export const CourierListTable = (props) => {
   const {
@@ -57,7 +58,6 @@ export const CourierListTable = (props) => {
           <TableHead>
             <TableRow>
               <TableCell>FIO</TableCell>
-
               <TableCell>Status</TableCell>
               <TableCell>Birthdate</TableCell>
               <TableCell>Phone</TableCell>
@@ -125,7 +125,7 @@ export const CourierListTable = (props) => {
                   <Tooltip title="Stats">
                     <IconButton
                       component="a"
-                      onClick={() => toggleModal(courier)}
+                      onClick={() => toggleStatsModal(courier)}
                     >
                       <QueryStatsIcon fontSize="small" />
                     </IconButton>
