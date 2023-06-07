@@ -9,6 +9,7 @@ import { reducer as rolesReducer } from "@slices/roles";
 import { reducer as usersReducer } from "@slices/users";
 import { reducer as clientsReducer } from "@slices/clients";
 import { reducer as couriersReducer } from "@slices/couriers";
+import { reducer as bannersReducer } from "@slices/banners";
 import { reducer as bonusesReducer } from "@slices/bonuses";
 import { reducer as pointsReducer } from "@slices/points";
 import { reducer as productsReducer } from "@slices/products";
@@ -29,6 +30,7 @@ export const rootReducer = combineReducers({
   users: usersReducer,
   clients: clientsReducer,
   couriers: couriersReducer,
+  banners: bannersReducer,
   bonuses: bonusesReducer,
   points: pointsReducer,
   orders: ordersReducer,

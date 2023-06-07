@@ -22,6 +22,7 @@ import { store } from "../store";
 import { createTheme } from "../theme";
 import { createEmotionCache } from "../utils/create-emotion-cache";
 import "../i18n";
+import { SettingsButton } from "@components/settings-button";
 
 Router.events.on("routeChangeStart", nProgress.start);
 Router.events.on("routeChangeError", nProgress.done);
@@ -60,7 +61,7 @@ const App = (props) => {
                     <RTL direction={settings.direction}>
                       <CssBaseline />
                       <Toaster position="top-center" />
-                      {/* <SettingsButton /> */}
+                      <SettingsButton />
                       <AuthConsumer>
                         {(auth) =>
                           !auth.isInitialized ? (

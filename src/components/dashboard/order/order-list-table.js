@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import {
+  Box,
   IconButton,
   Table,
   TableBody,
@@ -11,10 +12,12 @@ import {
   Tooltip,
 } from "@mui/material";
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
+import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
 import { Scrollbar } from "../../scrollbar";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { OrderStatusModal } from "./order-status-modal";
 import { SeverityPill } from "@components/severity-pill";
+import { OrderDetailModal } from "./order-detail-modal";
 
 export const OrderListTable = (props) => {
   const {
@@ -28,12 +31,18 @@ export const OrderListTable = (props) => {
   } = props;
 
   const [open, setOpen] = useState(false);
+  const [openOrderDetails, setOpenOrderDetails] = useState(false);
 
   const [currentOrder, setCurrentOrder] = useState();
 
   const toggleModal = (order) => {
     setOpen((prevValue) => !prevValue);
     setCurrentOrder(order);
+  };
+
+  const toggleOrderDetailsModal = (order) => {
+    setCurrentOrder(order);
+    setOpenOrderDetails((prevValue) => !prevValue);
   };
 
   return (
@@ -47,6 +56,7 @@ export const OrderListTable = (props) => {
               <TableCell>Payment Option</TableCell>
               <TableCell>Partner region</TableCell>
               <TableCell>Partner Brand</TableCell>
+              <TableCell>Point Name</TableCell>
               <TableCell>Client Name</TableCell>
               <TableCell>Client Phone</TableCell>
               <TableCell>Status</TableCell>
@@ -61,6 +71,7 @@ export const OrderListTable = (props) => {
                 <TableCell>{order.paymentOption}</TableCell>
                 <TableCell>{order.partner?.brand}</TableCell>
                 <TableCell>{order.partner?.brand}</TableCell>
+                <TableCell>{order.point?.name}</TableCell>
                 <TableCell>{order.client?.name}</TableCell>
                 <TableCell>{order.client?.phone}</TableCell>
                 <TableCell>
@@ -77,19 +88,25 @@ export const OrderListTable = (props) => {
                 </TableCell>
 
                 <TableCell align="right">
-                  {/* <NextLink
-                    href={`/dashboard/orders/${order.id}/edit`}
-                    passHref
-                  > */}
-                  <Tooltip title="Change status">
-                    <IconButton
-                      component="a"
-                      onClick={() => toggleModal(order)}
-                    >
-                      <PencilAltIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                  {/* </NextLink> */}
+                  <Box display="flex">
+                    <Tooltip title="Change status">
+                      <IconButton
+                        component="a"
+                        onClick={() => toggleModal(order)}
+                      >
+                        <PencilAltIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title="Order details">
+                      <IconButton
+                        component="a"
+                        onClick={() => toggleOrderDetailsModal(order)}
+                      >
+                        <ArrowRightIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
                 </TableCell>
               </TableRow>
             ))}
@@ -101,6 +118,13 @@ export const OrderListTable = (props) => {
           open={open}
           handleClose={toggleModal}
           order={currentOrder}
+        />
+      )}
+      {openOrderDetails && (
+        <OrderDetailModal
+          open={openOrderDetails}
+          handleClose={toggleOrderDetailsModal}
+          orderId={currentOrder.id}
         />
       )}
       <TablePagination
