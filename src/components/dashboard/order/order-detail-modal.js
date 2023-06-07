@@ -1,18 +1,27 @@
 import { useEffect } from "react";
-import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import IconButton from "@mui/material/IconButton";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import CloseIcon from "@mui/icons-material/Close";
-import { useDispatch, useSelector } from "src/store";
 import { getOrder } from "@services/index";
+import { useDispatch, useSelector } from "src/store";
+import { SeverityPill } from "@components/severity-pill";
+import { Scrollbar } from "../../scrollbar";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiPaper-root": {
-    width: "90vw",
+    minWidth: "90vw",
   },
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -61,7 +70,101 @@ export const OrderDetailModal = (props) => {
       <BootstrapDialogTitle onClose={handleClose}>
         Order details
       </BootstrapDialogTitle>
-      <DialogContent dividers>order</DialogContent>
+      <DialogContent dividers>
+        <Scrollbar>
+          <Table sx={{ minWidth: 700 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Added From</TableCell>
+                <TableCell>Amount</TableCell>
+                <TableCell>Payment Option</TableCell>
+                <TableCell>Partner region | Brand</TableCell>
+                <TableCell>Point Name</TableCell>
+                <TableCell>Client Name | Phone | Bonus</TableCell>
+                <TableCell>delivery amount</TableCell>
+                <TableCell>comment</TableCell>
+                <TableCell>decline reason</TableCell>
+                <TableCell>Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow hover>
+                <TableCell>{order.addedFrom}</TableCell>
+                <TableCell>{order.amount?.toLocaleString("ru")}</TableCell>
+                <TableCell>{order.paymentOption}</TableCell>
+                <TableCell>
+                  {order.partner?.region} | {order.partner?.brand}
+                </TableCell>
+                <TableCell>{order.point?.name}</TableCell>
+                <TableCell>
+                  {order.client?.name} | {order.client?.phone} |{" "}
+                  {order.clientTotalBonus?.toLocaleString("ru")}
+                </TableCell>
+
+                <TableCell>
+                  {order.deliveryAmount?.toLocaleString("ru")}
+                </TableCell>
+                <TableCell>{order.comment}</TableCell>
+                <TableCell>{order.decline_reason}</TableCell>
+                <TableCell>
+                  <SeverityPill
+                    color={
+                      (order.status === "ORDER_NEW" && "primary") ||
+                      (order.status === "ORDER_ACCEPTED" && "success") ||
+                      (order.status === "ORDER_CANCELED" && "error") ||
+                      "info"
+                    }
+                  >
+                    {order.status}
+                  </SeverityPill>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </Scrollbar>
+        <Scrollbar>
+          <Table sx={{ minWidth: 700, mt: 7 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Amount</TableCell>
+                <TableCell>Count</TableCell>
+                <TableCell>measuring</TableCell>
+                <TableCell>price</TableCell>
+                <TableCell>volume</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>ingredients</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {order?.orderProducts?.map((orderProduct) => (
+                <TableRow hover key={orderProduct.id}>
+                  <TableCell>
+                    {orderProduct?.amount?.toLocaleString("ru")}
+                  </TableCell>
+                  <TableCell>
+                    {orderProduct.count?.toLocaleString("ru")}
+                  </TableCell>
+                  <TableCell>
+                    {orderProduct?.productByVolume?.measuring?.toLocaleString(
+                      "ru"
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {orderProduct?.productByVolume?.price?.toLocaleString("ru")}
+                  </TableCell>
+                  <TableCell>{orderProduct?.productByVolume?.volume}</TableCell>
+                  <TableCell>
+                    {orderProduct?.productByVolume?.product?.name}
+                  </TableCell>
+                  <TableCell>
+                    {orderProduct?.productByVolume?.product?.ingredients}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Scrollbar>
+      </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose}>
           Cancel
