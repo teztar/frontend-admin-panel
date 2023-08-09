@@ -34,8 +34,8 @@ export const CourierEditForm = (props) => {
         patronymic: courier?.patronymic || "",
         passportSeries: courier?.passportSeries || "",
         phoneNumber: courier?.phoneNumber?.substring(4) || "",
-        startWorkTime: courier?.startWorkTime || null,
-        endWorkTime: courier?.endWorkTime || null,
+        startWorkTime: new Date("01/01/1970 " + courier?.startWorkTime) || null,
+        endWorkTime: new Date("01/01/1970 " + courier?.endWorkTime) || null,
         tin: courier?.tin || "",
         submit: null,
       }}

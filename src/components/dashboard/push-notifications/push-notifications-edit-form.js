@@ -3,7 +3,6 @@ import NextLink from "next/link";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import { format } from "date-fns";
 import {
   Button,
   Card,
@@ -18,14 +17,21 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import { useDispatch } from "src/store";
+import { useDispatch, useSelector } from "src/store";
 import {
   createPushNotification,
+  getGenders,
+  getNotificationFormats,
+  getNotificationSortedFields,
+  getNotificationStatuses,
+  getPrefixes,
   updatePushNotification,
 } from "@services/index";
 import { DatePicker } from "@mui/x-date-pickers";
 import { UploadFile } from "@mui/icons-material";
 import { Box } from "@mui/system";
+import { removeEmptyBodyFields } from "@utils/axios";
+import { toSnakeCaseFormat } from "@utils/case-style";
 
 const sortBys = [
   "AGE",
@@ -41,6 +47,9 @@ export const PushNotificationEditForm = (props) => {
 
   const { pushNotification, mode = "edit", ...other } = props;
 
+  const { genders, prefixes, notificationFormats, notificationSortedFields } =
+    useSelector((state) => state.handbooks);
+
   const [webImage, setWebImage] = useState(pushNotification?.webImage);
   const [appImage, setAppImage] = useState(pushNotification?.appImage);
   const [webImageUrl, setWebImageUrl] = useState(null);
@@ -50,6 +59,14 @@ export const PushNotificationEditForm = (props) => {
 
   const appImageRef = useRef(null);
   const webImageRef = useRef(null);
+
+  useEffect(() => {
+    dispatch(getGenders());
+    dispatch(getPrefixes());
+    dispatch(getNotificationFormats());
+    dispatch(getNotificationStatuses());
+    dispatch(getNotificationSortedFields());
+  }, []);
 
   useEffect(() => {
     if (webImage) {
@@ -73,6 +90,7 @@ export const PushNotificationEditForm = (props) => {
         dispatchDate: pushNotification?.dispatchDate || null,
         format: pushNotification?.format || "",
         sortBy: pushNotification?.sortBy || "",
+        prefix: pushNotification?.prefix || "",
         sortValue: pushNotification?.sortValue || "",
         webImage: webImage || "",
         appImage: appImage || "",
@@ -85,29 +103,31 @@ export const PushNotificationEditForm = (props) => {
         try {
           let data = {};
 
-          if (values.id) {
-            formData.append("id", values.id);
-          }
-          formData.append("title", values.title);
-          formData.append("body", values.body);
-          formData.append("format", values.format);
-          formData.append(
-            "dispatch_date",
-            format(new Date(values.dispatchDate), "dd-MM-yyyy")
+          const payload = JSON.stringify(
+            removeEmptyBodyFields(toSnakeCaseFormat(values))
           );
-          formData.append("sort_by", values.sortBy);
-          formData.append("sort_value", values.sortValue);
+
+          formData.append("payload", payload);
           formData.append("web_image", webImage);
           formData.append("app_image", appImage);
 
           for (let pair of formData.entries()) {
-            console.log("pair: ", (data[pair[0]] = pair[1]));
             data[pair[0]] = pair[1];
           }
           if (mode === "create") {
-            dispatch(createPushNotification(formData));
+            dispatch(
+              createPushNotification({
+                payload: formData,
+                requestDigest: payload,
+              })
+            );
           } else {
-            dispatch(updatePushNotification(formData));
+            dispatch(
+              updatePushNotification({
+                payload: formData,
+                requestDigest: payload,
+              })
+            );
           }
           setStatus({ success: true });
           setSubmitting(false);
@@ -191,9 +211,9 @@ export const PushNotificationEditForm = (props) => {
                       name="format"
                       onChange={handleChange}
                     >
-                      {formats.map((format) => (
-                        <MenuItem key={format} value={format}>
-                          {format}
+                      {notificationFormats.map((format) => (
+                        <MenuItem key={format.key} value={format.key}>
+                          {format.value}
                         </MenuItem>
                       ))}
                     </Select>
@@ -210,28 +230,72 @@ export const PushNotificationEditForm = (props) => {
                       name="sortBy"
                       onChange={handleChange}
                     >
-                      {sortBys.map((sort) => (
-                        <MenuItem key={sort} value={sort}>
-                          {sort}
+                      {notificationSortedFields.map((sort) => (
+                        <MenuItem key={sort.key} value={sort.key}>
+                          {sort.value}
                         </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
                 </Grid>
 
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={Boolean(touched.sortValue && errors.sortValue)}
-                    fullWidth
-                    helperText={touched.sortValue && errors.sortValue}
-                    label="Sort value"
-                    name="sortValue"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    required
-                    value={values.sortValue}
-                  />
-                </Grid>
+                {values.sortBy !== "GENDER" && (
+                  <Grid item md={6} xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="prefix-label">Prefix</InputLabel>
+                      <Select
+                        labelId="prefix-label"
+                        value={values.prefix}
+                        label="Prefix"
+                        name="prefix"
+                        onChange={handleChange}
+                      >
+                        {prefixes.map((prefix) => (
+                          <MenuItem key={prefix.key} value={prefix.key}>
+                            {prefix.value}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+
+                {values.sortBy === "GENDER" && (
+                  <Grid item md={6} xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="gender-label">Gender</InputLabel>
+                      <Select
+                        labelId="gender-label"
+                        value={values.sortValue}
+                        label="Prefix"
+                        name="sortValue"
+                        onChange={handleChange}
+                      >
+                        {genders.map((gender) => (
+                          <MenuItem key={gender.key} value={gender.key}>
+                            {gender.value}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+
+                {values.sortBy !== "GENDER" && (
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      error={Boolean(touched.sortValue && errors.sortValue)}
+                      fullWidth
+                      helperText={touched.sortValue && errors.sortValue}
+                      label="Sort value"
+                      name="sortValue"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      required
+                      value={values.sortValue}
+                    />
+                  </Grid>
+                )}
 
                 <Grid item md={6} xs={12}>
                   <input

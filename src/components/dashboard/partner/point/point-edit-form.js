@@ -35,12 +35,12 @@ export const PointEditForm = (props) => {
 
   const handleGetGeoObject = async (map, setFieldValue) => {
     if (Array.isArray(map)) {
-      setFieldValue("geolocationLatitude", map[0]);
-      setFieldValue("geolocationLongitude", map[1]);
+      setFieldValue("location.latitude", map[0]);
+      setFieldValue("location.longitude", map[1]);
     } else {
       const coords = map.get("coords");
-      setFieldValue("geolocationLatitude", coords[0]);
-      setFieldValue("geolocationLongitude", coords[1]);
+      setFieldValue("location.latitude", coords[0]);
+      setFieldValue("location.longitude", coords[1]);
     }
   };
 
@@ -57,13 +57,16 @@ export const PointEditForm = (props) => {
         id: mode === "edit" ? pointId : "",
         partnerId: mode === "create" ? partnerId : "",
         assortment: point?.assortment || "",
+        commission: point?.commission || "",
         averageCookingTime: point?.averageCookingTime || null,
-        closingTime: point?.closingTime || null,
-        geolocationLatitude: point?.geolocationLatitude || "",
-        geolocationLongitude: point?.geolocationLongitude || "",
+        closingTime: new Date("01/01/1970 " + point?.closingTime) || null,
+        location: {
+          latitude: point?.address?.latitude || "",
+          longitude: point?.address?.longitude || "",
+        },
         kitchenType: point?.kitchenType || "",
         minimumCheckAmount: point?.minimumCheckAmount || "",
-        openingTime: point?.openingTime || null,
+        openingTime: new Date("01/01/1970 " + point?.openingTime) || "",
         status: point?.status || "",
         phoneNumbers:
           pointPhones && pointPhones.length > 0
@@ -72,14 +75,14 @@ export const PointEditForm = (props) => {
         submit: null,
       }}
       validationSchema={Yup.object().shape({
-        assortment: Yup.string().max(255).required(),
-        averageCookingTime: Yup.string().required(),
-        closingTime: Yup.string().required(),
-        geolocationLatitude: Yup.string().max(255).required(),
-        geolocationLongitude: Yup.string().max(255).required(),
-        kitchenType: Yup.string().max(255).required(),
-        minimumCheckAmount: Yup.string().max(255).required(),
-        openingTime: Yup.string().required(),
+        // assortment: Yup.string().max(255).required(),
+        // averageCookingTime: Yup.string().required(),
+        // closingTime: Yup.string().required(),
+        // latitude: Yup.string().max(255).required(),
+        // longitude: Yup.string().max(255).required(),
+        // kitchenType: Yup.string().max(255).required(),
+        // minimumCheckAmount: Yup.string().max(255).required(),
+        // openingTime: Yup.string().required(),
         phoneNumbers: Yup.array().of(
           Yup.object().shape({
             phoneNumber: Yup.string()
@@ -154,6 +157,19 @@ export const PointEditForm = (props) => {
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.commission && errors.commission)}
+                    fullWidth
+                    helperText={touched.commission && errors.commission}
+                    label="Commission"
+                    name="commission"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.commission}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
                   <TimePicker
                     openTo="minutes"
                     ampm={false}
@@ -174,6 +190,7 @@ export const PointEditForm = (props) => {
                     inputFormat="hh:mm"
                     label="Opening Time"
                     onChange={(time) => {
+                      console.log({ time });
                       setFieldValue("openingTime", time);
                     }}
                     renderInput={(inputProps) => (
@@ -198,46 +215,6 @@ export const PointEditForm = (props) => {
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
-                    required
-                    fullWidth
-                    // type="number"
-                    error={Boolean(
-                      touched.geolocationLatitude && errors.geolocationLatitude
-                    )}
-                    helperText={
-                      touched.geolocationLatitude && errors.geolocationLatitude
-                    }
-                    label="Geolocation Latitude"
-                    name="geolocationLatitude"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.geolocationLatitude}
-                    inputProps={{ maxLength: 9 }}
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    // type="number"
-                    error={Boolean(
-                      touched.geolocationLongitude &&
-                        errors.geolocationLongitude
-                    )}
-                    helperText={
-                      touched.geolocationLongitude &&
-                      errors.geolocationLongitude
-                    }
-                    label="Geolocation Longitude"
-                    name="geolocationLongitude"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.geolocationLongitude}
-                    inputProps={{ maxLength: 9 }}
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
                     error={Boolean(touched.kitchenType && errors.kitchenType)}
                     fullWidth
                     helperText={touched.kitchenType && errors.kitchenType}
@@ -255,16 +232,35 @@ export const PointEditForm = (props) => {
                     fullWidth
                     // type="number"
                     error={Boolean(
-                      touched.minimumCheckAmount && errors.minimumCheckAmount
+                      touched.location?.latitude && errors.location?.latitude
                     )}
                     helperText={
-                      touched.minimumCheckAmount && errors.minimumCheckAmount
+                      touched.location?.latitude && errors.location?.latitude
                     }
-                    label="Minimum Check Amount"
-                    name="minimumCheckAmount"
+                    label="Geolocation Latitude"
+                    name="latitude"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.minimumCheckAmount}
+                    value={values.location?.latitude}
+                    inputProps={{ maxLength: 9 }}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    // type="number"
+                    error={Boolean(
+                      touched.location?.longitude && errors.location?.longitude
+                    )}
+                    helperText={
+                      touched.location?.longitude && errors.location?.longitude
+                    }
+                    label="Geolocation Longitude"
+                    name="longitude"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.location?.longitude}
                     inputProps={{ maxLength: 9 }}
                   />
                 </Grid>
@@ -323,6 +319,25 @@ export const PointEditForm = (props) => {
                     )}
                   />
                 </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    // type="number"
+                    error={Boolean(
+                      touched.minimumCheckAmount && errors.minimumCheckAmount
+                    )}
+                    helperText={
+                      touched.minimumCheckAmount && errors.minimumCheckAmount
+                    }
+                    label="Minimum Check Amount"
+                    name="minimumCheckAmount"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.minimumCheckAmount}
+                    inputProps={{ maxLength: 9 }}
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   <YMaps
                     query={{
@@ -357,10 +372,7 @@ export const PointEditForm = (props) => {
                       />
                       <Placemark
                         // onClick={() => handlePoint(point)}
-                        geometry={[
-                          values.geolocationLatitude,
-                          values.geolocationLongitude,
-                        ]}
+                        geometry={[values.latitude, values.longitude]}
                         options={{
                           iconColor: "#ff0000",
                         }}

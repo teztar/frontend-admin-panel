@@ -3,7 +3,7 @@ import crypto from "crypto-js";
 import { API_URL } from "./apiUrl";
 import { toCamelCaseFormat, toSnakeCaseFormat } from "./case-style";
 
-const key =
+export const key =
   "JDJhJDEwJFR1VEN6cGlBVlAwdllocTJVSVVlSWVqQXBJOVo1Yzl3ejBBdkhCYW9MdUZjVm9QTUVBbWI2";
 
 export const cleanEmtpyFields = (obj) => {
@@ -20,7 +20,7 @@ export const cleanEmtpyFields = (obj) => {
   return obj;
 };
 
-const removeEmptyBodyFields = (obj) => {
+export const removeEmptyBodyFields = (obj) => {
   return Object.entries(obj).reduce(
     (a, [k, v]) => (v ? ((a[k] = v), a) : a),
     {}

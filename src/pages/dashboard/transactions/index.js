@@ -88,6 +88,7 @@ const TransactionList = () => {
   };
 
   const downloadTransactions = () => {
+    console.log("downloadTransactions");
     dispatch(
       downloadTransactionsFile({
         addedFrom: addedFrom,

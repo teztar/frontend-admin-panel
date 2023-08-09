@@ -1,3 +1,4 @@
+import { useState } from "react";
 import NextLink from "next/link";
 import PropTypes from "prop-types";
 import {
@@ -13,12 +14,11 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
-import { Scrollbar } from "../../scrollbar";
 import TablePaginationActions from "@utils/tablePaginationActions";
-import { format } from "date-fns";
 import { SeverityPill } from "@components/severity-pill";
-import { useState } from "react";
+import { Scrollbar } from "../../scrollbar";
 import { BannerDeleteModal } from "./banner-delete-modal";
+import useBannersImageLoader from "@hooks/use-banner-images";
 
 export const BannerListTable = (props) => {
   const {
@@ -31,18 +31,24 @@ export const BannerListTable = (props) => {
     ...other
   } = props;
 
+  const newBanners = useBannersImageLoader(banners, "bannerImages");
+
+  console.log({ newBanners });
+
   const [open, setOpen] = useState(false);
 
   const [currentBanner, setCurrentBanner] = useState();
 
-  const toggleModal = (order) => {
+  const toggleModal = (banner) => {
     setOpen((prevValue) => !prevValue);
-    setCurrentBanner(order);
+    setCurrentBanner(banner);
   };
 
   return (
     <div {...other}>
       <Scrollbar>
+        <br />
+
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
@@ -50,25 +56,47 @@ export const BannerListTable = (props) => {
               <TableCell>body</TableCell>
               <TableCell>queue</TableCell>
               <TableCell>link </TableCell>
-              <TableCell>Start date</TableCell>
-              <TableCell>End date</TableCell>
+              <TableCell>web </TableCell>
+              <TableCell>app </TableCell>
+              {/* <TableCell>Start date</TableCell> */}
+              {/* <TableCell>End date</TableCell> */}
               <TableCell>Active</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {banners.map((banner) => (
+            {newBanners?.map((banner) => (
               <TableRow hover key={banner.id}>
                 <TableCell>{banner.title}</TableCell>
                 <TableCell>{banner.body}</TableCell>
                 <TableCell>{banner.queue}</TableCell>
                 <TableCell>{banner.link}</TableCell>
+                <TableCell
+                // onClick={() => getImage(banner.bannerImages[0].name)}
+                >
+                  <img
+                    src={banner.webImageUrl}
+                    alt="image web"
+                    style={{
+                      width: 40,
+                    }}
+                  />
+                </TableCell>
                 <TableCell>
+                  <img
+                    src={banner.appImageUrl}
+                    alt="image"
+                    style={{
+                      width: 40,
+                    }}
+                  />
+                </TableCell>
+                {/* <TableCell>
                   {format(new Date(banner.startDate), "dd-MM-yyyy")}
                 </TableCell>
                 <TableCell>
                   {format(new Date(banner.endDate), "dd-MM-yyyy")}
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                   <SeverityPill color={banner.active ? "success" : "error"}>
                     {banner.active ? "ACTIVE" : "INACTIVE"}

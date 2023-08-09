@@ -4,12 +4,14 @@ import {
   getBanners,
   createBanner,
   updateBanner,
+  getBannerImage,
 } from "@services/index";
 
 const initialState = {
   banners: [],
   count: null,
   banner: {},
+  bannerImage: null,
   loading: true,
   error: null,
 };
@@ -39,6 +41,17 @@ const banners = createSlice({
       state.banner = action.payload?.payload;
     });
     builder.addCase(getBanner.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(getBannerImage.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getBannerImage.fulfilled, (state, action) => {
+      state.loading = false;
+      state.bannerImage = action.payload?.payload;
+    });
+    builder.addCase(getBannerImage.rejected, (state) => {
       state.loading = false;
     });
 

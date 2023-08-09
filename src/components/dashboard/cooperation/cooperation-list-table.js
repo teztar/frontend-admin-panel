@@ -39,7 +39,6 @@ export const CooperationListTable = (props) => {
               <TableCell>Phone</TableCell>
               <TableCell>Birth date</TableCell>
               <TableCell>Address</TableCell>
-              <TableCell>Show in map</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
@@ -81,20 +80,18 @@ export const CooperationListTable = (props) => {
                 <TableCell>
                   {format(new Date(cooperation.dateOfBirth), "dd-MM-yyyy")}
                 </TableCell>
-                <TableCell>{cooperation.address.name}</TableCell>
                 <TableCell>
                   <Button
                     onClick={() =>
                       showInMap(
-                        cooperation?.address?.geolocationLatitude,
-                        cooperation?.address?.geolocationLongitude
+                        cooperation?.address?.latitude,
+                        cooperation?.address?.longitude
                       )
                     }
                   >
-                    Open in map
+                    {cooperation.address.name}
                   </Button>
                 </TableCell>
-
                 <TableCell>
                   <SeverityPill
                     color={

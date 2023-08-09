@@ -1,8 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import toast from "react-hot-toast";
-
-export const baseUrl = process.env.NEXT_PUBLIC_API_ROUTE;
+import axios from "axios";
+import crypto from "crypto-js";
+import { key } from "@utils/axios";
+import { API_URL } from "@utils/apiUrl";
 
 export const getPushNotifications = createAsyncThunk(
   "pushNotifications/getPushNotifications",
@@ -43,23 +44,27 @@ export const getPushNotification = createAsyncThunk(
 export const createPushNotification = createAsyncThunk(
   "pushNotifications/createPushNotification",
   async (values, { rejectWithValue }) => {
+    console.log({ values });
     try {
       const accessToken = localStorage.getItem("accessToken");
+
+      const encryptedData = crypto.HmacSHA256(values.requestDigest, key);
 
       const requestHeaders = new Headers();
 
       requestHeaders.append("Authorization", "Bearer " + accessToken);
       requestHeaders.append("Accept", "application/json");
+      requestHeaders.append("X-RequestDigest", encryptedData);
 
       const requestOptions = {
         method: "POST",
         headers: requestHeaders,
-        body: values,
+        body: values.payload,
         redirect: "follow",
       };
 
       const response = await fetch(
-        baseUrl + "/push_notifications/new",
+        API_URL + "/push_notifications/new",
         requestOptions
       );
 

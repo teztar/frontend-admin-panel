@@ -8,10 +8,13 @@ import {
   Card,
   Container,
   Grid,
+  IconButton,
   InputAdornment,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
+import { ArrowLeft as ArrowLeftIcon } from "@icons/arrow-left";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { PointListTable } from "@components/dashboard/partner/point/point-list-table";
 import { Plus as PlusIcon } from "@icons/plus";
@@ -118,6 +121,18 @@ const PointList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
+                <NextLink href="/dashboard/partners" passHref>
+                  <Tooltip title="Back to partners">
+                    <IconButton component="a">
+                      <ArrowLeftIcon fontSize="small" />
+                      <Typography sx={{ ml: 1 }}>Partners</Typography>
+                    </IconButton>
+                  </Tooltip>
+                </NextLink>
+              </Grid>
+            </Grid>
+            <Grid container justifyContent="space-between" spacing={3}>
+              <Grid item>
                 <Typography variant="h4">
                   {partner?.brand} - {partner?.region} - Points
                 </Typography>
@@ -169,6 +184,7 @@ const PointList = () => {
                 />
               </Box>
             </Box>
+
             <PointListTable
               points={points}
               pointsCount={count}
