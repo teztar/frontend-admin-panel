@@ -86,14 +86,19 @@ const getSections = (t) => [
         icon: <CorporateFareIcon fontSize="small" />,
       },
       {
-        title: t("Partners Balance"),
-        path: "/dashboard/partners-balance",
-        icon: <MoneyIcon fontSize="small" />,
+        title: t("Banners"),
+        path: "/dashboard/banners",
+        icon: <ViewCarouselIcon fontSize="small" />,
       },
       {
         title: t("Partners"),
         path: "/dashboard/partners",
         icon: <HandshakeIcon fontSize="small" />,
+      },
+      {
+        title: t("Partners Balance"),
+        path: "/dashboard/partners-balance",
+        icon: <MoneyIcon fontSize="small" />,
       },
       {
         title: t("Orders"),
@@ -105,20 +110,11 @@ const getSections = (t) => [
         path: "/dashboard/bonuses",
         icon: <CardGiftcardIcon fontSize="small" />,
       },
+
       {
         title: t("Push Notifications"),
         path: "/dashboard/push-notifications",
         icon: <NotificationsActiveIcon fontSize="small" />,
-      },
-      {
-        title: t("Banners"),
-        path: "/dashboard/banners",
-        icon: <ViewCarouselIcon fontSize="small" />,
-      },
-      {
-        title: t("Users"),
-        path: "/dashboard/users",
-        icon: <UsersIcon fontSize="small" />,
       },
       {
         title: t("Clients"),
@@ -129,6 +125,11 @@ const getSections = (t) => [
         title: t("Couriers"),
         path: "/dashboard/couriers",
         icon: <AssistWalkerIcon fontSize="small" />,
+      },
+      {
+        title: t("Users"),
+        path: "/dashboard/users",
+        icon: <UsersIcon fontSize="small" />,
       },
       {
         title: t("Roles"),

@@ -58,12 +58,12 @@ export const PointEditForm = (props) => {
         partnerId: mode === "create" ? partnerId : "",
         assortment: point?.assortment || "",
         averageCookingTime: point?.averageCookingTime || null,
-        closingTime: point?.closingTime || null,
+        closingTime: new Date("01/01/1970 " + point?.closingTime) || null,
         geolocationLatitude: point?.geolocationLatitude || "",
         geolocationLongitude: point?.geolocationLongitude || "",
         kitchenType: point?.kitchenType || "",
         minimumCheckAmount: point?.minimumCheckAmount || "",
-        openingTime: point?.openingTime || null,
+        openingTime: new Date("01/01/1970 " + point?.openingTime) || null,
         status: point?.status || "",
         phoneNumbers:
           pointPhones && pointPhones.length > 0

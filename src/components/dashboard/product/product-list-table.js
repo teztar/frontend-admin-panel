@@ -13,16 +13,10 @@ import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import { Scrollbar } from "@components/scrollbar";
 import { useRouter } from "next/router";
 import TablePaginationActions from "@utils/tablePaginationActions";
-import { useDispatch, useSelector } from "src/store";
-import { getProductImage } from "@services/index";
-import { useState } from "react";
-import axios from "axios";
+import useImageLoader from "@hooks/use-image-loader";
 
 export const ProductListTable = (props) => {
-  const dispatch = useDispatch();
   const { query } = useRouter();
-
-  const { productImage } = useSelector((state) => state.products);
 
   const {
     products,
@@ -34,20 +28,8 @@ export const ProductListTable = (props) => {
     ...other
   } = props;
 
-  const [image, setImage] = useState(null);
-  const handleGetProductImage = async (path) =>
-    await dispatch(getProductImage({ filePath: path }));
-
-  const getImage = async (path) => {
-    try {
-      const response = await axios.get(`/products/images/${path}`);
-      console.log("daromad: ", response.data);
-      setImage(response.data);
-    } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
-      console.log("error: ", error);
-    }
-  };
+  const newProducts = useImageLoader("products", products, "image");
+  console.log({ newProducts });
 
   const partnerId = query?.partnerId;
   const pointId = query?.pointId;
@@ -69,7 +51,7 @@ export const ProductListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((product) => (
+            {newProducts.map((product) => (
               <TableRow hover key={product.id}>
                 <TableCell>{product.name}</TableCell>
                 <TableCell>{product.category}</TableCell>
@@ -77,8 +59,15 @@ export const ProductListTable = (props) => {
                 <TableCell>{product.price?.toLocaleString("ru")}</TableCell>
                 <TableCell>{product.measuring}</TableCell>
                 <TableCell>{product.description}</TableCell>
-                <TableCell onClick={() => getImage(product?.image?.name)}>
-                  {image && <img src={image} alt="image" id="image" />}
+                <TableCell>
+                  <img
+                    src={product.imageUrl}
+                    alt="image"
+                    id="image"
+                    style={{
+                      width: 40,
+                    }}
+                  />
                 </TableCell>
                 <TableCell align="right">
                   <NextLink

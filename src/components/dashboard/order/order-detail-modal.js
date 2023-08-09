@@ -105,7 +105,7 @@ export const OrderDetailModal = (props) => {
                   {order.deliveryAmount?.toLocaleString("ru")}
                 </TableCell>
                 <TableCell>{order.comment}</TableCell>
-                <TableCell>{order.decline_reason}</TableCell>
+                <TableCell>{order.declineReason}</TableCell>
                 <TableCell>
                   <SeverityPill
                     color={

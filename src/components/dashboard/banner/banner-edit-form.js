@@ -1,7 +1,9 @@
+import { useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
 import { Formik } from "formik";
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -14,18 +16,83 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { UploadFile } from "@mui/icons-material";
 import { format } from "date-fns";
-import { useDispatch } from "src/store";
+import { useDispatch, useSelector } from "src/store";
 import { createBanner, updateBanner } from "@services/index";
+import { removeEmptyBodyFields } from "@utils/axios";
+import { toSnakeCaseFormat } from "@utils/case-style";
+import { getBannerImage } from "@services/banners.service";
 
 export const BannerEditForm = (props) => {
   const dispatch = useDispatch();
 
   const { banner, mode = "edit", ...other } = props;
 
+  const bannerImage = useSelector((state) => state.banners);
+
+  // const newBanner = useBannersImageLoader([banner], "bannerImages");
+
+  // console.log({ newBanner });
+
+  const webImageName = banner?.bannerImages?.find(
+    (item) => item.format === "WEB"
+  )?.name;
+  const appImageName = banner?.bannerImages?.find(
+    (item) => item.format === "APP"
+  )?.name;
+
+  const [webImage, setWebImage] = useState(banner?.webImage);
+  const [appImage, setAppImage] = useState(banner?.appImage);
+
+  const [webImageUrl, setWebImageUrl] = useState(null);
+  const [appImageUrl, setAppImageUrl] = useState(null);
+
+  const appImageRef = useRef(null);
+  const webImageRef = useRef(null);
+
+  const formData = new FormData();
+
+  console.log({ bannerImage });
+
+  useEffect(() => {
+    if (webImage) {
+      setWebImageUrl(URL.createObjectURL(webImage));
+    }
+  }, [webImage]);
+
+  useEffect(() => {
+    if (appImage) {
+      setAppImageUrl(URL.createObjectURL(appImage));
+    }
+  }, [appImage]);
+
+  useEffect(() => {
+    if (mode === "edit" && webImageName && appImageName) {
+      console.log({ webImageName });
+      console.log("daromad");
+      dispatch(getBannerImage({ filePath: webImageName }));
+
+      //  dispatch(getBannerImage({ filePath: appImageName }));
+
+      // setWebImageUrl(fetchWeb());
+      // setAppImageUrl(fetchApp());
+
+      // if (web && window) {
+      //   setWebImageUrl(window.URL.createObjectURL(web));
+      // }
+      // if (app && window) {
+      //   setAppImageUrl(window.URL.createObjectURL(app));
+      // }
+    }
+  }, [webImageName, appImageName]);
+
+  console.log({ webImageUrl });
+  console.log({ appImageUrl });
+
   return (
     <Formik
-      enableReinitialize={true}
+      enableReinitialize={mode === "edit" ? true : false}
       initialValues={{
         id: banner?.id || "",
         title: banner?.title || "",
@@ -35,10 +102,14 @@ export const BannerEditForm = (props) => {
         active: banner?.active || true,
         startDate: banner?.startDate || null,
         endDate: banner?.endDate || null,
+        webImage: webImage || "",
+        appImage: appImage || "",
         submit: null,
       }}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
+          let data = {};
+
           const newValues = {
             ...values,
             active: mode === "create" ? null : values.active,
@@ -46,9 +117,27 @@ export const BannerEditForm = (props) => {
             endDate: format(new Date(values.endDate), "yyyy-MM-dd"),
           };
 
-          console.log({ newValues });
+          const payload = JSON.stringify(
+            removeEmptyBodyFields(toSnakeCaseFormat(newValues))
+          );
+
+          formData.append("payload", payload);
+          formData.append("web_image", webImage);
+          formData.append("app_image", appImage);
+
+          for (let pair of formData.entries()) {
+            data[pair[0]] = pair[1];
+          }
+
+          console.log({ payload });
           if (mode === "create") {
-            dispatch(createBanner(newValues));
+            console.log("daromad");
+            dispatch(
+              createBanner({
+                payload: formData,
+                requestDigest: payload,
+              })
+            );
           } else {
             dispatch(updateBanner(newValues));
           }
@@ -109,6 +198,20 @@ export const BannerEditForm = (props) => {
                     InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    error={Boolean(touched.link && errors.link)}
+                    helperText={touched.link && errors.link}
+                    name="link"
+                    label="Link"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.link}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
 
                 <Grid item md={6} xs={12}>
                   <TextField
@@ -125,22 +228,7 @@ export const BannerEditForm = (props) => {
                     InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
-                {mode === "edit" && (
-                  <Grid item md={6} xs={12}>
-                    <FormControlLabel
-                      name="active"
-                      label="Active"
-                      value={values.active}
-                      onChange={handleChange}
-                      control={<Switch defaultChecked />}
-                      sx={{
-                        "& .MuiTypography-root": {
-                          useSelector: "none",
-                        },
-                      }}
-                    />
-                  </Grid>
-                )}
+
                 <Grid item md={6} xs={12}>
                   <DatePicker
                     inputFormat="dd/MM/yyyy"
@@ -166,6 +254,81 @@ export const BannerEditForm = (props) => {
                     )}
                     value={values.endDate}
                   />
+                </Grid>
+                {mode === "edit" && (
+                  <>
+                    <Grid item md={6} xs={12}>
+                      <FormControlLabel
+                        name="active"
+                        label="Active"
+                        value={values.active}
+                        onChange={handleChange}
+                        control={<Switch defaultChecked />}
+                        sx={{
+                          "& .MuiTypography-root": {
+                            useSelector: "none",
+                          },
+                        }}
+                      />
+                    </Grid>
+                    <Grid item md={6} xs={12}></Grid>
+                  </>
+                )}
+                <Grid item md={6} xs={12}>
+                  <input
+                    hidden
+                    type="file"
+                    accept="image/*"
+                    ref={webImageRef}
+                    onChange={(e) => setWebImage(e.target.files[0])}
+                  />
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    startIcon={<UploadFile />}
+                    onClick={() => webImageRef?.current?.click()}
+                  >
+                    Web image
+                  </Button>
+                  {webImageUrl && webImage && (
+                    <Box mt={3}>
+                      <img
+                        src={webImageUrl}
+                        style={{
+                          width: 250,
+                          height: 250,
+                        }}
+                      />
+                    </Box>
+                  )}
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <input
+                    hidden
+                    type="file"
+                    accept="image/*"
+                    ref={appImageRef}
+                    onChange={(e) => setAppImage(e.target.files[0])}
+                  />
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    startIcon={<UploadFile />}
+                    onClick={() => appImageRef?.current?.click()}
+                  >
+                    App image
+                  </Button>
+                  {appImageUrl && appImage && (
+                    <Box mt={3}>
+                      <img
+                        src={appImageUrl}
+                        style={{
+                          width: 250,
+                          height: 250,
+                        }}
+                      />
+                    </Box>
+                  )}
                 </Grid>
               </Grid>
             </CardContent>

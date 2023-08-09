@@ -1,6 +1,8 @@
 import NextLink from "next/link";
 import PropTypes from "prop-types";
 import {
+  Box,
+  Button,
   IconButton,
   Table,
   TableBody,
@@ -8,6 +10,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
@@ -39,12 +42,12 @@ export const PointListTable = (props) => {
             <TableRow>
               <TableCell>Assortment</TableCell>
               <TableCell>av cooking time</TableCell>
+              <TableCell>commission</TableCell>
               <TableCell>opening time</TableCell>
               <TableCell>closing time</TableCell>
               <TableCell>phones</TableCell>
               <TableCell>min check amount</TableCell>
-              <TableCell>latitude</TableCell>
-              <TableCell>longitude</TableCell>
+              <TableCell>address</TableCell>
               <TableCell>status</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
@@ -55,6 +58,7 @@ export const PointListTable = (props) => {
                 <TableRow hover key={point.id}>
                   <TableCell>{point.assortment}</TableCell>
                   <TableCell>{point.averageCookingTime}</TableCell>
+                  <TableCell>{point.commission}</TableCell>
                   <TableCell>{point.openingTime}</TableCell>
                   <TableCell>{point.closingTime}</TableCell>
                   <TableCell>
@@ -65,26 +69,42 @@ export const PointListTable = (props) => {
                   <TableCell>
                     {point.minimumCheckAmount?.toLocaleString("ru")}
                   </TableCell>
-                  <TableCell>{point.geolocationLatitude}</TableCell>
-                  <TableCell>{point.geolocationLongitude}</TableCell>
+                  <TableCell>
+                    <Button
+                      onClick={() =>
+                        showInMap(
+                          point?.address?.latitude,
+                          point?.address?.longitude
+                        )
+                      }
+                    >
+                      {point?.address?.name}
+                    </Button>
+                  </TableCell>
                   <TableCell>{point.status}</TableCell>
                   <TableCell align="right">
-                    <NextLink
-                      href={`/dashboard/partners/${partnerId}/points/${point.id}/edit`}
-                      passHref
-                    >
-                      <IconButton component="a">
-                        <PencilAltIcon fontSize="small" />
-                      </IconButton>
-                    </NextLink>
-                    <NextLink
-                      href={`/dashboard/partners/${partnerId}/points/${point?.id}/products`}
-                      passHref
-                    >
-                      <IconButton component="a">
-                        <ArrowRightIcon fontSize="small" />
-                      </IconButton>
-                    </NextLink>
+                    <Box display="flex">
+                      <NextLink
+                        href={`/dashboard/partners/${partnerId}/points/${point.id}/edit`}
+                        passHref
+                      >
+                        <Tooltip title="Edit">
+                          <IconButton component="a">
+                            <PencilAltIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </NextLink>
+                      <NextLink
+                        href={`/dashboard/partners/${partnerId}/points/${point?.id}/products`}
+                        passHref
+                      >
+                        <Tooltip title="Products">
+                          <IconButton component="a">
+                            <ArrowRightIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </NextLink>
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))

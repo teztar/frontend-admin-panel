@@ -11,6 +11,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
@@ -94,17 +95,21 @@ export const PartnerListTable = (props) => {
                       href={`/dashboard/partners/${partner.id}/edit`}
                       passHref
                     >
-                      <IconButton component="a">
-                        <PencilAltIcon fontSize="small" />
-                      </IconButton>
+                      <Tooltip title="Edit">
+                        <IconButton component="a">
+                          <PencilAltIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
                     </NextLink>
                     <NextLink
                       href={`/dashboard/partners/${partner.id}/points`}
                       passHref
                     >
-                      <IconButton component="a">
-                        <ArrowRightIcon fontSize="small" />
-                      </IconButton>
+                      <Tooltip title={partner.brand + " points"}>
+                        <IconButton component="a">
+                          <ArrowRightIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
                     </NextLink>
                   </TableCell>
                 </TableRow>

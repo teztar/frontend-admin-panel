@@ -32,7 +32,7 @@ export const BonusListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Product category</TableCell>
+              <TableCell>category</TableCell>
               <TableCell>Type</TableCell>
               <TableCell>Commission</TableCell>
               <TableCell>Bonus From Our Side</TableCell>
@@ -47,7 +47,7 @@ export const BonusListTable = (props) => {
           <TableBody>
             {bonuses.map((bonus) => (
               <TableRow hover key={bonus.id}>
-                <TableCell>{bonus.productCategory}</TableCell>
+                <TableCell>{bonus.category}</TableCell>
                 <TableCell>{bonus.type}</TableCell>
                 <TableCell>{bonus.commission}</TableCell>
                 <TableCell>{bonus.bonusFromOurSide}</TableCell>

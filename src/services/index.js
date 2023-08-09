@@ -79,6 +79,7 @@ export {
   createBanner,
   deleteBanner,
   updateBanner,
+  getBannerImage,
 } from "./banners.service";
 
 export {
