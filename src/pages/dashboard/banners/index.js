@@ -90,7 +90,7 @@ const BannerList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Banners</Typography>
+                <Typography variant="h4">Баннеры</Typography>
               </Grid>
               <Grid item>
                 <NextLink href="/dashboard/banners/new" passHref>

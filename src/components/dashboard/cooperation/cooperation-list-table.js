@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { format } from "date-fns";
 import PropTypes from "prop-types";
 import {
   Avatar,
@@ -9,13 +11,17 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import TablePaginationActions from "@utils/tablePaginationActions";
 import { getInitials } from "@utils/get-initials";
+import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
+import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
 import { Scrollbar } from "../../scrollbar";
 import { SeverityPill } from "@components/severity-pill";
-import { format } from "date-fns";
 import { showInMap } from "@utils/showInMap";
+import { CooperationStatusModal } from "./cooperation-status-modal";
 
 export const CooperationListTable = (props) => {
   const {
@@ -27,6 +33,21 @@ export const CooperationListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
+
+  const [open, setOpen] = useState(false);
+  const [openCooperationDetails, setOpenCooperationDetails] = useState(false);
+
+  const [currentCooperation, setCurrentCooperation] = useState();
+
+  const toggleModal = (cooperation) => {
+    setOpen((prevValue) => !prevValue);
+    setCurrentCooperation(cooperation);
+  };
+
+  const toggleCooperationDetailsModal = (cooperation) => {
+    setCurrentCooperation(cooperation);
+    setOpenCooperationDetails((prevValue) => !prevValue);
+  };
 
   return (
     <div {...other}>
@@ -40,6 +61,7 @@ export const CooperationListTable = (props) => {
               <TableCell>Birth date</TableCell>
               <TableCell>Address</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -101,11 +123,41 @@ export const CooperationListTable = (props) => {
                     {cooperation.status}
                   </SeverityPill>
                 </TableCell>
+                <TableCell align="right">
+                  <Box display="flex">
+                    <Tooltip title="Change status">
+                      <IconButton
+                        component="a"
+                        onClick={() => toggleModal(cooperation)}
+                      >
+                        <PencilAltIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title="Cooperation details">
+                      <IconButton
+                        component="a"
+                        onClick={() =>
+                          toggleCooperationDetailsModal(cooperation)
+                        }
+                      >
+                        <ArrowRightIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </Scrollbar>
+      {open && (
+        <CooperationStatusModal
+          open={open}
+          handleClose={toggleModal}
+          cooperation={currentCooperation}
+        />
+      )}
       <TablePagination
         component="div"
         count={cooperationsCount}

@@ -98,7 +98,7 @@ const CourierList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Couriers</Typography>
+                <Typography variant="h4">Курьеры</Typography>
               </Grid>
               <Grid item>
                 <NextLink href="/dashboard/couriers/new" passHref>

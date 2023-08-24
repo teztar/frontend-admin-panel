@@ -33,3 +33,17 @@ export const getCooperation = createAsyncThunk(
     }
   }
 );
+
+export const updateCooperation = createAsyncThunk(
+  "cooperation/updateCooperation",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.put("/cooperation/change/status", values);
+      toast.success("Статус cooperationa обнавлен");
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.messages);
+    }
+  }
+);

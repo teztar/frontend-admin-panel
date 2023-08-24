@@ -73,66 +73,66 @@ const getSections = (t) => [
     ],
   },
   {
-    title: t("Management"),
+    title: t("Управление"),
     items: [
       {
-        title: t("Transactions"),
+        title: t("Транзакции"),
         path: "/dashboard/transactions",
         icon: <ReceiptIcon fontSize="small" />,
       },
       {
-        title: t("Cooperation"),
+        title: t("Сотрудничество"),
         path: "/dashboard/cooperation",
         icon: <CorporateFareIcon fontSize="small" />,
       },
       {
-        title: t("Banners"),
+        title: t("Баннеры"),
         path: "/dashboard/banners",
         icon: <ViewCarouselIcon fontSize="small" />,
       },
       {
-        title: t("Partners"),
+        title: t("Партнёры"),
         path: "/dashboard/partners",
         icon: <HandshakeIcon fontSize="small" />,
       },
       {
-        title: t("Partners Balance"),
+        title: t("Баланс партнёров"),
         path: "/dashboard/partners-balance",
         icon: <MoneyIcon fontSize="small" />,
       },
       {
-        title: t("Orders"),
+        title: t("Заказы"),
         icon: <ShoppingCartIcon fontSize="small" />,
         path: "/dashboard/orders",
       },
       {
-        title: t("Bonuses"),
+        title: t("Бонусы"),
         path: "/dashboard/bonuses",
         icon: <CardGiftcardIcon fontSize="small" />,
       },
 
       {
-        title: t("Push Notifications"),
+        title: t("Push-уведомления"),
         path: "/dashboard/push-notifications",
         icon: <NotificationsActiveIcon fontSize="small" />,
       },
       {
-        title: t("Clients"),
+        title: t("Клиенты"),
         path: "/dashboard/clients",
         icon: <SupervisedUserCircleIcon fontSize="small" />,
       },
       {
-        title: t("Couriers"),
+        title: t("Курьеры"),
         path: "/dashboard/couriers",
         icon: <AssistWalkerIcon fontSize="small" />,
       },
       {
-        title: t("Users"),
+        title: t("Пользователи"),
         path: "/dashboard/users",
         icon: <UsersIcon fontSize="small" />,
       },
       {
-        title: t("Roles"),
+        title: t("Роли"),
         path: "/dashboard/roles",
         icon: <LockClosedIcon fontSize="small" />,
       },

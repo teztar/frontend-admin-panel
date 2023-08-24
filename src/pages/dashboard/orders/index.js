@@ -130,7 +130,7 @@ const OrderList = () => {
                 sx={{ m: 1.5 }}
                 value={status}
               >
-                <option></option>
+                <option>Все</option>
                 {orderStatuses.map((option) => (
                   <option key={option.key} value={option.key}>
                     {option.value}

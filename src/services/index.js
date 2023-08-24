@@ -88,7 +88,11 @@ export {
   downloadTransactionsFile,
 } from "./transactions.service";
 
-export { getCooperation, getCooperations } from "./cooperations.service";
+export {
+  getCooperation,
+  getCooperations,
+  updateCooperation,
+} from "./cooperations.service";
 
 export {
   getPartnersBalance,

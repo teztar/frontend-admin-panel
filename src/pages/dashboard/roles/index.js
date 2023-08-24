@@ -90,7 +90,7 @@ const RoleList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Roles</Typography>
+                <Typography variant="h4">Роли</Typography>
               </Grid>
               <Grid item>
                 <NextLink href="/dashboard/roles/new" passHref>

@@ -350,7 +350,7 @@ export const PointEditForm = (props) => {
                         center: [38.559772, 68.787038],
                         zoom: 11,
                       }}
-                      options={{ maxZoom: 11, minZoom: 8 }}
+                      options={{ minZoom: 8 }}
                       width="100%"
                       height="300px"
                       onClick={(map) => {

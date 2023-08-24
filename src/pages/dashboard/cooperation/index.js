@@ -14,7 +14,11 @@ import { CooperationListTable } from "@components/dashboard/cooperation/cooperat
 import { Search as SearchIcon } from "@icons/search";
 import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
-import { getCooperationRequestTypes, getCooperations } from "@services/index";
+import {
+  getCooperationRequestStatuses,
+  getCooperationRequestTypes,
+  getCooperations,
+} from "@services/index";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 
@@ -62,6 +66,8 @@ const CooperationList = () => {
 
   useEffect(() => {
     dispatch(getCooperationRequestTypes());
+    dispatch(getCooperationRequestStatuses());
+    // dispatch(getCooperation({ id: "4ba8910f-26a1-4acc-aca8-2b9b3398dd28" }));
     gtm.push({ event: "page_view" });
   }, []);
 
@@ -99,7 +105,7 @@ const CooperationList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Cooperations</Typography>
+                <Typography variant="h4">Сотрудничество</Typography>
               </Grid>
             </Grid>
           </Box>

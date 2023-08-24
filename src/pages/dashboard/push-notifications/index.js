@@ -115,7 +115,7 @@ const PushNotificationList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Push Notifications</Typography>
+                <Typography variant="h4">Push-уведомления</Typography>
               </Grid>
               <Grid item>
                 <NextLink href="/dashboard/push-notifications/new" passHref>

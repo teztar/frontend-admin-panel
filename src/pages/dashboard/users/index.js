@@ -90,7 +90,7 @@ const UserList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Users</Typography>
+                <Typography variant="h4">Пользователи</Typography>
               </Grid>
               <Grid item>
                 <NextLink href="/dashboard/users/new" passHref>
