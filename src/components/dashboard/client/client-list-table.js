@@ -14,7 +14,6 @@ import {
   TableRow,
   Tooltip,
 } from "@mui/material";
-import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
 import EditIcon from "@mui/icons-material/Edit";
 import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import { getInitials } from "@utils/get-initials";
@@ -79,7 +78,7 @@ export const ClientListTable = (props) => {
                     </Avatar>
                     <Box sx={{ ml: 1 }}>
                       <NextLink
-                        href={`/dashboard/clients/${client.id}/edit`}
+                        href={`/dashboard/clients/${client.id}/orders`}
                         passHref
                       >
                         <Link color="inherit" variant="subtitle2">
@@ -121,17 +120,6 @@ export const ClientListTable = (props) => {
                     <Tooltip title="Edit client">
                       <IconButton component="a">
                         <PencilAltIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </NextLink>
-
-                  <NextLink
-                    href={`/dashboard/clients/${client.id}/orders`}
-                    passHref
-                  >
-                    <Tooltip title="Client orders">
-                      <IconButton component="a">
-                        <ArrowRightIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
                   </NextLink>

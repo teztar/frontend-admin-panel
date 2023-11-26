@@ -101,6 +101,7 @@ export const createBanner = createAsyncThunk(
       if (response.ok) {
         return response.json().then((data) => {
           toast.success("Banner успешно сохранились");
+          // history.push("/dashboard/banners");
           return toCamelCaseFormat(data);
         });
       }
@@ -135,17 +136,53 @@ export const updateBanner = createAsyncThunk(
   "banners/updateBanner",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/banners/update", values);
-      toast.success("Баннер обнавлен");
-      return response.data;
-    } catch (error) {
-      const errArray = Object.entries(error?.messages[0]?.error);
+      const accessToken = localStorage.getItem("accessToken");
 
-      for (const [key, value] of errArray) {
-        toast.error(`${key}: ${value}`);
+      const encryptedData = crypto.HmacSHA256(values.requestDigest, key);
+
+      const requestHeaders = new Headers();
+
+      requestHeaders.append("Authorization", "Bearer " + accessToken);
+      requestHeaders.append("Accept", "application/json");
+      requestHeaders.append("X-RequestDigest", encryptedData);
+
+      const requestOptions = {
+        method: "PUT",
+        headers: requestHeaders,
+        body: values.payload,
+        redirect: "follow",
+      };
+
+      const response = await fetch(API_URL + "/banners/update", requestOptions);
+
+      if (response.ok) {
+        return response.json().then((data) => {
+          toast.success("Banner успешно обновлен");
+          return toCamelCaseFormat(data);
+        });
       }
-      console.log(Object.entries(error.messages[0].error));
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+
+      if (!response.ok) {
+        return response.json().then((data) => {
+          const errors = () =>
+            data?.map((item) => {
+              return Object.values(item).map((err) => {
+                return toast.error(err, {
+                  duration: 10000,
+                });
+              });
+            });
+
+          errors();
+        });
+      }
+    } catch (error) {
+      error.messages.map((message) => {
+        return {
+          image: toast.error(message.image[0]),
+          client_id: toast.error(message.client_id[0]),
+        };
+      });
       return rejectWithValue(error.messages);
     }
   }

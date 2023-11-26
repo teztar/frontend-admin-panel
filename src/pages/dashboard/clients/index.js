@@ -90,7 +90,7 @@ const ClientList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Clients</Typography>
+                <Typography variant="h4">Клиенты</Typography>
               </Grid>
               <Grid item>
                 <NextLink href="/dashboard/clients/new" passHref>

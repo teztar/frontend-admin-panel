@@ -1,4 +1,5 @@
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import {
   Avatar,
@@ -19,6 +20,11 @@ import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import { getInitials } from "@utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
 import TablePaginationActions from "@utils/tablePaginationActions";
+import { styled } from "@mui/system";
+
+const CustomTableCell = styled(TableCell)(() => ({
+  cursor: "pointer",
+}));
 
 export const PartnerListTable = (props) => {
   const {
@@ -30,6 +36,8 @@ export const PartnerListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
+
+  const router = useRouter();
 
   return (
     <div {...other}>
@@ -50,7 +58,11 @@ export const PartnerListTable = (props) => {
             {partners && partners.length > 0 ? (
               partners.map((partner) => (
                 <TableRow hover key={partner.id}>
-                  <TableCell>
+                  <CustomTableCell
+                    onClick={() =>
+                      router.push(`/dashboard/partners/${partner.id}/points`)
+                    }
+                  >
                     <Box
                       sx={{
                         alignItems: "center",
@@ -80,16 +92,45 @@ export const PartnerListTable = (props) => {
                         </Typography>
                       </Box>
                     </Box>
-                  </TableCell>
-                  <TableCell>{partner.companyTin}</TableCell>
-                  <TableCell>{partner.directorName}</TableCell>
-                  <TableCell>{partner.email}</TableCell>
-                  <TableCell>
+                  </CustomTableCell>
+                  <CustomTableCell
+                    onClick={() =>
+                      router.push(`/dashboard/partners/${partner.id}/points`)
+                    }
+                  >
+                    {partner.companyTin}
+                  </CustomTableCell>
+                  <CustomTableCell
+                    onClick={() =>
+                      router.push(`/dashboard/partners/${partner.id}/points`)
+                    }
+                  >
+                    {partner.directorName}
+                  </CustomTableCell>
+                  <CustomTableCell
+                    onClick={() =>
+                      router.push(`/dashboard/partners/${partner.id}/points`)
+                    }
+                  >
+                    {partner.email}
+                  </CustomTableCell>
+                  <CustomTableCell
+                    onClick={() =>
+                      router.push(`/dashboard/partners/${partner.id}/points`)
+                    }
+                  >
                     {partner.phoneNumbers?.map((item) => (
                       <Typography key={item}>{item}</Typography>
                     ))}
-                  </TableCell>
-                  <TableCell>{partner.region}</TableCell>
+                  </CustomTableCell>
+                  <CustomTableCell
+                    onClick={() =>
+                      router.push(`/dashboard/partners/${partner.id}/points`)
+                    }
+                  >
+                    {partner.region}
+                  </CustomTableCell>
+
                   <TableCell align="right">
                     <NextLink
                       href={`/dashboard/partners/${partner.id}/edit`}

@@ -55,7 +55,6 @@ export const getCourierStats = createAsyncThunk(
 export const getCourierBalances = createAsyncThunk(
   "couriers/getCourierBalances",
   async (params, { rejectWithValue }) => {
-    console.log({ params });
     try {
       const response = await axios.get("/couriers/balance", {
         params: {

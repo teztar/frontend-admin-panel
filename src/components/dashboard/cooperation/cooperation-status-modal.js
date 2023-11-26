@@ -9,7 +9,7 @@ import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "src/store";
-import { updateOrder } from "@services/index";
+import { updateCooperation } from "@services/index";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -47,23 +47,30 @@ function BootstrapDialogTitle(props) {
   );
 }
 
-export const OrderStatusModal = (props) => {
+export const CooperationStatusModal = (props) => {
   const dispatch = useDispatch();
-  const { orderStatuses } = useSelector((state) => state.handbooks);
 
-  const { open, handleClose, order } = props;
+  const { cooperationRequestStatuses } = useSelector(
+    (state) => state.handbooks
+  );
 
-  const [status, setStatus] = useState(order.status);
+  const newCooperationRequestStatuses = cooperationRequestStatuses.filter(
+    (item) => item.key !== "PENDING"
+  );
 
-  const updateOrderStatus = () => {
-    dispatch(updateOrder({ id: order.id, status: status }));
+  const { open, handleClose, cooperation } = props;
+
+  const [status, setStatus] = useState(cooperation.status);
+
+  const updateCooperationStatus = () => {
+    dispatch(updateCooperation({ id: cooperation.id, status: "ACCEPTED" }));
     handleClose();
   };
 
   return (
     <BootstrapDialog onClose={handleClose} open={open}>
       <BootstrapDialogTitle onClose={handleClose}>
-        Update order status
+        Update cooperation status
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <TextField
@@ -75,7 +82,7 @@ export const OrderStatusModal = (props) => {
           value={status}
           SelectProps={{ native: true }}
         >
-          {orderStatuses?.map((option) => (
+          {newCooperationRequestStatuses?.map((option) => (
             <option key={option.key} value={option.key}>
               {option.value}
             </option>
@@ -83,7 +90,7 @@ export const OrderStatusModal = (props) => {
         </TextField>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={updateOrderStatus}>
+        <Button autoFocus onClick={updateCooperationStatus}>
           Save changes
         </Button>
       </DialogActions>

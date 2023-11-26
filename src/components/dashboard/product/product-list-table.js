@@ -29,7 +29,6 @@ export const ProductListTable = (props) => {
   } = props;
 
   const newProducts = useImageLoader("products", products, "image");
-  console.log({ newProducts });
 
   const partnerId = query?.partnerId;
   const pointId = query?.pointId;

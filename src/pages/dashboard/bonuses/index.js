@@ -90,7 +90,7 @@ const BonusList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Bonuses</Typography>
+                <Typography variant="h4">Бонусы</Typography>
               </Grid>
               <Grid item>
                 <NextLink href="/dashboard/bonuses/new" passHref>

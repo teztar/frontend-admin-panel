@@ -11,7 +11,7 @@ export const getProducts = createAsyncThunk(
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
           search: params?.search ?? "",
-          category: params?.category ?? "",
+          categoryId: params?.category ?? "",
           pointId: params?.pointId,
         },
       });

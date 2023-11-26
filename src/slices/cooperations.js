@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCooperation, getCooperations } from "@services/index";
+import {
+  getCooperation,
+  getCooperations,
+  updateCooperation,
+} from "@services/index";
 
 const initialState = {
   cooperations: [],
@@ -34,6 +38,16 @@ const cooperations = createSlice({
       state.transaction = action.payload?.payload;
     });
     builder.addCase(getCooperation.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(updateCooperation.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateCooperation.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(updateCooperation.rejected, (state) => {
       state.loading = false;
     });
   },

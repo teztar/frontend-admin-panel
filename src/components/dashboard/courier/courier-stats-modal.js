@@ -55,8 +55,6 @@ export const CourierStatsModal = (props) => {
   const { periods } = useSelector((state) => state.handbooks);
   const { courierStats } = useSelector((state) => state.couriers);
 
-  console.log({ courierStats });
-
   const { open, handleClose, courier } = props;
 
   const [period, setPeriod] = useState("YEAR");

@@ -18,8 +18,6 @@ const CourierBalanceList = () => {
 
   const courierId = router.query.courierId;
 
-  console.log(courierId);
-
   const { courierBalances } = useSelector((state) => state.couriers);
 
   useEffect(() => {

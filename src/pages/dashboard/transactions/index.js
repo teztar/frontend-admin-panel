@@ -141,7 +141,7 @@ const TransactionList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Transactions</Typography>
+                <Typography variant="h4">Транзакции</Typography>
               </Grid>
               <Grid item>
                 <Button

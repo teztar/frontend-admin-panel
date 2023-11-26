@@ -33,8 +33,6 @@ export const BannerListTable = (props) => {
 
   const newBanners = useBannersImageLoader(banners, "bannerImages");
 
-  console.log({ newBanners });
-
   const [open, setOpen] = useState(false);
 
   const [currentBanner, setCurrentBanner] = useState();

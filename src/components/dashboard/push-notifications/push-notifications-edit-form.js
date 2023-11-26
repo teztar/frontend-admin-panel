@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
-import * as Yup from "yup";
 import { Formik } from "formik";
 import {
   Button,
@@ -32,6 +31,7 @@ import { UploadFile } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import { removeEmptyBodyFields } from "@utils/axios";
 import { toSnakeCaseFormat } from "@utils/case-style";
+import { formatRFC3339 } from "date-fns";
 
 const sortBys = [
   "AGE",
@@ -92,28 +92,33 @@ export const PushNotificationEditForm = (props) => {
         sortBy: pushNotification?.sortBy || "",
         prefix: pushNotification?.prefix || "",
         sortValue: pushNotification?.sortValue || "",
-        webImage: webImage || "",
-        appImage: appImage || "",
+        webImage: mode === "edit" && pushNotification?.webImageUrl,
+        appImage: mode === "edit" && pushNotification?.appImageUrl,
         submit: null,
       }}
-      validationSchema={Yup.object().shape({
-        body: Yup.string().min(4).max(255),
-      })}
+      // validationSchema={Yup.object().shape({
+      //   body: Yup.string().min(4).max(255),
+      // })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
-          let data = {};
+          const newValues = {
+            ...values,
+            dispatchDate: formatRFC3339(new Date(values.dispatchDate)),
+            sortValue: values.prefix + values.sortValue,
+          };
+
+          delete newValues.appImage;
+          delete newValues.webImage;
+          delete newValues.prefix;
 
           const payload = JSON.stringify(
-            removeEmptyBodyFields(toSnakeCaseFormat(values))
+            removeEmptyBodyFields(toSnakeCaseFormat(newValues))
           );
 
           formData.append("payload", payload);
           formData.append("web_image", webImage);
           formData.append("app_image", appImage);
 
-          for (let pair of formData.entries()) {
-            data[pair[0]] = pair[1];
-          }
           if (mode === "create") {
             dispatch(
               createPushNotification({
