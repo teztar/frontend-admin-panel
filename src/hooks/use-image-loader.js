@@ -8,8 +8,10 @@ const useImageLoader = (routeName, items, imageKeyName) => {
 
   useEffect(() => {
     const fetchImages = async () => {
+      const newItems = Array.isArray(items) ? items : [items];
+
       const loadedImageArray = await Promise.all(
-        items.map(async (item) => {
+        newItems.map(async (item) => {
           try {
             const getImageUrl = `/api/admin/${routeName}/images/${item[imageKeyName].name}`;
             const encryptedData = crypto.HmacSHA256(getImageUrl, key);

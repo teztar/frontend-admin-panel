@@ -18,32 +18,21 @@ import {
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { UploadFile } from "@mui/icons-material";
 import { format } from "date-fns";
-import { useDispatch, useSelector } from "src/store";
+import { useDispatch } from "src/store";
 import { createBanner, updateBanner } from "@services/index";
 import { removeEmptyBodyFields } from "@utils/axios";
 import { toSnakeCaseFormat } from "@utils/case-style";
-import { getBannerImage } from "@services/banners.service";
+import useBannersImageLoader from "@hooks/use-banner-images";
 
 export const BannerEditForm = (props) => {
   const dispatch = useDispatch();
 
   const { banner, mode = "edit", ...other } = props;
 
-  const bannerImage = useSelector((state) => state.banners);
+  const newBanner = useBannersImageLoader(banner, "bannerImages")[0];
 
-  // const newBanner = useBannersImageLoader([banner], "bannerImages");
-
-  // console.log({ newBanner });
-
-  const webImageName = banner?.bannerImages?.find(
-    (item) => item.format === "WEB"
-  )?.name;
-  const appImageName = banner?.bannerImages?.find(
-    (item) => item.format === "APP"
-  )?.name;
-
-  const [webImage, setWebImage] = useState(banner?.webImage);
-  const [appImage, setAppImage] = useState(banner?.appImage);
+  const [webImage, setWebImage] = useState(newBanner?.webImageUrl);
+  const [appImage, setAppImage] = useState(newBanner?.appImageUrl);
 
   const [webImageUrl, setWebImageUrl] = useState(null);
   const [appImageUrl, setAppImageUrl] = useState(null);
@@ -52,8 +41,6 @@ export const BannerEditForm = (props) => {
   const webImageRef = useRef(null);
 
   const formData = new FormData();
-
-  console.log({ bannerImage });
 
   useEffect(() => {
     if (webImage) {
@@ -67,49 +54,24 @@ export const BannerEditForm = (props) => {
     }
   }, [appImage]);
 
-  useEffect(() => {
-    if (mode === "edit" && webImageName && appImageName) {
-      console.log({ webImageName });
-      console.log("daromad");
-      dispatch(getBannerImage({ filePath: webImageName }));
-
-      //  dispatch(getBannerImage({ filePath: appImageName }));
-
-      // setWebImageUrl(fetchWeb());
-      // setAppImageUrl(fetchApp());
-
-      // if (web && window) {
-      //   setWebImageUrl(window.URL.createObjectURL(web));
-      // }
-      // if (app && window) {
-      //   setAppImageUrl(window.URL.createObjectURL(app));
-      // }
-    }
-  }, [webImageName, appImageName]);
-
-  console.log({ webImageUrl });
-  console.log({ appImageUrl });
-
   return (
     <Formik
       enableReinitialize={mode === "edit" ? true : false}
       initialValues={{
-        id: banner?.id || "",
-        title: banner?.title || "",
-        body: banner?.body || "",
-        queue: banner?.queue || "",
-        link: banner?.link || "",
-        active: banner?.active || true,
-        startDate: banner?.startDate || null,
-        endDate: banner?.endDate || null,
-        webImage: webImage || "",
-        appImage: appImage || "",
+        id: newBanner?.id || "",
+        title: newBanner?.title || "",
+        body: newBanner?.body || "",
+        queue: newBanner?.queue || "",
+        link: newBanner?.link || "",
+        active: newBanner?.active || true,
+        startDate: newBanner?.startDate || null,
+        endDate: newBanner?.endDate || null,
+        webImage: mode === "edit" && newBanner?.webImageUrl,
+        appImage: mode === "edit" && newBanner?.appImageUrl,
         submit: null,
       }}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
-          let data = {};
-
           const newValues = {
             ...values,
             active: mode === "create" ? null : values.active,
@@ -117,21 +79,40 @@ export const BannerEditForm = (props) => {
             endDate: format(new Date(values.endDate), "yyyy-MM-dd"),
           };
 
+          delete newValues.appImage;
+          delete newValues.webImage;
+
           const payload = JSON.stringify(
             removeEmptyBodyFields(toSnakeCaseFormat(newValues))
           );
 
           formData.append("payload", payload);
-          formData.append("web_image", webImage);
-          formData.append("app_image", appImage);
-
-          for (let pair of formData.entries()) {
-            data[pair[0]] = pair[1];
+          // if (mode === "edit") {
+          if (!webImageUrl) {
+            formData.append(
+              "web_image",
+              new File([values.webImage], "webImage.png", {
+                type: "image/png",
+                lastModified: new Date(),
+              })
+            );
+          } else {
+            formData.append("web_image", webImage);
           }
 
-          console.log({ payload });
+          if (!appImageUrl) {
+            formData.append(
+              "app_image",
+              new File([values.appImage], "appImage.png", {
+                type: "image/png",
+                lastModified: new Date(),
+              })
+            );
+          } else {
+            formData.append("app_image", appImage);
+          }
+
           if (mode === "create") {
-            console.log("daromad");
             dispatch(
               createBanner({
                 payload: formData,
@@ -139,7 +120,12 @@ export const BannerEditForm = (props) => {
               })
             );
           } else {
-            dispatch(updateBanner(newValues));
+            dispatch(
+              updateBanner({
+                payload: formData,
+                requestDigest: payload,
+              })
+            );
           }
           setStatus({ success: true });
           setSubmitting(false);
@@ -330,6 +316,30 @@ export const BannerEditForm = (props) => {
                     </Box>
                   )}
                 </Grid>
+
+                {!webImageUrl && values.webImage && (
+                  <Grid item md={6} xs={12}>
+                    <img
+                      src={values.webImage}
+                      alt="web image"
+                      style={{
+                        width: 40,
+                      }}
+                    />
+                  </Grid>
+                )}
+
+                {!appImageUrl && values.appImage && (
+                  <Grid item md={6} xs={12}>
+                    <img
+                      src={values.appImage}
+                      alt="app image"
+                      style={{
+                        width: 40,
+                      }}
+                    />
+                  </Grid>
+                )}
               </Grid>
             </CardContent>
             <CardActions

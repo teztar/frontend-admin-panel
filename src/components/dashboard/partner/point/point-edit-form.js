@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
@@ -16,15 +17,20 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
+import { UploadFile } from "@mui/icons-material";
+import { format } from "date-fns";
 import { useDispatch } from "src/store";
 import { createPoint, updatePoint } from "@services/index";
-import { format } from "date-fns";
-import { useRef } from "react";
+import useImageLoader from "@hooks/use-image-loader";
+import { removeEmptyBodyFields } from "@utils/axios";
+import { toSnakeCaseFormat } from "@utils/case-style";
 
 export const PointEditForm = (props) => {
   const { point, mode = "edit", ...other } = props;
 
   const dispatch = useDispatch();
+
+  const newPoint = useImageLoader("points", point, "pointImage")[0];
 
   const { query } = useRouter();
 
@@ -32,6 +38,13 @@ export const PointEditForm = (props) => {
   const partnerId = query?.partnerId;
 
   const map = useRef(null);
+  const webImageRef = useRef(null);
+
+  const [webImage, setWebImage] = useState(newPoint?.imageUrl);
+
+  const [webImageUrl, setWebImageUrl] = useState(null);
+
+  const formData = new FormData();
 
   const handleGetGeoObject = async (map, setFieldValue) => {
     if (Array.isArray(map)) {
@@ -39,6 +52,7 @@ export const PointEditForm = (props) => {
       setFieldValue("location.longitude", map[1]);
     } else {
       const coords = map.get("coords");
+
       setFieldValue("location.latitude", coords[0]);
       setFieldValue("location.longitude", coords[1]);
     }
@@ -50,12 +64,20 @@ export const PointEditForm = (props) => {
     };
   });
 
+  useEffect(() => {
+    if (webImage) {
+      setWebImageUrl(URL.createObjectURL(webImage));
+    }
+  }, [webImage]);
+
   return (
     <Formik
-      enableReinitialize
+      enableReinitialize={mode === "edit" ? true : false}
       initialValues={{
         id: mode === "edit" ? pointId : "",
         partnerId: mode === "create" ? partnerId : "",
+        name: point?.name || "",
+        description: point?.description || "",
         assortment: point?.assortment || "",
         commission: point?.commission || "",
         averageCookingTime: point?.averageCookingTime || null,
@@ -63,11 +85,13 @@ export const PointEditForm = (props) => {
         location: {
           latitude: point?.address?.latitude || "",
           longitude: point?.address?.longitude || "",
+          name: point?.address?.name || "",
         },
         kitchenType: point?.kitchenType || "",
         minimumCheckAmount: point?.minimumCheckAmount || "",
-        openingTime: new Date("01/01/1970 " + point?.openingTime) || "",
+        openingTime: new Date("01/01/1970 " + point?.openingTime) || null,
         status: point?.status || "",
+        image: mode === "edit" ? newPoint?.imageUrl : webImageUrl,
         phoneNumbers:
           pointPhones && pointPhones.length > 0
             ? pointPhones
@@ -83,20 +107,22 @@ export const PointEditForm = (props) => {
         // kitchenType: Yup.string().max(255).required(),
         // minimumCheckAmount: Yup.string().max(255).required(),
         // openingTime: Yup.string().required(),
-        phoneNumbers: Yup.array().of(
-          Yup.object().shape({
-            phoneNumber: Yup.string()
-              .min(9)
-              .max(12)
-              .required("Phone number is required"),
-          })
-        ),
+        // phoneNumbers: Yup.array().of(
+        //   Yup.object().shape({
+        //     phoneNumber: Yup.string()
+        //       .min(9)
+        //       .max(12)
+        //       .required("Phone number is required"),
+        //   })
+        // ),
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
           const phonesWithPrefix = values.phoneNumbers.map(
             (item) => "+992" + item?.phoneNumber?.replaceAll(" ", "")
           );
+
+          let data = {};
 
           const newValues = {
             ...values,
@@ -108,9 +134,32 @@ export const PointEditForm = (props) => {
             closingTime: format(new Date(values.closingTime), "HH:mm"),
             openingTime: format(new Date(values.openingTime), "HH:mm"),
             minimumCheckAmount: +values.minimumCheckAmount,
+            commission: +values.commission,
+            location: {
+              latitude: values.location.latitude.toString(),
+              longitude: values.location.longitude.toString(),
+              name: values.location.name,
+            },
           };
+
+          const payload = JSON.stringify(
+            removeEmptyBodyFields(toSnakeCaseFormat(newValues))
+          );
+
+          formData.append("payload", payload);
+          formData.append("image", webImage);
+
+          for (let pair of formData.entries()) {
+            data[pair[0]] = pair[1];
+          }
+
           if (mode === "create") {
-            dispatch(createPoint(newValues));
+            dispatch(
+              createPoint({
+                payload: formData,
+                requestDigest: payload,
+              })
+            );
           } else {
             dispatch(updatePoint(newValues));
           }
@@ -143,6 +192,32 @@ export const PointEditForm = (props) => {
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.name && errors.name)}
+                    fullWidth
+                    helperText={touched.name && errors.name}
+                    label="Name"
+                    name="name"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.name}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.description && errors.description)}
+                    fullWidth
+                    helperText={touched.description && errors.description}
+                    label="Description"
+                    name="description"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.description}
+                  />
+                </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
                     error={Boolean(touched.assortment && errors.assortment)}
@@ -190,7 +265,6 @@ export const PointEditForm = (props) => {
                     inputFormat="hh:mm"
                     label="Opening Time"
                     onChange={(time) => {
-                      console.log({ time });
                       setFieldValue("openingTime", time);
                     }}
                     renderInput={(inputProps) => (
@@ -266,6 +340,70 @@ export const PointEditForm = (props) => {
                 </Grid>
 
                 <Grid item md={6} xs={12}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        fullWidth
+                        // type="number"
+                        error={Boolean(
+                          touched.minimumCheckAmount &&
+                            errors.minimumCheckAmount
+                        )}
+                        helperText={
+                          touched.minimumCheckAmount &&
+                          errors.minimumCheckAmount
+                        }
+                        label="Minimum Check Amount"
+                        name="minimumCheckAmount"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.minimumCheckAmount}
+                        inputProps={{ maxLength: 9 }}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <input
+                        hidden
+                        type="file"
+                        accept="image/*"
+                        ref={webImageRef}
+                        onChange={(e) => setWebImage(e.target.files[0])}
+                      />
+                      <Button
+                        variant="contained"
+                        fullWidth
+                        startIcon={<UploadFile />}
+                        onClick={() => webImageRef?.current?.click()}
+                      >
+                        Web image
+                      </Button>
+                      {webImageUrl && webImage && (
+                        <Box mt={3}>
+                          <img
+                            src={webImageUrl}
+                            style={{
+                              width: 250,
+                              height: 250,
+                            }}
+                          />
+                        </Box>
+                      )}
+                    </Grid>
+                    {!webImageUrl && values.image && (
+                      <Grid item xs={12}>
+                        <img
+                          src={values.image}
+                          alt="image web"
+                          style={{
+                            width: 40,
+                          }}
+                        />
+                      </Grid>
+                    )}
+                  </Grid>
+                </Grid>
+                <Grid item md={6} xs={12}>
                   <FieldArray
                     name="phoneNumbers"
                     render={({ push, remove }) => (
@@ -319,25 +457,7 @@ export const PointEditForm = (props) => {
                     )}
                   />
                 </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    // type="number"
-                    error={Boolean(
-                      touched.minimumCheckAmount && errors.minimumCheckAmount
-                    )}
-                    helperText={
-                      touched.minimumCheckAmount && errors.minimumCheckAmount
-                    }
-                    label="Minimum Check Amount"
-                    name="minimumCheckAmount"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.minimumCheckAmount}
-                    inputProps={{ maxLength: 9 }}
-                  />
-                </Grid>
+
                 <Grid item xs={12}>
                   <YMaps
                     query={{
@@ -372,7 +492,10 @@ export const PointEditForm = (props) => {
                       />
                       <Placemark
                         // onClick={() => handlePoint(point)}
-                        geometry={[values.latitude, values.longitude]}
+                        geometry={[
+                          values.location.latitude,
+                          values.location.longitude,
+                        ]}
                         options={{
                           iconColor: "#ff0000",
                         }}

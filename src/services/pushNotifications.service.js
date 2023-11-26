@@ -44,7 +44,6 @@ export const getPushNotification = createAsyncThunk(
 export const createPushNotification = createAsyncThunk(
   "pushNotifications/createPushNotification",
   async (values, { rejectWithValue }) => {
-    console.log({ values });
     try {
       const accessToken = localStorage.getItem("accessToken");
 

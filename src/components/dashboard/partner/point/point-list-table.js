@@ -40,6 +40,8 @@ export const PointListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
+              <TableCell>name</TableCell>
+              {/* <TableCell>description</TableCell> */}
               <TableCell>Assortment</TableCell>
               <TableCell>av cooking time</TableCell>
               <TableCell>commission</TableCell>
@@ -56,6 +58,8 @@ export const PointListTable = (props) => {
             {points && points.length > 0 ? (
               points.map((point) => (
                 <TableRow hover key={point.id}>
+                  <TableCell>{point.name}</TableCell>
+                  {/* <TableCell>{point.description}</TableCell> */}
                   <TableCell>{point.assortment}</TableCell>
                   <TableCell>{point.averageCookingTime}</TableCell>
                   <TableCell>{point.commission}</TableCell>

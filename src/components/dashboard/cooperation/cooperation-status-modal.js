@@ -49,8 +49,13 @@ function BootstrapDialogTitle(props) {
 
 export const CooperationStatusModal = (props) => {
   const dispatch = useDispatch();
+
   const { cooperationRequestStatuses } = useSelector(
     (state) => state.handbooks
+  );
+
+  const newCooperationRequestStatuses = cooperationRequestStatuses.filter(
+    (item) => item.key !== "PENDING"
   );
 
   const { open, handleClose, cooperation } = props;
@@ -58,7 +63,7 @@ export const CooperationStatusModal = (props) => {
   const [status, setStatus] = useState(cooperation.status);
 
   const updateCooperationStatus = () => {
-    dispatch(updateCooperation({ id: cooperation.id, status: status }));
+    dispatch(updateCooperation({ id: cooperation.id, status: "ACCEPTED" }));
     handleClose();
   };
 
@@ -77,7 +82,7 @@ export const CooperationStatusModal = (props) => {
           value={status}
           SelectProps={{ native: true }}
         >
-          {cooperationRequestStatuses?.map((option) => (
+          {newCooperationRequestStatuses?.map((option) => (
             <option key={option.key} value={option.key}>
               {option.value}
             </option>

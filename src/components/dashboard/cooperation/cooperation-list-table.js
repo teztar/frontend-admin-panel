@@ -129,6 +129,7 @@ export const CooperationListTable = (props) => {
                       <IconButton
                         component="a"
                         onClick={() => toggleModal(cooperation)}
+                        disabled={cooperation.status === "ACCEPTED"}
                       >
                         <PencilAltIcon fontSize="small" />
                       </IconButton>

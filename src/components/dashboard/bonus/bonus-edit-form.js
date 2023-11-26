@@ -18,7 +18,6 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch, useSelector } from "src/store";
 import {
   createBonus,
@@ -26,14 +25,21 @@ import {
   getBonusTypes,
   getPartners,
   getPoints,
+  getProductCategories,
+  getProducts,
   updateBonus,
 } from "@services/index";
-import { format } from "date-fns";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { formatRFC3339 } from "date-fns";
 
 export const BonusEditForm = (props) => {
   const dispatch = useDispatch();
 
   const { partners } = useSelector((state) => state.partners);
+
+  const { products, productCategories } = useSelector(
+    (state) => state.products
+  );
 
   const { bonusCategories, bonusTypes } = useSelector(
     (state) => state.handbooks
@@ -43,35 +49,72 @@ export const BonusEditForm = (props) => {
 
   const { bonus, mode = "edit", ...other } = props;
 
-  const [partnerId, setPartnerId] = useState();
+  const [partnerId, setPartnerId] = useState(bonus?.partnerId);
+  const [pointId, setPointId] = useState(bonus?.pointId);
+  const [productCategoryId, setProductCategoryId] = useState(
+    bonus?.productCategoryId
+  );
 
   useEffect(() => {
     dispatch(getBonusTypes());
     dispatch(getBonusCategories());
-    dispatch(getPartners());
+    dispatch(getPartners({ perPage: 100 }));
   }, []);
 
   useEffect(() => {
     if (partnerId) {
       dispatch(getPoints({ partnerId: partnerId }));
     }
-  }, [partnerId]);
+  }, [partnerId, bonus]);
+
+  useEffect(() => {
+    if (pointId) {
+      dispatch(getProductCategories({ pointId }));
+    }
+  }, [pointId, bonus]);
+
+  useEffect(() => {
+    if (productCategoryId) {
+      dispatch(
+        getProducts({
+          pointId: pointId,
+          perPage: Number(100),
+          categoryId: productCategoryId,
+        })
+      );
+    }
+  }, [productCategoryId, bonus]);
+
+  useEffect(() => {
+    if (bonus) {
+      dispatch(getPoints({ partnerId: bonus.partnerId }));
+      dispatch(getProductCategories({ pointId: bonus.pointId }));
+      dispatch(
+        getProducts({
+          pointId: bonus.pointId,
+          perPage: Number(100),
+          categoryId: bonus.productCategoryId,
+        })
+      );
+    }
+  }, [bonus]);
 
   return (
     <Formik
-      enableReinitialize={true}
+      enableReinitialize={mode === "edit" ? true : false}
       initialValues={{
         id: bonus?.id || "",
         active: bonus?.active || true,
         commission: bonus?.commission || "",
+        partnerId: bonus?.partnerId || "",
         startDate: bonus?.startDate || null,
         endDate: bonus?.endDate || null,
-        fixBonus: bonus?.fixBonus || "",
         bonusFromOurSide: bonus?.bonusFromOurSide || "",
         bonusFromPartner: bonus?.bonusFromPartner || "",
         pointId: bonus?.pointId || "",
         productId: bonus?.productId || "",
-        productCategory: bonus?.productCategory || "",
+        category: bonus?.category || "",
+        productCategoryId: bonus?.productCategoryId || "",
         type: bonus?.type || "",
         submit: null,
       }}
@@ -79,13 +122,13 @@ export const BonusEditForm = (props) => {
         try {
           const newValues = {
             ...values,
-            partnerId: null,
             pointId: mode === "edit" ? null : values.pointId,
-            startDate: format(new Date(values.startDate), "yyyy-MM-dd"),
-            endDate: format(new Date(values.endDate), "yyyy-MM-dd"),
+            startDate: formatRFC3339(new Date(values.startDate)),
+            endDate: formatRFC3339(new Date(values.endDate)),
           };
 
-          console.log({ newValues });
+          delete newValues?.partnerId;
+
           if (mode === "create") {
             dispatch(createBonus(newValues));
           } else {
@@ -121,31 +164,147 @@ export const BonusEditForm = (props) => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
-                  <DatePicker
-                    inputFormat="dd/MM/yyyy"
-                    label="Start date"
-                    onChange={(date) => {
-                      setFieldValue("startDate", date);
-                    }}
-                    renderInput={(inputProps) => (
-                      <TextField fullWidth {...inputProps} />
-                    )}
-                    value={values.startDate}
-                  />
+                  <FormControl fullWidth>
+                    <InputLabel id="partnerId-label">Partner</InputLabel>
+                    <Select
+                      labelId="partnerId-label"
+                      value={values.partnerId}
+                      label="Partner"
+                      name="partnerId"
+                      onChange={handleChange}
+                    >
+                      {partners.map((partner) => (
+                        <MenuItem
+                          key={partner.id}
+                          value={partner.id}
+                          onClick={() => setPartnerId(partner?.id)}
+                        >
+                          {partner?.brand}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
+
                 <Grid item md={6} xs={12}>
-                  <DatePicker
-                    inputFormat="dd/MM/yyyy"
-                    label="End date"
-                    onChange={(date) => {
-                      setFieldValue("endDate", date);
-                    }}
-                    renderInput={(inputProps) => (
-                      <TextField fullWidth {...inputProps} />
-                    )}
-                    value={values.endDate}
-                  />
+                  <FormControl fullWidth disabled={!partnerId && pointId}>
+                    <InputLabel id="point-label">Point</InputLabel>
+                    <Select
+                      labelId="point-label"
+                      value={values.pointId}
+                      label="Point"
+                      name="pointId"
+                      onChange={handleChange}
+                    >
+                      {points.map((point) => (
+                        <MenuItem
+                          key={point.id}
+                          value={point.id}
+                          onClick={() => setPointId(point.id)}
+                        >
+                          {point?.assortment}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="productType-label">Type</InputLabel>
+                    <Select
+                      labelId="productType-label"
+                      value={values.type}
+                      label="Type"
+                      name="type"
+                      onChange={handleChange}
+                    >
+                      {bonusTypes.map((productType) => (
+                        <MenuItem key={productType.key} value={productType.key}>
+                          {productType.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="productCategory-label">Category</InputLabel>
+                    <Select
+                      labelId="productCategory-label"
+                      value={values.category}
+                      label="Category"
+                      name="category"
+                      onChange={handleChange}
+                    >
+                      {bonusCategories?.map((category) => (
+                        <MenuItem key={category.key} value={category.key}>
+                          {category.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                {values.category !== "OUR" && (
+                  <Grid item md={6} xs={12}>
+                    <FormControl
+                      fullWidth
+                      disabled={!values.pointId && !pointId}
+                    >
+                      <InputLabel id="productType-label">
+                        Product Caregory
+                      </InputLabel>
+                      <Select
+                        labelId="productType-label"
+                        value={values.productCategoryId}
+                        label="Product Caregory"
+                        name="productCategoryId"
+                        onChange={handleChange}
+                      >
+                        {productCategories.map((productCategory) => (
+                          <MenuItem
+                            key={productCategory.id}
+                            value={productCategory.id}
+                            onClick={() =>
+                              setProductCategoryId(productCategory.id)
+                            }
+                          >
+                            {productCategory.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+
+                {values.category !== "OUR" && values.category !== "FIX" && (
+                  <Grid item md={6} xs={12}>
+                    <FormControl
+                      fullWidth
+                      disabled={!values.productCategoryId && !productCategoryId}
+                    >
+                      <InputLabel id="productId-label">Product</InputLabel>
+                      <Select
+                        name="productId"
+                        label="Product"
+                        labelId="productId-label"
+                        value={values.productId}
+                        onChange={(e) => {
+                          setFieldValue("productId", e.target.value);
+                        }}
+                      >
+                        {products.map((product) => (
+                          <MenuItem key={product.id} value={product.id}>
+                            {product.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+
                 <Grid item md={6} xs={12}>
                   <TextField
                     required
@@ -184,88 +343,45 @@ export const BonusEditForm = (props) => {
                 </Grid>
 
                 <Grid item md={6} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel id="partnerId-label">Partner</InputLabel>
-                    <Select
-                      labelId="partnerId-label"
-                      value={values.partnerId}
-                      label="Partner"
-                      name="partnerId"
-                      onChange={handleChange}
-                    >
-                      {partners.map((partner) => (
-                        <MenuItem
-                          key={partner.id}
-                          value={partner.id}
-                          onClick={() => setPartnerId(partner?.id)}
-                        >
-                          {partner?.brand}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                  <TextField
+                    required
+                    fullWidth
+                    type="number"
+                    error={Boolean(touched.commission && errors.commission)}
+                    helperText={touched.commission && errors.commission}
+                    name="commission"
+                    label="Commission"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.commission}
+                  />
                 </Grid>
 
                 <Grid item md={6} xs={12}>
-                  <FormControl fullWidth disabled={!partnerId}>
-                    <InputLabel id="point-label">Point</InputLabel>
-                    <Select
-                      labelId="point-label"
-                      value={values.pointId}
-                      label="Point"
-                      name="pointId"
-                      onChange={handleChange}
-                    >
-                      {points.map((point) => (
-                        <MenuItem key={point.id} value={point.id}>
-                          {point?.assortment}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                  <DateTimePicker
+                    ampm={false}
+                    label="Start date"
+                    onChange={(date) => {
+                      setFieldValue("startDate", date);
+                    }}
+                    renderInput={(inputProps) => (
+                      <TextField fullWidth {...inputProps} />
+                    )}
+                    value={values.startDate}
+                  />
                 </Grid>
-
                 <Grid item md={6} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel id="productCategory-label">
-                      Product Category
-                    </InputLabel>
-                    <Select
-                      labelId="productCategory-label"
-                      value={values.productCategory}
-                      label="Product Category"
-                      name="productCategory"
-                      onChange={handleChange}
-                    >
-                      {bonusCategories?.map((productCategory) => (
-                        <MenuItem
-                          key={productCategory.key}
-                          value={productCategory.key}
-                        >
-                          {productCategory.value}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid item md={6} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel id="productType-label">Product Type</InputLabel>
-                    <Select
-                      labelId="productType-label"
-                      value={values.type}
-                      label="Product Type"
-                      name="type"
-                      onChange={handleChange}
-                    >
-                      {bonusTypes.map((productType) => (
-                        <MenuItem key={productType.key} value={productType.key}>
-                          {productType.value}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                  <DateTimePicker
+                    ampm={false}
+                    label="End date"
+                    onChange={(date) => {
+                      setFieldValue("endDate", date);
+                    }}
+                    renderInput={(inputProps) => (
+                      <TextField fullWidth {...inputProps} />
+                    )}
+                    value={values.endDate}
+                  />
                 </Grid>
 
                 <Grid item md={6} xs={12}>

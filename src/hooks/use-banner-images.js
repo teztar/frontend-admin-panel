@@ -8,10 +8,12 @@ const useBannersImageLoader = (items, imageKeyName) => {
 
   useEffect(() => {
     const fetchImages = async () => {
+      const newItems = Array.isArray(items) ? items : [items];
+
       const loadedImageArray = await Promise.all(
-        items.map(async (item) => {
+        newItems.map(async (item) => {
           try {
-            const getMobileUrl = `/api/admin/banners/images/${item[imageKeyName][0].name}`;
+            const getMobileUrl = `/api/admin/banners/images/${item[imageKeyName][0]?.name}`;
             const encryptedMobileData = crypto.HmacSHA256(getMobileUrl, key);
             const accessToken = localStorage.getItem("accessToken");
             const mobileRequestHeaders = new Headers();
