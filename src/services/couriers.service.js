@@ -59,6 +59,7 @@ export const getCourierBalances = createAsyncThunk(
       const response = await axios.get("/couriers/balance", {
         params: {
           courierId: params?.id,
+          period: params?.period ?? "YEAR",
         },
       });
       return response.data;
@@ -75,6 +76,23 @@ export const createCourier = createAsyncThunk(
     try {
       const response = await axios.post("/couriers/new", values);
       toast.success("Курьер добавлен");
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.messages);
+    }
+  }
+);
+
+export const createPayDebtAmount = createAsyncThunk(
+  "couriers/createPayDebtAmount",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        "/couriers/balance/pay_debt_amount",
+        values
+      );
+      toast.success("Pay debt amount success");
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

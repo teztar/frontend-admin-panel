@@ -6,6 +6,7 @@ import {
   updateCourier,
   getCourierBalances,
   getCourierStats,
+  createPayDebtAmount,
 } from "@services/index";
 
 const initialState = {
@@ -75,6 +76,16 @@ const couriers = createSlice({
       state.loading = false;
     });
     builder.addCase(createCourier.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(createPayDebtAmount.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(createPayDebtAmount.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(createPayDebtAmount.rejected, (state) => {
       state.loading = false;
     });
 
