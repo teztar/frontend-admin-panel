@@ -57,6 +57,7 @@ export {
   updateCourier,
   getCourierStats,
   getCourierBalances,
+  createPayDebtAmount,
 } from "./couriers.service";
 
 export {

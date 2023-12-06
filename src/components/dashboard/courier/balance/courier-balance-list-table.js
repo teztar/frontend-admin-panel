@@ -1,90 +1,66 @@
-import { useState } from "react";
-import NextLink from "next/link";
 import PropTypes from "prop-types";
-import {
-  Avatar,
-  Box,
-  Link,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import { getInitials } from "@utils/get-initials";
-import { format } from "date-fns";
+import { styled } from "@mui/system";
+import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { Scrollbar } from "@components/scrollbar";
 
+const CustomTableCell = styled(TableCell)(() => ({
+  textTransform: "uppercase",
+  fontWeight: "bold",
+}));
 export const CourierBalanceListTable = (props) => {
   const { courierBalances, ...other } = props;
 
-  const [open, setOpen] = useState(false);
-
-  const [currentCourier, setCurrentCourier] = useState();
-
-  const toggleModal = (courier) => {
-    console.log({ courier });
-    setOpen((prevValue) => !prevValue);
-    setCurrentCourier(courier);
-  };
+  console.log({ courierBalances });
 
   return (
     <div {...other}>
       <Scrollbar>
         <Table sx={{ minWidth: 700 }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>FIO</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Birthdate</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Passport</TableCell>
-              <TableCell>Start Work Time</TableCell>
-              <TableCell>End Work Time</TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
           <TableBody>
-            {courierBalances.map((courier) => (
-              <TableRow hover key={courier.id}>
-                <TableCell>
-                  <Box
-                    sx={{
-                      alignItems: "center",
-                      display: "flex",
-                    }}
-                  >
-                    <Avatar
-                      src={courier.avatar}
-                      sx={{
-                        height: 42,
-                        width: 42,
-                      }}
-                    >
-                      {getInitials(courier.name)}
-                    </Avatar>
-                    <Box sx={{ ml: 1 }}>
-                      <NextLink
-                        href={`/dashboard/couriers/${courier.id}/edit`}
-                        passHref
-                      >
-                        <Link color="inherit" variant="subtitle2">
-                          {courier.surname} {courier.name} {courier.patronymic}
-                        </Link>
-                      </NextLink>
-                    </Box>
-                  </Box>
-                </TableCell>
-                <TableCell>{courier.status}</TableCell>
-                <TableCell>
-                  {format(new Date(courier.dateOfBirth), "dd-MM-yyyy")}
-                </TableCell>
-                <TableCell>{courier.phoneNumber}</TableCell>
-                <TableCell>{courier.passportSeries}</TableCell>
-                <TableCell>{courier.startWorkTime}</TableCell>
-                <TableCell>{courier.endWorkTime}</TableCell>
-              </TableRow>
-            ))}
+            <TableRow hover>
+              <CustomTableCell>сумма долга за этот период</CustomTableCell>
+              <CustomTableCell>
+                {courierBalances?.thisPeriodDebtAmount}
+              </CustomTableCell>
+            </TableRow>
+            <TableRow>
+              <CustomTableCell>
+                сумма доставленного заказа за этот период
+              </CustomTableCell>
+              <CustomTableCell>
+                {courierBalances?.thisPeriodDeliveredOrderAmount}
+              </CustomTableCell>
+            </TableRow>
+
+            <TableRow>
+              <CustomTableCell>сумма дохода за этот период</CustomTableCell>
+              <CustomTableCell>
+                {courierBalances?.thisPeriodIncomeAmount}
+              </CustomTableCell>
+            </TableRow>
+
+            <TableRow>
+              <CustomTableCell>общая сумма долга</CustomTableCell>
+              <CustomTableCell>
+                {courierBalances?.totalDebtAmount}
+              </CustomTableCell>
+            </TableRow>
+
+            <TableRow>
+              <CustomTableCell>
+                общая сумма доставленного заказа
+              </CustomTableCell>
+              <CustomTableCell>
+                {courierBalances?.totalDeliveredOrderAmount}
+              </CustomTableCell>
+            </TableRow>
+
+            <TableRow>
+              <CustomTableCell>общее количество поступлений</CustomTableCell>
+              <CustomTableCell>
+                {courierBalances?.totalIncomeAmount}
+              </CustomTableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </Scrollbar>
@@ -93,5 +69,5 @@ export const CourierBalanceListTable = (props) => {
 };
 
 CourierBalanceListTable.propTypes = {
-  courierBalances: PropTypes.array.isRequired,
+  courierBalances: PropTypes.object.isRequired,
 };
