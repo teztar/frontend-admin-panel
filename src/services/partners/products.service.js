@@ -38,13 +38,26 @@ export const getProduct = createAsyncThunk(
   }
 );
 
-export const getProductCategories = createAsyncThunk(
-  "products/getProductCategories",
+export const getProductCategoriesByPoint = createAsyncThunk(
+  "products/getProductCategoriesByPoint",
   async (params, { rejectWithValue }) => {
     try {
       const response = await axios.get(
         `/products/categories/${params?.pointId}`
       );
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
+export const getProductCategories = createAsyncThunk(
+  "products/getProductCategories",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/products/categories");
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

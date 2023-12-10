@@ -34,6 +34,8 @@ export const PointListTable = (props) => {
 
   const partnerId = query?.partnerId;
 
+  // const newPoints = useImageLoader(points, "image", "image");
+
   return (
     <div {...other}>
       <Scrollbar>
@@ -45,8 +47,8 @@ export const PointListTable = (props) => {
               <TableCell>Assortment</TableCell>
               <TableCell>av cooking time</TableCell>
               <TableCell>commission</TableCell>
-              <TableCell>opening time</TableCell>
-              <TableCell>closing time</TableCell>
+              <TableCell>opens in</TableCell>
+              <TableCell>closes in</TableCell>
               <TableCell>phones</TableCell>
               <TableCell>min check amount</TableCell>
               <TableCell>address</TableCell>

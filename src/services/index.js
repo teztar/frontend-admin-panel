@@ -21,6 +21,7 @@ export {
   createProduct,
   updateProduct,
   getProductImage,
+  getProductCategoriesByPoint,
   getProductCategories,
 } from "./partners/products.service";
 
@@ -122,4 +123,5 @@ export {
   getPeriods,
   getPointStatuses,
   getPrefixes,
+  getProductVolumes,
 } from "./handbooks.service";

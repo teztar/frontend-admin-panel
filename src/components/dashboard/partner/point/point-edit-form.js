@@ -46,12 +46,17 @@ export const PointEditForm = (props) => {
 
   const formData = new FormData();
 
+  const [locationName, setLocationName] = useState("");
+
   const handleGetGeoObject = async (map, setFieldValue) => {
+    console.log("Map:", map);
     if (Array.isArray(map)) {
       setFieldValue("location.latitude", map[0]);
       setFieldValue("location.longitude", map[1]);
     } else {
       const coords = map.get("coords");
+
+      console.log("Coords:", coords);
 
       setFieldValue("location.latitude", coords[0]);
       setFieldValue("location.longitude", coords[1]);
@@ -85,7 +90,7 @@ export const PointEditForm = (props) => {
         location: {
           latitude: point?.address?.latitude || "",
           longitude: point?.address?.longitude || "",
-          name: point?.address?.name || "",
+          name: point?.address?.name || "Rudaki 100",
         },
         kitchenType: point?.kitchenType || "",
         minimumCheckAmount: point?.minimumCheckAmount || "",
@@ -491,7 +496,6 @@ export const PointEditForm = (props) => {
                         }}
                       />
                       <Placemark
-                        // onClick={() => handlePoint(point)}
                         geometry={[
                           values.location.latitude,
                           values.location.longitude,
