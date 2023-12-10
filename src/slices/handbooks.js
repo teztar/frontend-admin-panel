@@ -18,6 +18,7 @@ import {
   getPeriods,
   getPointStatuses,
   getPrefixes,
+  getProductVolumes,
 } from "@services/index";
 
 const initialState = {
@@ -39,6 +40,7 @@ const initialState = {
   periods: [],
   pointStatuses: [],
   prefixes: [],
+  volumes: [],
   loading: true,
   error: null,
 };
@@ -249,6 +251,17 @@ const handbooks = createSlice({
       state.prefixes = action.payload?.payload;
     });
     builder.addCase(getPrefixes.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(getProductVolumes.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getProductVolumes.fulfilled, (state, action) => {
+      state.loading = false;
+      state.volumes = action.payload?.payload;
+    });
+    builder.addCase(getProductVolumes.rejected, (state) => {
       state.loading = false;
     });
   },

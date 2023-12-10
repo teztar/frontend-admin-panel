@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from "src/store";
 import {
   getPartner,
   getPoint,
-  getProductCategories,
+  getProductCategoriesByPoint,
   getProducts,
 } from "@services/index";
 
@@ -82,7 +82,7 @@ const ProductList = () => {
         pointId,
       })
     );
-    dispatch(getProductCategories({ pointId }));
+    dispatch(getProductCategoriesByPoint({ pointId }));
     gtm.push({ event: "page_view" });
   }, []);
 

@@ -25,7 +25,7 @@ import {
   getBonusTypes,
   getPartners,
   getPoints,
-  getProductCategories,
+  getProductCategoriesByPoint,
   getProducts,
   updateBonus,
 } from "@services/index";
@@ -69,7 +69,7 @@ export const BonusEditForm = (props) => {
 
   useEffect(() => {
     if (pointId) {
-      dispatch(getProductCategories({ pointId }));
+      dispatch(getProductCategoriesByPoint({ pointId }));
     }
   }, [pointId, bonus]);
 
@@ -88,7 +88,7 @@ export const BonusEditForm = (props) => {
   useEffect(() => {
     if (bonus) {
       dispatch(getPoints({ partnerId: bonus.partnerId }));
-      dispatch(getProductCategories({ pointId: bonus.pointId }));
+      dispatch(getProductCategoriesByPoint({ pointId: bonus.pointId }));
       dispatch(
         getProducts({
           pointId: bonus.pointId,

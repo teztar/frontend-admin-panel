@@ -239,3 +239,16 @@ export const getPrefixes = createAsyncThunk(
     }
   }
 );
+
+export const getProductVolumes = createAsyncThunk(
+  "handbooks/getProductVolumes",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/handbook/product_volumes");
+      return response.data;
+    } catch (error) {
+      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      return rejectWithValue(error.error);
+    }
+  }
+);
