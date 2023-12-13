@@ -90,7 +90,7 @@ export const PointEditForm = (props) => {
         location: {
           latitude: point?.address?.latitude || "",
           longitude: point?.address?.longitude || "",
-          name: point?.address?.name || "Rudaki 100",
+          name: point?.address?.name || "",
         },
         kitchenType: point?.kitchenType || "",
         minimumCheckAmount: point?.minimumCheckAmount || "",
@@ -340,6 +340,24 @@ export const PointEditForm = (props) => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.location?.longitude}
+                    inputProps={{ maxLength: 9 }}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    // type="number"
+                    error={Boolean(
+                      touched.location?.name && errors.location?.name
+                    )}
+                    helperText={touched.location?.name && errors.location?.name}
+                    label="Street Name"
+                    name="location.name"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.location?.name}
                     inputProps={{ maxLength: 9 }}
                   />
                 </Grid>

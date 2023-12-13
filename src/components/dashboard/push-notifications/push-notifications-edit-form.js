@@ -180,6 +180,7 @@ export const PushNotificationEditForm = (props) => {
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
+                    multiline
                     error={Boolean(touched.body && errors.body)}
                     fullWidth
                     helperText={touched.body && errors.body}
