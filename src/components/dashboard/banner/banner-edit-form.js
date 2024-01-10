@@ -70,7 +70,10 @@ export const BannerEditForm = (props) => {
         appImage: mode === "edit" && newBanner?.appImageUrl,
         submit: null,
       }}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (
+        values,
+        { setErrors, setStatus, setSubmitting, resetForm }
+      ) => {
         try {
           const newValues = {
             ...values,
@@ -117,6 +120,7 @@ export const BannerEditForm = (props) => {
               createBanner({
                 payload: formData,
                 requestDigest: payload,
+                resetForm: resetForm,
               })
             );
           } else {

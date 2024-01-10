@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
-import * as Yup from "yup";
 import { Formik } from "formik";
 import { Map, Placemark, SearchControl, YMaps } from "react-yandex-maps";
 import {

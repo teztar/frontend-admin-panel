@@ -56,10 +56,11 @@ export const getClientOrders = createAsyncThunk(
 
 export const createClient = createAsyncThunk(
   "clients/createClient",
-  async (values, { rejectWithValue }) => {
+  async ({ values, resetForm }, { rejectWithValue }) => {
     try {
       const response = await axios.post("/clients/new", values);
       toast.success("Клиент добавлен");
+      resetForm();
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

@@ -104,7 +104,10 @@ export const ProductEditForm = (props) => {
         image: mode === "edit" ? newProduct?.imageUrl : webImageUrl,
         submit: null,
       }}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (
+        values,
+        { setErrors, setStatus, setSubmitting, resetForm }
+      ) => {
         try {
           const newValues = {
             ...values,
@@ -124,6 +127,7 @@ export const ProductEditForm = (props) => {
               createProduct({
                 payload: formData,
                 requestDigest: payload,
+                resetForm: resetForm,
               })
             );
           } else {

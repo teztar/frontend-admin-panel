@@ -46,8 +46,6 @@ export const PointEditForm = (props) => {
 
   const formData = new FormData();
 
-  const [locationName, setLocationName] = useState("");
-
   const handleGetGeoObject = async (map, setFieldValue) => {
     console.log("Map:", map);
     if (Array.isArray(map)) {
@@ -121,7 +119,10 @@ export const PointEditForm = (props) => {
         //   })
         // ),
       })}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (
+        values,
+        { setErrors, setStatus, setSubmitting, resetForm }
+      ) => {
         try {
           const phonesWithPrefix = values.phoneNumbers.map(
             (item) => "+992" + item?.phoneNumber?.replaceAll(" ", "")
@@ -163,6 +164,7 @@ export const PointEditForm = (props) => {
               createPoint({
                 payload: formData,
                 requestDigest: payload,
+                resetForm: resetForm,
               })
             );
           } else {

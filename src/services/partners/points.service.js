@@ -78,6 +78,7 @@ export const createPoint = createAsyncThunk(
       if (response.ok) {
         return response.json().then((data) => {
           toast.success("Точка добавлен");
+          values.resetForm();
           return toCamelCaseFormat(data);
         });
       }

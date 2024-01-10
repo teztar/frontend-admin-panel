@@ -102,6 +102,7 @@ export const createBanner = createAsyncThunk(
         return response.json().then((data) => {
           toast.success("Banner успешно сохранились");
           // history.push("/dashboard/banners");
+          values.resetForm();
           return toCamelCaseFormat(data);
         });
       }

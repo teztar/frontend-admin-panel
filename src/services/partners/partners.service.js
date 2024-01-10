@@ -35,10 +35,11 @@ export const getPartner = createAsyncThunk(
 
 export const createPartner = createAsyncThunk(
   "partners/createPartner",
-  async (values, { rejectWithValue }) => {
+  async ({ values, resetForm }, { rejectWithValue }) => {
     try {
       const response = await axios.post("/partners/new", values);
       toast.success("Партнёр добавлен");
+      resetForm();
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

@@ -37,10 +37,11 @@ export const getOrder = createAsyncThunk(
 
 export const createOrder = createAsyncThunk(
   "orders/createOrder",
-  async (values, { rejectWithValue }) => {
+  async ({ values, setValues }, { rejectWithValue }) => {
     try {
       const response = await axios.post("/orders/new", values);
       toast.success("Заказ добавлен");
+      setValues({});
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

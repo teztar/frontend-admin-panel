@@ -60,7 +60,10 @@ export const ClientEditForm = (props) => {
         name: Yup.string().min(4).max(255),
         phone: Yup.string().max(9).required("Phone is required"),
       })}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (
+        values,
+        { setErrors, setStatus, setSubmitting, resetForm }
+      ) => {
         try {
           const newValues = {
             ...values,
@@ -68,7 +71,7 @@ export const ClientEditForm = (props) => {
             phone: "+992" + values?.phone?.replaceAll(" ", ""),
           };
           if (mode === "create") {
-            dispatch(createClient(newValues));
+            dispatch(createClient({ values: newValues, resetForm: resetForm }));
           } else {
             dispatch(updateClient(newValues));
           }

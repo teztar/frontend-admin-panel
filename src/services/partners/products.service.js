@@ -122,6 +122,7 @@ export const createProduct = createAsyncThunk(
       if (response.ok) {
         return response.json().then((data) => {
           toast.success("Продукт добавлен");
+          values.resetForm();
           return toCamelCaseFormat(data);
         });
       }

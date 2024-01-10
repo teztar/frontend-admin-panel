@@ -99,7 +99,10 @@ export const PushNotificationEditForm = (props) => {
       // validationSchema={Yup.object().shape({
       //   body: Yup.string().min(4).max(255),
       // })}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (
+        values,
+        { setErrors, setStatus, setSubmitting, resetForm }
+      ) => {
         try {
           const newValues = {
             ...values,
@@ -124,6 +127,7 @@ export const PushNotificationEditForm = (props) => {
               createPushNotification({
                 payload: formData,
                 requestDigest: payload,
+                resetForm: resetForm,
               })
             );
           } else {

@@ -118,7 +118,10 @@ export const BonusEditForm = (props) => {
         type: bonus?.type || "",
         submit: null,
       }}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (
+        values,
+        { setErrors, setStatus, setSubmitting, resetForm }
+      ) => {
         try {
           const newValues = {
             ...values,
@@ -130,7 +133,7 @@ export const BonusEditForm = (props) => {
           delete newValues?.partnerId;
 
           if (mode === "create") {
-            dispatch(createBonus(newValues));
+            dispatch(createBonus({ values: newValues, resetForm: resetForm }));
           } else {
             dispatch(updateBonus(newValues));
           }
@@ -202,7 +205,7 @@ export const BonusEditForm = (props) => {
                           value={point.id}
                           onClick={() => setPointId(point.id)}
                         >
-                          {point?.assortment}
+                          {point?.name}
                         </MenuItem>
                       ))}
                     </Select>
