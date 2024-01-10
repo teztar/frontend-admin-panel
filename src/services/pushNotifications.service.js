@@ -70,6 +70,7 @@ export const createPushNotification = createAsyncThunk(
       if (response.ok) {
         return response.json().then((data) => {
           toast.success("Фотографии успешно сохранились");
+          values.resetForm();
           return toCamelCaseFormat(data);
         });
       }

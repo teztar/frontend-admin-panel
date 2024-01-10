@@ -1,5 +1,7 @@
+import { useRef } from "react";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
+import { Map, Placemark, SearchControl, YMaps } from "react-yandex-maps";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import {
@@ -23,6 +25,20 @@ export const CourierEditForm = (props) => {
 
   const dispatch = useDispatch();
 
+  const map = useRef(null);
+
+  const handleGetGeoObject = async (map, setFieldValue) => {
+    if (Array.isArray(map)) {
+      setFieldValue("location.latitude", map[0]);
+      setFieldValue("location.longitude", map[1]);
+    } else {
+      const coords = map.get("coords");
+
+      setFieldValue("location.latitude", coords[0]);
+      setFieldValue("location.longitude", coords[1]);
+    }
+  };
+
   return (
     <Formik
       enableReinitialize={true}
@@ -37,29 +53,46 @@ export const CourierEditForm = (props) => {
         startWorkTime: new Date("01/01/1970 " + courier?.startWorkTime) || null,
         endWorkTime: new Date("01/01/1970 " + courier?.endWorkTime) || null,
         tin: courier?.tin || "",
+        location: {
+          latitude: courier?.address?.latitude || "",
+          longitude: courier?.address?.longitude || "",
+          name: courier?.address?.name || "",
+        },
         submit: null,
       }}
       validationSchema={Yup.object().shape({
         name: Yup.string().min(4).max(255),
         tin: Yup.string().min(9).max(9),
       })}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (
+        values,
+        { setErrors, setStatus, setSubmitting, resetForm }
+      ) => {
+        let newValues;
         try {
-          const newValues = {
+          newValues = {
             ...values,
             dateOfBirth: format(new Date(values.dateOfBirth), "yyyy-MM-dd"),
             startWorkTime: format(new Date(values.startWorkTime), "HH:mm"),
             endWorkTime: format(new Date(values.endWorkTime), "HH:mm"),
             phoneNumber: "+992" + values?.phoneNumber?.replaceAll(" ", ""),
+            location: {
+              latitude: values.location.latitude.toString(),
+              longitude: values.location.longitude.toString(),
+              name: values.location.name,
+            },
           };
           if (mode === "create") {
-            dispatch(createCourier(newValues));
+            dispatch(
+              createCourier({ values: newValues, resetForm: resetForm })
+            );
           } else {
             dispatch(updateCourier(newValues));
           }
           setStatus({ success: true });
           setSubmitting(false);
         } catch (err) {
+          newValues = {};
           console.error(err);
           toast.error("Something went wrong!");
           setStatus({ success: false });
@@ -132,6 +165,7 @@ export const CourierEditForm = (props) => {
                     helperText={touched.phoneNumber && errors.phoneNumber}
                     label="Phone Number"
                     name="phoneNumber"
+                    type="tel"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     required
@@ -152,7 +186,7 @@ export const CourierEditForm = (props) => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.passportSeries}
-                    inputProps={{ maxLength: 8 }}
+                    inputProps={{ maxLength: 9 }}
                   />
                 </Grid>
 
@@ -172,19 +206,6 @@ export const CourierEditForm = (props) => {
                 </Grid>
 
                 <Grid item md={6} xs={12}>
-                  <DatePicker
-                    inputFormat="dd/MM/yyyy"
-                    label="Birth date"
-                    onChange={(date) => {
-                      setFieldValue("dateOfBirth", date);
-                    }}
-                    renderInput={(inputProps) => (
-                      <TextField fullWidth {...inputProps} />
-                    )}
-                    value={values.dateOfBirth}
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
                   <TimePicker
                     ampm={false}
                     inputFormat="hh:mm"
@@ -194,7 +215,7 @@ export const CourierEditForm = (props) => {
                       setFieldValue("startWorkTime", time);
                     }}
                     renderInput={(inputProps) => (
-                      <TextField fullWidth {...inputProps} />
+                      <TextField fullWidth {...inputProps} error={false} />
                     )}
                   />
                 </Grid>
@@ -207,10 +228,125 @@ export const CourierEditForm = (props) => {
                       setFieldValue("endWorkTime", time);
                     }}
                     renderInput={(inputProps) => (
-                      <TextField fullWidth {...inputProps} />
+                      <TextField fullWidth {...inputProps} error={false} />
                     )}
                     value={values.endWorkTime}
                   />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <DatePicker
+                    inputFormat="dd/MM/yyyy"
+                    label="Birth date"
+                    onChange={(date) => {
+                      setFieldValue("dateOfBirth", date);
+                    }}
+                    renderInput={(inputProps) => (
+                      <TextField fullWidth {...inputProps} />
+                    )}
+                    value={values.dateOfBirth}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    // type="number"
+                    error={Boolean(
+                      touched.location?.latitude && errors.location?.latitude
+                    )}
+                    helperText={
+                      touched.location?.latitude && errors.location?.latitude
+                    }
+                    label="Geolocation Latitude"
+                    name="latitude"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.location?.latitude}
+                    inputProps={{ maxLength: 9 }}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    // type="number"
+                    error={Boolean(
+                      touched.location?.longitude && errors.location?.longitude
+                    )}
+                    helperText={
+                      touched.location?.longitude && errors.location?.longitude
+                    }
+                    label="Geolocation Longitude"
+                    name="longitude"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.location?.longitude}
+                    inputProps={{ maxLength: 9 }}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    error={Boolean(
+                      touched.location?.name && errors.location?.name
+                    )}
+                    helperText={touched.location?.name && errors.location?.name}
+                    label="Street Name"
+                    name="location.name"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.location?.name}
+                    inputProps={{ maxLength: 9 }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <YMaps
+                    query={{
+                      lang: "ru_RU",
+                      apikey: "6d2219fd-5118-4e09-bb69-e786ff23284a",
+                    }}
+                  >
+                    <Map
+                      defaultState={{
+                        center: [38.559772, 68.787038],
+                        zoom: 11,
+                      }}
+                      options={{ minZoom: 8 }}
+                      width="100%"
+                      height="300px"
+                      onClick={(map) => {
+                        handleGetGeoObject(map, setFieldValue);
+                      }}
+                      modules={[
+                        "templateLayoutFactory",
+                        "layout.ImageWithContent",
+                        "geocode",
+                        "geoObject.addon.balloon",
+                        "multiRouter.MultiRoute",
+                      ]}
+                      instanceRef={map}
+                    >
+                      <SearchControl
+                        options={{
+                          float: "right",
+                        }}
+                      />
+                      <Placemark
+                        geometry={[
+                          values.location?.latitude,
+                          values.location?.longitude,
+                        ]}
+                        options={{
+                          iconColor: "#ff0000",
+                        }}
+                        modules={["geoObject.addon.hint"]}
+                      />
+                    </Map>
+                  </YMaps>
                 </Grid>
               </Grid>
             </CardContent>

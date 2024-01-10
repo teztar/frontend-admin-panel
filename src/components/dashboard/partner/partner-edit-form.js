@@ -65,7 +65,10 @@ export const PartnerEditForm = (props) => {
         // ),
         // region: Yup.string().max(255).required("Region is required"),
       })}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (
+        values,
+        { setErrors, setStatus, setSubmitting, resetForm }
+      ) => {
         try {
           const phonesWithPrefix = values.phoneNumbers.map(
             (item) => "+992" + item?.phoneNumber?.replaceAll(" ", "")
@@ -74,7 +77,9 @@ export const PartnerEditForm = (props) => {
           const newValues = { ...values, phoneNumbers: phonesWithPrefix };
 
           if (mode === "create") {
-            dispatch(createPartner(newValues));
+            dispatch(
+              createPartner({ values: newValues, resetForm: resetForm })
+            );
           } else {
             dispatch(updatePartner(newValues));
           }
@@ -175,7 +180,7 @@ export const PartnerEditForm = (props) => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.passportSeries}
-                    inputProps={{ maxLength: 8 }}
+                    inputProps={{ maxLength: 9 }}
                   />
                 </Grid>
 

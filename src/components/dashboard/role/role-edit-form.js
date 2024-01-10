@@ -41,7 +41,9 @@ export const RoleEditForm = (props) => {
         const permissionKeys = values.permissions.map((item) => item.key);
         const newValues = { ...values, permissions: permissionKeys };
         if (mode === "create") {
-          dispatch(createRole(newValues));
+          dispatch(
+            createRole({ values: newValues, resetForm: helpers.resetForm })
+          );
         } else {
           dispatch(updateRole(newValues));
         }

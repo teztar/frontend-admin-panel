@@ -1,7 +1,8 @@
+import { Fragment, useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import { Formik } from "formik";
+import { FieldArray, Formik, getIn } from "formik";
 import {
   Box,
   Button,
@@ -10,6 +11,7 @@ import {
   CardContent,
   CardHeader,
   Checkbox,
+  Chip,
   Divider,
   FormControl,
   Grid,
@@ -27,9 +29,10 @@ import {
   getProductVolumes,
   updateProduct,
 } from "@services/index";
-import { useEffect, useRef, useState } from "react";
 import useImageLoader from "@hooks/use-image-loader";
 import { UploadFile } from "@mui/icons-material";
+import { removeEmptyBodyFields } from "@utils/axios";
+import { toSnakeCaseFormat } from "@utils/case-style";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -64,6 +67,8 @@ export const ProductEditForm = (props) => {
   const partnerId = query?.partnerId;
   const pointId = query?.pointId;
 
+  const formData = new FormData();
+
   useEffect(() => {
     dispatch(getProductVolumes());
     dispatch(getProductCategories());
@@ -75,44 +80,63 @@ export const ProductEditForm = (props) => {
     }
   }, [webImage]);
 
-  console.log({ volumesArr });
-
   return (
     <Formik
-      enableReinitialize
+      enableReinitialize={mode === "edit" ? true : false}
       initialValues={{
         id: mode === "edit" ? product?.id : null,
         pointId: mode === "create" ? pointId : null,
         name: product?.name || "",
-        price: product?.price || "",
         categories: product?.categories || [],
         description: product?.description || "",
         ingredients: product?.ingredients || "",
-        measuring: product?.measuring || "",
         volumes:
           product && product?.volumes?.length > 0
             ? product.volumes
             : [
                 {
-                  price: 0,
+                  price: "",
                   volume: "",
                   measuring: "",
-                  max_quantity_in_one_order: 0,
+                  maxQuantityInOneOrder: "",
                 },
               ],
         image: mode === "edit" ? newProduct?.imageUrl : webImageUrl,
         submit: null,
       }}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (
+        values,
+        { setErrors, setStatus, setSubmitting, resetForm }
+      ) => {
         try {
+          const newValues = {
+            ...values,
+            categoriesId: values.categories.map((item) => item.id),
+          };
+
+          const payload = JSON.stringify(
+            removeEmptyBodyFields(toSnakeCaseFormat(newValues))
+          );
+
+          formData.append("payload", payload);
+          formData.append("image", webImage);
+
+          console.log({ payload });
           if (mode === "create") {
-            dispatch(createProduct(values));
+            dispatch(
+              createProduct({
+                payload: formData,
+                requestDigest: payload,
+                resetForm: resetForm,
+              })
+            );
           } else {
             dispatch(updateProduct(values));
           }
           setStatus({ success: true });
           setSubmitting(false);
         } catch (err) {
+          values = {};
           console.error(err);
           toast.error("Something went wrong!");
           setStatus({ success: false });
@@ -134,9 +158,7 @@ export const ProductEditForm = (props) => {
         <form noValidate onSubmit={handleSubmit}>
           <Card>
             <CardHeader
-              title={`${
-                mode === "create" ? "Create" : "Edit"
-              } product, ведется работа`}
+              title={`${mode === "create" ? "Create" : "Edit"} product`}
             />
             <Divider />
             <CardContent>
@@ -156,75 +178,16 @@ export const ProductEditForm = (props) => {
                 </Grid>
 
                 <Grid item md={6} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel id="multiple-checkbox-label">
-                      Categories
-                    </InputLabel>
-                    <Select
-                      labelId="multiple-checkbox-label"
-                      id="multiple-checkbox"
-                      multiple
-                      value={values.categories}
-                      onChange={handleChange}
-                      input={<OutlinedInput label="Categories" />}
-                      renderValue={(selected) => selected.join(", ")}
-                      MenuProps={MenuProps}
-                    >
-                      {productCategories.map((productCategory) => (
-                        <MenuItem
-                          key={productCategory.id}
-                          value={productCategory.id}
-                        >
-                          <Checkbox
-                            checked={
-                              values.categories.indexOf(productCategory.id) > -1
-                            }
-                          />
-                          <ListItemText primary={productCategory.name} />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item md={6} xs={12}>
                   <TextField
-                    required
+                    error={Boolean(touched.description && errors.description)}
                     fullWidth
-                    type="number"
-                    error={Boolean(touched.price && errors.price)}
-                    helperText={touched.price && errors.price}
-                    label="Price"
-                    name="price"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.price}
-                    inputProps={{ maxLength: 9 }}
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    fullWidth
-                    error={Boolean(touched.measuring && errors.measuring)}
-                    helperText={touched.measuring && errors.measuring}
-                    label="Measuring"
-                    name="measuring"
+                    helperText={touched.description && errors.description}
+                    label="Description"
+                    name="description"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     required
-                    value={values.measuring}
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    error={Boolean(touched.category && errors.category)}
-                    helperText={touched.category && errors.category}
-                    label="Category"
-                    name="category"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.category}
+                    value={values.description}
                   />
                 </Grid>
 
@@ -243,37 +206,190 @@ export const ProductEditForm = (props) => {
                 </Grid>
 
                 <Grid item md={6} xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    error={Boolean(touched.description && errors.description)}
-                    helperText={touched.description && errors.description}
-                    label="Description"
-                    name="description"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.description}
-                  />
-                </Grid>
-
-                <Grid item md={6} xs={12}>
                   <FormControl fullWidth>
-                    <InputLabel id="partnerId-label">Volumes</InputLabel>
+                    <InputLabel id="multiple-checkbox-label">
+                      Categories
+                    </InputLabel>
                     <Select
-                      labelId="volume-label"
-                      value={values.volume}
-                      label="Volumes"
-                      name="volume"
-                      onChange={handleChange}
+                      labelId="multiple-checkbox-label"
+                      id="multiple-checkbox"
+                      multiple
+                      value={values.categories}
+                      onChange={(event) =>
+                        setFieldValue("categories", event.target.value)
+                      }
+                      input={<OutlinedInput label="Categories" />}
+                      renderValue={(selected) => (
+                        <Box
+                          sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                        >
+                          {selected.map((category, index) => (
+                            <Chip key={index} label={category.name} />
+                          ))}
+                        </Box>
+                      )}
+                      MenuProps={MenuProps}
                     >
-                      {volumesArr.map((volume) => (
-                        <MenuItem key={volume.key} value={volume.key}>
-                          {volume?.value}
+                      {productCategories.map((productCategory) => (
+                        <MenuItem
+                          key={productCategory.id}
+                          value={productCategory}
+                        >
+                          <Checkbox
+                            checked={values.categories.some(
+                              (cat) => cat.id === productCategory.id
+                            )}
+                          />
+                          <ListItemText primary={productCategory.name} />
                         </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
                 </Grid>
+
+                <Grid item xs={12}>
+                  <FieldArray
+                    name="volumes"
+                    render={({ push, remove }) => (
+                      <Grid container spacing={3}>
+                        {values?.volumes?.map((p, index) => {
+                          const maxQuantityInOneOrder = `volumes[${index}].maxQuantityInOneOrder`;
+                          const price = `volumes[${index}].price`;
+                          const measuring = `volumes[${index}].measuring`;
+                          const volume = `volumes[${index}].volume`;
+
+                          const touchedMaxQuantityInOneOrder = getIn(
+                            touched,
+                            maxQuantityInOneOrder
+                          );
+                          const errorMaxQuantityInOneOrder = getIn(
+                            errors,
+                            maxQuantityInOneOrder
+                          );
+
+                          const touchedPrice = getIn(touched, price);
+                          const errorPrice = getIn(errors, price);
+
+                          const touchedMeasuring = getIn(touched, measuring);
+                          const errorMeasuring = getIn(errors, measuring);
+
+                          const touchedVolume = getIn(touched, volume);
+                          const errorVolume = getIn(errors, volume);
+
+                          return (
+                            <Fragment key={index}>
+                              <Grid item md={6} xs={12}>
+                                <TextField
+                                  required
+                                  fullWidth
+                                  type="number"
+                                  error={Boolean(touchedPrice && errorPrice)}
+                                  helperText={touchedPrice && errorPrice}
+                                  label="Price"
+                                  name={price}
+                                  onBlur={handleBlur}
+                                  onChange={handleChange}
+                                  value={p?.price}
+                                />
+                              </Grid>
+                              <Grid item md={6} xs={12}>
+                                <TextField
+                                  fullWidth
+                                  error={Boolean(
+                                    touchedMeasuring && errorMeasuring
+                                  )}
+                                  helperText={
+                                    touchedMeasuring && errorMeasuring
+                                  }
+                                  label="Measuring"
+                                  name={measuring}
+                                  onBlur={handleBlur}
+                                  onChange={handleChange}
+                                  required
+                                  value={p?.measuring}
+                                />
+                              </Grid>
+
+                              <Grid item md={6} xs={12}>
+                                <FormControl fullWidth>
+                                  <InputLabel id="partnerId-label">
+                                    Volumes
+                                  </InputLabel>
+                                  <Select
+                                    labelId="volume-label"
+                                    value={p?.volume}
+                                    label="Volumes"
+                                    name={volume}
+                                    onChange={handleChange}
+                                  >
+                                    {volumesArr.map((volume) => (
+                                      <MenuItem
+                                        key={volume.key}
+                                        value={volume.key}
+                                      >
+                                        {volume?.value}
+                                      </MenuItem>
+                                    ))}
+                                  </Select>
+                                </FormControl>
+                              </Grid>
+                              <Grid item md={6} xs={12}>
+                                <TextField
+                                  type="number"
+                                  error={Boolean(
+                                    touchedMaxQuantityInOneOrder &&
+                                      errorMaxQuantityInOneOrder
+                                  )}
+                                  fullWidth
+                                  helperText={
+                                    touchedMaxQuantityInOneOrder &&
+                                    errorMaxQuantityInOneOrder
+                                      ? errorMaxQuantityInOneOrder
+                                      : ""
+                                  }
+                                  label="Max Quantity In One Order"
+                                  name={maxQuantityInOneOrder}
+                                  onBlur={handleBlur}
+                                  onChange={handleChange}
+                                  value={p?.maxQuantityInOneOrder ?? ""}
+                                />
+
+                                <Box
+                                  mt={3}
+                                  gap={3}
+                                  display="flex"
+                                  justifyContent="space-between"
+                                >
+                                  {index + 1 === values.volumes.length && (
+                                    <Button
+                                      fullWidth
+                                      color="primary"
+                                      variant="contained"
+                                      onClick={() => push(index, "")}
+                                    >
+                                      Add
+                                    </Button>
+                                  )}
+                                  {index > 0 && (
+                                    <Button
+                                      fullWidth
+                                      color="warning"
+                                      variant="outlined"
+                                      onClick={() => remove(index)}
+                                    >
+                                      Remove
+                                    </Button>
+                                  )}
+                                </Box>
+                              </Grid>
+                            </Fragment>
+                          );
+                        })}
+                      </Grid>
+                    )}
+                  />
+                </Grid>
+
                 <Grid item xs={12}>
                   <input
                     hidden

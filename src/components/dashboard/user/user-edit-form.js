@@ -66,10 +66,13 @@ export const UserEditForm = (props) => {
           .max(255)
           .required("Email is required"),
       })}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (
+        values,
+        { setErrors, setStatus, setSubmitting, resetForm }
+      ) => {
         try {
           if (mode === "create") {
-            dispatch(createUser(values));
+            dispatch(createUser({ values: values, resetForm: resetForm }));
           } else {
             dispatch(updateUser(values));
           }

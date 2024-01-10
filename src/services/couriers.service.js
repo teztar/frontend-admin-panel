@@ -72,10 +72,11 @@ export const getCourierBalances = createAsyncThunk(
 
 export const createCourier = createAsyncThunk(
   "couriers/createCourier",
-  async (values, { rejectWithValue }) => {
+  async ({ values, resetForm }, { rejectWithValue }) => {
     try {
       const response = await axios.post("/couriers/new", values);
       toast.success("Курьер добавлен");
+      resetForm();
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

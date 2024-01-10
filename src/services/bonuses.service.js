@@ -35,10 +35,11 @@ export const getBonus = createAsyncThunk(
 
 export const createBonus = createAsyncThunk(
   "bonuses/createBonus",
-  async (values, { rejectWithValue }) => {
+  async ({ values, resetForm }, { rejectWithValue }) => {
     try {
       const response = await axios.post("/bonuses/new", values);
       toast.success("Бонус добавлен");
+      resetForm();
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

@@ -36,10 +36,11 @@ export const getUser = createAsyncThunk(
 
 export const createUser = createAsyncThunk(
   "users/createUser",
-  async (values, { rejectWithValue }) => {
+  async ({ values, resetForm }, { rejectWithValue }) => {
     try {
       const response = await axios.post("/users/new", values);
       toast.success("Пользователь добавлен");
+      resetForm();
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

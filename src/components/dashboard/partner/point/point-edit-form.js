@@ -46,8 +46,6 @@ export const PointEditForm = (props) => {
 
   const formData = new FormData();
 
-  const [locationName, setLocationName] = useState("");
-
   const handleGetGeoObject = async (map, setFieldValue) => {
     console.log("Map:", map);
     if (Array.isArray(map)) {
@@ -90,7 +88,7 @@ export const PointEditForm = (props) => {
         location: {
           latitude: point?.address?.latitude || "",
           longitude: point?.address?.longitude || "",
-          name: point?.address?.name || "Rudaki 100",
+          name: point?.address?.name || "",
         },
         kitchenType: point?.kitchenType || "",
         minimumCheckAmount: point?.minimumCheckAmount || "",
@@ -121,7 +119,10 @@ export const PointEditForm = (props) => {
         //   })
         // ),
       })}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (
+        values,
+        { setErrors, setStatus, setSubmitting, resetForm }
+      ) => {
         try {
           const phonesWithPrefix = values.phoneNumbers.map(
             (item) => "+992" + item?.phoneNumber?.replaceAll(" ", "")
@@ -163,6 +164,7 @@ export const PointEditForm = (props) => {
               createPoint({
                 payload: formData,
                 requestDigest: payload,
+                resetForm: resetForm,
               })
             );
           } else {
@@ -340,6 +342,24 @@ export const PointEditForm = (props) => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.location?.longitude}
+                    inputProps={{ maxLength: 9 }}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    // type="number"
+                    error={Boolean(
+                      touched.location?.name && errors.location?.name
+                    )}
+                    helperText={touched.location?.name && errors.location?.name}
+                    label="Street Name"
+                    name="location.name"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.location?.name}
                     inputProps={{ maxLength: 9 }}
                   />
                 </Grid>
