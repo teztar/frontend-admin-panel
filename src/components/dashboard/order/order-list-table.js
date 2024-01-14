@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { format } from "date-fns";
 import {
   Box,
   IconButton,
@@ -51,6 +52,7 @@ export const OrderListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
+              <TableCell>Added Date</TableCell>
               <TableCell>Added From</TableCell>
               <TableCell>Amount</TableCell>
               <TableCell>Payment Option</TableCell>
@@ -66,6 +68,9 @@ export const OrderListTable = (props) => {
           <TableBody>
             {orders.map((order) => (
               <TableRow hover key={order.id}>
+                <TableCell>
+                  {format(new Date(order?.createdAt), "dd.MM.yyyy HH:mm")}
+                </TableCell>
                 <TableCell onClick={() => toggleOrderDetailsModal(order)}>
                   {order.addedFrom}
                 </TableCell>

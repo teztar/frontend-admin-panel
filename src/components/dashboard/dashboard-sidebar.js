@@ -11,6 +11,7 @@ import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 
 import { ChartBar as ChartBarIcon } from "../../icons/chart-bar";
 import { Home as HomeIcon } from "../../icons/home";
+import { ShoppingBag as ShoppingBagIcon } from "../../icons/shopping-bag";
 import { LockClosed as LockClosedIcon } from "../../icons/lock-closed";
 import { Selector as SelectorIcon } from "../../icons/selector";
 import { ShoppingCart as ShoppingCartIcon } from "../../icons/shopping-cart";
@@ -110,11 +111,15 @@ const getSections = (t) => [
         path: "/dashboard/bonuses",
         icon: <CardGiftcardIcon fontSize="small" />,
       },
-
       {
         title: t("Push-уведомления"),
         path: "/dashboard/push-notifications",
         icon: <NotificationsActiveIcon fontSize="small" />,
+      },
+      {
+        title: t("Категории продуктов"),
+        path: "/dashboard/product-categories",
+        icon: <ShoppingBagIcon fontSize="small" />,
       },
       {
         title: t("Клиенты"),
