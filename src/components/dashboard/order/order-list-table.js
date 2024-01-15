@@ -2,7 +2,6 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
 import {
-  Box,
   IconButton,
   Table,
   TableBody,
@@ -12,7 +11,6 @@ import {
   TableRow,
   Tooltip,
 } from "@mui/material";
-import { PencilAlt as PencilAltIcon } from "@icons/pencil-alt";
 import { ArrowRight as ArrowRightIcon } from "@icons/arrow-right";
 import { Scrollbar } from "../../scrollbar";
 import TablePaginationActions from "@utils/tablePaginationActions";
@@ -81,7 +79,10 @@ export const OrderListTable = (props) => {
                 <TableCell>{order.point?.name}</TableCell>
                 <TableCell>{order.client?.name}</TableCell>
                 <TableCell>{order.client?.phone}</TableCell>
-                <TableCell>
+                <TableCell
+                  onClick={() => toggleModal(order)}
+                  style={{ cursor: "pointer" }}
+                >
                   <SeverityPill
                     color={
                       (order.status === "ORDER_NEW" && "primary") ||
@@ -90,30 +91,19 @@ export const OrderListTable = (props) => {
                       "info"
                     }
                   >
-                    {order.status}
+                    <div style={{ cursor: "pointer" }}>{order.status}</div>
                   </SeverityPill>
                 </TableCell>
 
                 <TableCell align="right">
-                  <Box display="flex">
-                    <Tooltip title="Change status">
-                      <IconButton
-                        component="a"
-                        onClick={() => toggleModal(order)}
-                      >
-                        <PencilAltIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-
-                    <Tooltip title="Order details">
-                      <IconButton
-                        component="a"
-                        onClick={() => toggleOrderDetailsModal(order)}
-                      >
-                        <ArrowRightIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
+                  <Tooltip title="Order details">
+                    <IconButton
+                      component="a"
+                      onClick={() => toggleOrderDetailsModal(order)}
+                    >
+                      <ArrowRightIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             ))}

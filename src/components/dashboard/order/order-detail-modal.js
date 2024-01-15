@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import {
@@ -18,6 +18,7 @@ import { getOrder } from "@services/index";
 import { useDispatch, useSelector } from "src/store";
 import { SeverityPill } from "@components/severity-pill";
 import { Scrollbar } from "../../scrollbar";
+import { OrderStatusModal } from "./order-status-modal";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -57,9 +58,19 @@ function BootstrapDialogTitle(props) {
 
 export const OrderDetailModal = (props) => {
   const dispatch = useDispatch();
+
   const { order } = useSelector((state) => state.orders);
 
   const { open, handleClose, orderId } = props;
+
+  const [currentOrder, setCurrentOrder] = useState();
+
+  const [openOrderStatus, setOpenOrderStatus] = useState(false);
+
+  const toggleModal = (order) => {
+    setOpenOrderStatus((prevValue) => !prevValue);
+    setCurrentOrder(order);
+  };
 
   useEffect(() => {
     dispatch(getOrder({ id: orderId }));
@@ -106,7 +117,7 @@ export const OrderDetailModal = (props) => {
                 </TableCell>
                 <TableCell>{order.comment}</TableCell>
                 <TableCell>{order.declineReason}</TableCell>
-                <TableCell>
+                <TableCell onClick={() => toggleModal(order)}>
                   <SeverityPill
                     color={
                       (order.status === "ORDER_NEW" && "primary") ||
@@ -115,7 +126,7 @@ export const OrderDetailModal = (props) => {
                       "info"
                     }
                   >
-                    {order.status}
+                    <div style={{ cursor: "pointer" }}>{order.status}</div>
                   </SeverityPill>
                 </TableCell>
               </TableRow>
@@ -170,6 +181,13 @@ export const OrderDetailModal = (props) => {
           Cancel
         </Button>
       </DialogActions>
+      {openOrderStatus && (
+        <OrderStatusModal
+          open={openOrderStatus}
+          handleClose={toggleModal}
+          order={currentOrder}
+        />
+      )}
     </BootstrapDialog>
   );
 };
