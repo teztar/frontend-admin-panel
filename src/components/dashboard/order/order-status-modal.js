@@ -54,9 +54,16 @@ export const OrderStatusModal = (props) => {
   const { open, handleClose, order } = props;
 
   const [status, setStatus] = useState(order.status);
+  const [declineReason, setDeclineReason] = useState(order.declineReason ?? "");
 
   const updateOrderStatus = () => {
-    dispatch(updateOrder({ id: order.id, status: status }));
+    dispatch(
+      updateOrder({
+        id: order.id,
+        status: status,
+        declineReason: declineReason,
+      })
+    );
     handleClose();
   };
 
@@ -81,6 +88,16 @@ export const OrderStatusModal = (props) => {
             </option>
           ))}
         </TextField>
+
+        <TextField
+          sx={{ mt: 4 }}
+          fullWidth
+          name="declineReason"
+          label="Decline reason"
+          value={declineReason}
+          onChange={(e) => setDeclineReason(e.target.value)}
+          required={status === "ORDER_CANCELED"}
+        />
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={updateOrderStatus}>
