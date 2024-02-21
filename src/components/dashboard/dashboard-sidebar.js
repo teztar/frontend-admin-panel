@@ -8,7 +8,7 @@ import HandshakeIcon from "@mui/icons-material/Handshake";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import AssistWalkerIcon from "@mui/icons-material/AssistWalker";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
-
+import DiningIcon from "@mui/icons-material/Dining";
 import { ChartBar as ChartBarIcon } from "../../icons/chart-bar";
 import { Home as HomeIcon } from "../../icons/home";
 import { ShoppingBag as ShoppingBagIcon } from "../../icons/shopping-bag";
@@ -120,6 +120,11 @@ const getSections = (t) => [
         title: t("Категории продуктов"),
         path: "/dashboard/product-categories",
         icon: <ShoppingBagIcon fontSize="small" />,
+      },
+      {
+        title: t("Тип кухни"),
+        path: "/dashboard/kitchen-types",
+        icon: <DiningIcon fontSize="small" />,
       },
       {
         title: t("Клиенты"),

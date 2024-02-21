@@ -9,7 +9,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { RoleEditForm } from "@components/dashboard/role/role-edit-form";
-import { gtm } from "@lib/gtm";
 
 const RoleEdit = () => {
   const dispatch = useDispatch();
@@ -17,10 +16,6 @@ const RoleEdit = () => {
   const { query } = useRouter();
 
   const { role } = useSelector((state) => state.roles);
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   useEffect(
     () => {

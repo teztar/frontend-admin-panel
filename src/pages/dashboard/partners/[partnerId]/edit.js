@@ -6,7 +6,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { PartnerEditForm } from "@components/dashboard/partner/partner-edit-form";
-import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
 import { getPartner } from "@services/partners/partners.service";
 import { useRouter } from "next/router";
@@ -17,10 +16,6 @@ const PartnerEdit = () => {
   const { query } = useRouter();
 
   const { partner } = useSelector((state) => state.partners);
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   useEffect(
     () => {

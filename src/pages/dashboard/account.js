@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Head from "next/head";
 import { Box, Container, Divider, Tab, Tabs, Typography } from "@mui/material";
 import { AuthGuard } from "../../components/authentication/auth-guard";
@@ -8,7 +8,6 @@ import { AccountGeneralSettings } from "../../components/dashboard/account/accou
 import { AccountNotificationsSettings } from "../../components/dashboard/account/account-notifications-settings";
 import { AccountTeamSettings } from "../../components/dashboard/account/account-team-settings";
 import { AccountSecuritySettings } from "../../components/dashboard/account/account-security-settings";
-import { gtm } from "../../lib/gtm";
 
 const tabs = [
   { label: "General", value: "general" },
@@ -20,10 +19,6 @@ const tabs = [
 
 const Account = () => {
   const [currentTab, setCurrentTab] = useState("general");
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   const handleTabsChange = (event, value) => {
     setCurrentTab(value);

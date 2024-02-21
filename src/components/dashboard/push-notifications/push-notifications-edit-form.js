@@ -389,7 +389,7 @@ export const PushNotificationEditForm = (props) => {
                   }}
                   variant="outlined"
                 >
-                  Cancel
+                  Назад
                 </Button>
               </NextLink>
             </CardActions>

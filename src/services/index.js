@@ -36,10 +36,18 @@ export {
 export { getUser, getUsers, createUser, updateUser } from "./users.service";
 
 export {
+  getProductCategory,
   getProductsCategories,
   createProductCategory,
   updateProductCategory,
 } from "./productCategories.service";
+
+export {
+  getKitchenType,
+  getKitchenTypes,
+  createKitchenType,
+  updateKitchenType,
+} from "./kitchenTypes.service";
 
 export {
   createPushNotification,

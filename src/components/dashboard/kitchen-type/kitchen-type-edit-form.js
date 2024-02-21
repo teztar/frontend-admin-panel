@@ -13,19 +13,19 @@ import {
   TextField,
 } from "@mui/material";
 import { useDispatch } from "src/store";
-import { createProductCategory, updateProductCategory } from "@services/index";
+import { createKitchenType, updateKitchenType } from "@services/index";
 
-export const ProductCategoryEditForm = (props) => {
+export const KitchenTypeEditForm = (props) => {
   const dispatch = useDispatch();
 
-  const { productCategory, mode = "edit", ...other } = props;
+  const { kitchenType, mode = "edit", ...other } = props;
 
   return (
     <Formik
       enableReinitialize={true}
       initialValues={{
-        id: productCategory?.id || "",
-        name: productCategory?.name || "",
+        id: kitchenType?.id || "",
+        name: kitchenType?.name || "",
         submit: null,
       }}
       validationSchema={Yup.object().shape({
@@ -38,10 +38,10 @@ export const ProductCategoryEditForm = (props) => {
         try {
           if (mode === "create") {
             dispatch(
-              createProductCategory({ values: values, resetForm: resetForm })
+              createKitchenType({ values: values, resetForm: resetForm })
             );
           } else {
-            dispatch(updateProductCategory(values));
+            dispatch(updateKitchenType(values));
           }
           setStatus({ success: true });
           setSubmitting(false);
@@ -66,9 +66,7 @@ export const ProductCategoryEditForm = (props) => {
         <form noValidate onSubmit={handleSubmit} {...other}>
           <Card>
             <CardHeader
-              title={`${
-                mode === "create" ? "Create" : "Edit"
-              } product category`}
+              title={`${mode === "create" ? "Create" : "Edit"} kitchen type`}
             />
             <Divider />
             <CardContent>
@@ -102,7 +100,7 @@ export const ProductCategoryEditForm = (props) => {
               >
                 {mode === "create" ? "Create" : "Update"}
               </Button>
-              <NextLink href="/dashboard/product-categories" passHref>
+              <NextLink href="/dashboard/kitchen-types" passHref>
                 <Button
                   component="a"
                   disabled={isSubmitting}

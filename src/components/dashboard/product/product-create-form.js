@@ -458,7 +458,7 @@ export const ProductEditForm = (props) => {
                   }}
                   variant="outlined"
                 >
-                  Cancel
+                  Назад
                 </Button>
               </NextLink>
             </CardActions>

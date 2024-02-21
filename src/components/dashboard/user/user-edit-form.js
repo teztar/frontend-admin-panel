@@ -236,7 +236,7 @@ export const UserEditForm = (props) => {
                   }}
                   variant="outlined"
                 >
-                  Cancel
+                  Назад
                 </Button>
               </NextLink>
             </CardActions>

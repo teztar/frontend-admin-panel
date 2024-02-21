@@ -3,34 +3,31 @@ import NextLink from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "src/store";
-import { getUser } from "@services/users.service";
 import { Box, Container, Link, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { ProductCategoryEditForm } from "@components/dashboard/product-category/product-category-edit-form";
-import { gtm } from "@lib/gtm";
+import { getProductCategory } from "@services/productCategories.service";
 
 const ProductCategoriesEdit = () => {
   const dispatch = useDispatch();
 
   const { query } = useRouter();
 
-  const { user } = useSelector((state) => state.users);
+  const { productCategory } = useSelector((state) => state.productCategories);
 
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
+  console.log({ productCategory });
 
   useEffect(
     () => {
-      dispatch(getUser({ id: query?.userId }));
+      dispatch(getProductCategory({ id: query?.productCategoryId }));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  if (!user) {
+  if (!productCategory) {
     return null;
   }
 
@@ -49,7 +46,7 @@ const ProductCategoriesEdit = () => {
       >
         <Container maxWidth="md">
           <Box sx={{ mb: 4, cursor: "pointer" }}>
-            <NextLink href="/dashboard/users" passHref>
+            <NextLink href="/dashboard/product-categories" passHref>
               <Link
                 color="textPrimary"
                 component="a"
@@ -59,13 +56,16 @@ const ProductCategoriesEdit = () => {
                 }}
               >
                 <ArrowBackIcon fontSize="small" sx={{ mr: 1 }} />
-                <Typography variant="subtitle2">Users</Typography>
+                <Typography variant="subtitle2">Product Categories</Typography>
               </Link>
             </NextLink>
           </Box>
 
           <Box mt={3}>
-            <ProductCategoryEditForm user={user} mode="edit" />
+            <ProductCategoryEditForm
+              productCategory={productCategory}
+              mode="edit"
+            />
           </Box>
         </Container>
       </Box>

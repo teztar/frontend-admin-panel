@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -8,7 +7,6 @@ import { AuthBanner } from "../../components/authentication/auth-banner";
 import { AmplifyPasswordReset } from "../../components/authentication/amplify-password-reset";
 import { Logo } from "../../components/logo";
 import { useAuth } from "../../hooks/use-auth";
-import { gtm } from "../../lib/gtm";
 
 const platformIcons = {
   Amplify: "/static/icons/amplify.svg",
@@ -21,10 +19,6 @@ const PasswordReset = () => {
   const router = useRouter();
   const { platform } = useAuth();
   const { disableGuard } = router.query;
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   return (
     <>

@@ -190,7 +190,6 @@ export const BannerEditForm = (props) => {
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
-                    required
                     fullWidth
                     error={Boolean(touched.link && errors.link)}
                     helperText={touched.link && errors.link}
@@ -370,7 +369,7 @@ export const BannerEditForm = (props) => {
                   }}
                   variant="outlined"
                 >
-                  Cancel
+                  Назад
                 </Button>
               </NextLink>
             </CardActions>

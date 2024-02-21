@@ -14,16 +14,16 @@ import {
 } from "@mui/material";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
-import { PartnerListTable } from "@components/dashboard/partner/partner-list-table";
 import { Plus as PlusIcon } from "@icons/plus";
 import { Search as SearchIcon } from "@icons/search";
 import { useDispatch, useSelector } from "src/store";
-import { getPartners } from "@services/index";
+import { getKitchenTypes } from "@services/index";
+import { KitchenTypeListTable } from "@components/dashboard/kitchen-type/kitchen-type-list-table";
 
-const PartnerList = () => {
+const KitchenTypesList = () => {
   const dispatch = useDispatch();
 
-  const { partners, count } = useSelector((state) => state.partners);
+  const { kitchenTypes, count } = useSelector((state) => state.kitchenTypes);
 
   const router = useRouter();
 
@@ -55,10 +55,10 @@ const PartnerList = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/partners?search=${search}&page=${page}&perPage=${rowsPerPage}`
+        `/dashboard/kitchen-types?search=${search}&page=${page}&perPage=${rowsPerPage}`
       );
       dispatch(
-        getPartners({
+        getKitchenTypes({
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
@@ -72,7 +72,7 @@ const PartnerList = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Partner List</title>
+        <title>Dashboard: Kitchen Types</title>
       </Head>
       <Box
         component="main"
@@ -85,10 +85,10 @@ const PartnerList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Партнёры</Typography>
+                <Typography variant="h4">Тип кухни</Typography>
               </Grid>
               <Grid item>
-                <NextLink href="/dashboard/partners/new" passHref>
+                <NextLink href="/dashboard/kitchen-types/new" passHref>
                   <Button
                     startIcon={<PlusIcon fontSize="small" />}
                     variant="contained"
@@ -110,6 +110,7 @@ const PartnerList = () => {
               }}
             >
               <Box
+                component="form"
                 sx={{
                   flexGrow: 1,
                   m: 1.5,
@@ -127,13 +128,13 @@ const PartnerList = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder="Search partners"
+                  placeholder="Search product categories"
                 />
               </Box>
             </Box>
-            <PartnerListTable
-              partners={partners}
-              partnersCount={count}
+            <KitchenTypeListTable
+              kitchenTypes={kitchenTypes}
+              kitchenTypesCount={count}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               rowsPerPage={rowsPerPage}
@@ -146,10 +147,10 @@ const PartnerList = () => {
   );
 };
 
-PartnerList.getLayout = (page) => (
+KitchenTypesList.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 
-export default PartnerList;
+export default KitchenTypesList;

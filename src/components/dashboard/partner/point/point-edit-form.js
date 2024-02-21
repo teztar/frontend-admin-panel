@@ -567,7 +567,7 @@ export const PointEditForm = (props) => {
                   }}
                   variant="outlined"
                 >
-                  Cancel
+                  Назад
                 </Button>
               </NextLink>
             </CardActions>

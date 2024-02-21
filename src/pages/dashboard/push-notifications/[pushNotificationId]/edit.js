@@ -9,7 +9,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { PushNotificationEditForm } from "@components/dashboard/push-notifications/push-notifications-edit-form";
-import { gtm } from "@lib/gtm";
 
 const PushNotificationEdit = () => {
   const dispatch = useDispatch();
@@ -17,10 +16,6 @@ const PushNotificationEdit = () => {
   const { query } = useRouter();
 
   const { pushNotification } = useSelector((state) => state.pushNotifications);
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   useEffect(
     () => {

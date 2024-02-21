@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NextLink from "next/link";
 import Head from "next/head";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
@@ -7,7 +7,6 @@ import { CheckoutOrderSummary } from "../components/checkout/checkout-order-summ
 import { ArrowLeft as ArrowLeftIcon } from "../icons/arrow-left";
 import { ArrowRight as ArrowRightIcon } from "../icons/arrow-right";
 import { Lock as LockIcon } from "../icons/lock";
-import { gtm } from "../lib/gtm";
 
 const productsData = [
   {
@@ -41,10 +40,6 @@ const Checkout = () => {
     zip: "",
   });
   const [products, setProducts] = useState(productsData);
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   const handleBillingChange = (event) => {
     setBilling((prevBilling) => ({

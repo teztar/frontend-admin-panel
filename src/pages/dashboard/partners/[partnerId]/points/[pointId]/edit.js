@@ -9,7 +9,6 @@ import { PointEditForm } from "@components/dashboard/partner/point/point-edit-fo
 import { useDispatch, useSelector } from "src/store";
 import { getPoint } from "@services/index";
 import { useRouter } from "next/router";
-import { gtm } from "src/lib/gtm";
 
 const PointEdit = () => {
   const dispatch = useDispatch();
@@ -20,10 +19,6 @@ const PointEdit = () => {
 
   const pointId = query?.pointId;
   const partnerId = query?.partnerId;
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   useEffect(
     () => {

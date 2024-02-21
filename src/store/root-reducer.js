@@ -20,6 +20,7 @@ import { reducer as cooperationsReducer } from "@slices/cooperations";
 import { reducer as partnersBalanceReducer } from "@slices/partnersBalance";
 import { reducer as pushNotificationsReducer } from "@slices/pushNotifications";
 import { reducer as productCategoriesReducer } from "@slices/productCategories";
+import { reducer as kitchenTypesReducer } from "@slices/kitchenTypes";
 
 export const rootReducer = combineReducers({
   calendar: calendarReducer,
@@ -43,4 +44,5 @@ export const rootReducer = combineReducers({
   partnersBalance: partnersBalanceReducer,
   pushNotifications: pushNotificationsReducer,
   productCategories: productCategoriesReducer,
+  kitchenTypes: kitchenTypesReducer,
 });

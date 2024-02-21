@@ -9,7 +9,6 @@ import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { ProductEditForm } from "@components/dashboard/product/product-create-form";
 import { useDispatch, useSelector } from "src/store";
 import { getProduct } from "@services/index";
-import { gtm } from "src/lib/gtm";
 
 const ProductEdit = () => {
   const dispatch = useDispatch();
@@ -21,10 +20,6 @@ const ProductEdit = () => {
   const pointId = query?.pointId;
   const productId = query?.productId;
   const partnerId = query?.partnerId;
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   useEffect(
     () => {

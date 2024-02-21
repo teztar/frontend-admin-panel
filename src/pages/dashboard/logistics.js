@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Head from "next/head";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { AuthGuard } from "../../components/authentication/auth-guard";
@@ -10,13 +9,8 @@ import { LogisticsOnRouteVehicles } from "../../components/dashboard/logistics/l
 import { Cog as CogIcon } from "../../icons/cog";
 import { Download as DownloadIcon } from "../../icons/download";
 import { Reports as ReportsIcon } from "../../icons/reports";
-import { gtm } from "../../lib/gtm";
 
 const Logistics = () => {
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
-
   return (
     <>
       <Head>

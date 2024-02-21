@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Head from "next/head";
 import { Divider } from "@mui/material";
 import { MainLayout } from "../components/main-layout";
@@ -8,15 +7,10 @@ import { HomeDevelopers } from "../components/home/home-developers";
 import { HomeDesigners } from "../components/home/home-designers";
 import { HomeFeatures } from "../components/home/home-features";
 import { HomeTestimonials } from "../components/home/home-testimonials";
-import { gtm } from "../lib/gtm";
 import path from "path";
 path.resolve("./next.config.js");
 
 const Home = () => {
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
-
   return (
     <>
       <Head>

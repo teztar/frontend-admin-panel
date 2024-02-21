@@ -16,7 +16,6 @@ import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { UserListTable } from "@components/dashboard/user/user-list-table";
 import { Plus as PlusIcon } from "@icons/plus";
 import { Search as SearchIcon } from "@icons/search";
-import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
 import { getUsers } from "@services/index";
 import { useRouter } from "next/router";
@@ -52,10 +51,6 @@ const UserList = () => {
   const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {

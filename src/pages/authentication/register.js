@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -11,7 +10,6 @@ import { FirebaseRegister } from "../../components/authentication/firebase-regis
 import { JWTRegister } from "../../components/authentication/jwt-register";
 import { Logo } from "../../components/logo";
 import { useAuth } from "../../hooks/use-auth";
-import { gtm } from "../../lib/gtm";
 
 const platformIcons = {
   Amplify: "/static/icons/amplify.svg",
@@ -24,10 +22,6 @@ const Register = () => {
   const router = useRouter();
   const { platform } = useAuth();
   const { disableGuard } = router.query;
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   return (
     <>

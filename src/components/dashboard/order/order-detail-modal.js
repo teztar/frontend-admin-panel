@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import {
@@ -18,6 +18,7 @@ import { getOrder } from "@services/index";
 import { useDispatch, useSelector } from "src/store";
 import { SeverityPill } from "@components/severity-pill";
 import { Scrollbar } from "../../scrollbar";
+import { OrderStatusModal } from "./order-status-modal";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -57,9 +58,19 @@ function BootstrapDialogTitle(props) {
 
 export const OrderDetailModal = (props) => {
   const dispatch = useDispatch();
+
   const { order } = useSelector((state) => state.orders);
 
   const { open, handleClose, orderId } = props;
+
+  const [currentOrder, setCurrentOrder] = useState();
+
+  const [openOrderStatus, setOpenOrderStatus] = useState(false);
+
+  const toggleModal = (order) => {
+    setOpenOrderStatus((prevValue) => !prevValue);
+    setCurrentOrder(order);
+  };
 
   useEffect(() => {
     dispatch(getOrder({ id: orderId }));
@@ -106,7 +117,7 @@ export const OrderDetailModal = (props) => {
                 </TableCell>
                 <TableCell>{order.comment}</TableCell>
                 <TableCell>{order.declineReason}</TableCell>
-                <TableCell>
+                <TableCell onClick={() => toggleModal(order)}>
                   <SeverityPill
                     color={
                       (order.status === "ORDER_NEW" && "primary") ||
@@ -115,7 +126,7 @@ export const OrderDetailModal = (props) => {
                       "info"
                     }
                   >
-                    {order.status}
+                    <div style={{ cursor: "pointer" }}>{order.status}</div>
                   </SeverityPill>
                 </TableCell>
               </TableRow>
@@ -126,12 +137,12 @@ export const OrderDetailModal = (props) => {
           <Table sx={{ minWidth: 700, mt: 7 }}>
             <TableHead>
               <TableRow>
-                <TableCell>Amount</TableCell>
-                <TableCell>Count</TableCell>
-                <TableCell>measuring</TableCell>
-                <TableCell>price</TableCell>
-                <TableCell>volume</TableCell>
                 <TableCell>Name</TableCell>
+                <TableCell>measuring</TableCell>
+                <TableCell>Count</TableCell>
+                <TableCell>price</TableCell>
+                <TableCell>Amount</TableCell>
+                <TableCell>volume</TableCell>
                 <TableCell>ingredients</TableCell>
               </TableRow>
             </TableHead>
@@ -139,10 +150,7 @@ export const OrderDetailModal = (props) => {
               {order?.orderProducts?.map((orderProduct) => (
                 <TableRow hover key={orderProduct.id}>
                   <TableCell>
-                    {orderProduct?.amount?.toLocaleString("ru")}
-                  </TableCell>
-                  <TableCell>
-                    {orderProduct.count?.toLocaleString("ru")}
+                    {orderProduct?.productByVolume?.product?.name}
                   </TableCell>
                   <TableCell>
                     {orderProduct?.productByVolume?.measuring?.toLocaleString(
@@ -150,12 +158,15 @@ export const OrderDetailModal = (props) => {
                     )}
                   </TableCell>
                   <TableCell>
+                    {orderProduct.count?.toLocaleString("ru")}
+                  </TableCell>
+                  <TableCell>
                     {orderProduct?.productByVolume?.price?.toLocaleString("ru")}
                   </TableCell>
-                  <TableCell>{orderProduct?.productByVolume?.volume}</TableCell>
                   <TableCell>
-                    {orderProduct?.productByVolume?.product?.name}
+                    {orderProduct?.amount?.toLocaleString("ru")}
                   </TableCell>
+                  <TableCell>{orderProduct?.productByVolume?.volume}</TableCell>
                   <TableCell>
                     {orderProduct?.productByVolume?.product?.ingredients}
                   </TableCell>
@@ -170,6 +181,13 @@ export const OrderDetailModal = (props) => {
           Cancel
         </Button>
       </DialogActions>
+      {openOrderStatus && (
+        <OrderStatusModal
+          open={openOrderStatus}
+          handleClose={toggleModal}
+          order={currentOrder}
+        />
+      )}
     </BootstrapDialog>
   );
 };

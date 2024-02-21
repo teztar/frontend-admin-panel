@@ -1,16 +1,10 @@
-import { useEffect } from "react";
 import Head from "next/head";
-import { gtm } from "@lib/gtm";
 import { Box, Container, Typography } from "@mui/material";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { CourierBalanceEditForm } from "@components/dashboard/courier/balance/courier-balance-edit-form";
 
 const CourierBalanceCreatePayDebtAmount = () => {
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
-
   return (
     <>
       <Head>
