@@ -137,12 +137,12 @@ export const OrderDetailModal = (props) => {
           <Table sx={{ minWidth: 700, mt: 7 }}>
             <TableHead>
               <TableRow>
-                <TableCell>Amount</TableCell>
-                <TableCell>Count</TableCell>
-                <TableCell>measuring</TableCell>
-                <TableCell>price</TableCell>
-                <TableCell>volume</TableCell>
                 <TableCell>Name</TableCell>
+                <TableCell>measuring</TableCell>
+                <TableCell>Count</TableCell>
+                <TableCell>price</TableCell>
+                <TableCell>Amount</TableCell>
+                <TableCell>volume</TableCell>
                 <TableCell>ingredients</TableCell>
               </TableRow>
             </TableHead>
@@ -150,10 +150,7 @@ export const OrderDetailModal = (props) => {
               {order?.orderProducts?.map((orderProduct) => (
                 <TableRow hover key={orderProduct.id}>
                   <TableCell>
-                    {orderProduct?.amount?.toLocaleString("ru")}
-                  </TableCell>
-                  <TableCell>
-                    {orderProduct.count?.toLocaleString("ru")}
+                    {orderProduct?.productByVolume?.product?.name}
                   </TableCell>
                   <TableCell>
                     {orderProduct?.productByVolume?.measuring?.toLocaleString(
@@ -161,12 +158,15 @@ export const OrderDetailModal = (props) => {
                     )}
                   </TableCell>
                   <TableCell>
+                    {orderProduct.count?.toLocaleString("ru")}
+                  </TableCell>
+                  <TableCell>
                     {orderProduct?.productByVolume?.price?.toLocaleString("ru")}
                   </TableCell>
-                  <TableCell>{orderProduct?.productByVolume?.volume}</TableCell>
                   <TableCell>
-                    {orderProduct?.productByVolume?.product?.name}
+                    {orderProduct?.amount?.toLocaleString("ru")}
                   </TableCell>
+                  <TableCell>{orderProduct?.productByVolume?.volume}</TableCell>
                   <TableCell>
                     {orderProduct?.productByVolume?.product?.ingredients}
                   </TableCell>

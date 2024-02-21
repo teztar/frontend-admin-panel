@@ -3,12 +3,13 @@ import {
   getProductsCategories,
   createProductCategory,
   updateProductCategory,
+  getProductCategory,
 } from "@services/index";
 
 const initialState = {
   productCategories: [],
+  productCategory: {},
   count: null,
-  user: {},
   loading: true,
   error: null,
 };
@@ -18,6 +19,18 @@ const productCategories = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getProductCategory.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getProductCategory.fulfilled, (state, action) => {
+      state.loading = false;
+      state.productCategory = action.payload?.payload;
+      state.count = action.payload?.count;
+    });
+    builder.addCase(getProductCategory.rejected, (state) => {
+      state.loading = false;
+    });
+
     builder.addCase(getProductsCategories.pending, (state) => {
       state.loading = true;
     });

@@ -1,16 +1,10 @@
-import { useEffect } from "react";
 import Head from "next/head";
 import { Box, Container, Typography } from "@mui/material";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { BonusEditForm } from "@components/dashboard/bonus/bonus-edit-form";
-import { gtm } from "@lib/gtm";
 
 const BonusCreate = () => {
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
-
   return (
     <>
       <Head>

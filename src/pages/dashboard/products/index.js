@@ -11,7 +11,6 @@ import { useMounted } from "../../../hooks/use-mounted";
 import { Download as DownloadIcon } from "@icons/download";
 import { Upload as UploadIcon } from "@icons/upload";
 import { Plus as PlusIcon } from "@icons/plus";
-import { gtm } from "@lib/gtm";
 
 const applyFilters = (products, filters) =>
   products.filter((product) => {
@@ -69,10 +68,6 @@ const ProductList = () => {
     status: [],
     inStock: undefined,
   });
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   const getProducts = useCallback(async () => {
     try {

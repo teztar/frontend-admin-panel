@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
 import { Box, Card, Container, Typography } from "@mui/material";
@@ -7,7 +6,6 @@ import { AuthBanner } from "../../components/authentication/auth-banner";
 import { AmplifyPasswordRecovery } from "../../components/authentication/amplify-password-recovery";
 import { Logo } from "../../components/logo";
 import { useAuth } from "../../hooks/use-auth";
-import { gtm } from "../../lib/gtm";
 
 const platformIcons = {
   Amplify: "/static/icons/amplify.svg",
@@ -18,10 +16,6 @@ const platformIcons = {
 
 const PasswordRecovery = () => {
   const { platform } = useAuth();
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   return (
     <>

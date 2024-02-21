@@ -2,11 +2,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const getProductsCategories = createAsyncThunk(
-  "productCategories/getProductCategories",
+export const getKitchenTypes = createAsyncThunk(
+  "kitchenTypes/getKitchenTypes",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/products/categories", {
+      const response = await axios.get("/kitchen_types", {
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
@@ -21,13 +21,11 @@ export const getProductsCategories = createAsyncThunk(
   }
 );
 
-export const getProductCategory = createAsyncThunk(
-  "productCategories/getProductCategory",
+export const getKitchenType = createAsyncThunk(
+  "kitchenTypes/getKitchenType",
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `/products/categories/info/${params?.id}`
-      );
+      const response = await axios.get(`/kitchen_types/info/${params?.id}`);
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);
@@ -36,12 +34,12 @@ export const getProductCategory = createAsyncThunk(
   }
 );
 
-export const createProductCategory = createAsyncThunk(
-  "productCategories/ProductCategory",
+export const createKitchenType = createAsyncThunk(
+  "kitchenTypes/createKitchenType",
   async ({ values, resetForm }, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/products/categories", values);
-      toast.success("Категория продукта добавлен");
+      const response = await axios.post("/kitchen_types", values);
+      toast.success("Тип кухни добавлен");
       resetForm();
       return response.data;
     } catch (error) {
@@ -51,12 +49,12 @@ export const createProductCategory = createAsyncThunk(
   }
 );
 
-export const updateProductCategory = createAsyncThunk(
-  "productCategories/updateProductCategory",
+export const updateKitchenType = createAsyncThunk(
+  "kitchenTypes/updateKitchenType",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/products/categories", values);
-      toast.success("Категория продукта обнавлен");
+      const response = await axios.put("/kitchen_types", values);
+      toast.success("Тип кухни обнавлен");
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

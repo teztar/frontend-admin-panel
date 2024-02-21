@@ -39,44 +39,45 @@ export const ProductCategoryListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {productCategories.map((productCategory) => (
-              <TableRow hover key={productCategory.id}>
-                <TableCell>
-                  <NextLink
-                    href={`/dashboard/productCategories/${productCategory.id}/edit`}
-                    passHref
-                  >
-                    <Link color="inherit" variant="subtitle2">
-                      {productCategory.name}
-                    </Link>
-                  </NextLink>
-                </TableCell>
+            {productCategories &&
+              productCategories?.map((productCategory) => (
+                <TableRow hover key={productCategory.id}>
+                  <TableCell>
+                    <NextLink
+                      href={`/dashboard/product-categories/${productCategory?.id}/edit`}
+                      passHref
+                    >
+                      <Link color="inherit" variant="subtitle2">
+                        {productCategory?.name}
+                      </Link>
+                    </NextLink>
+                  </TableCell>
 
-                <TableCell>
-                  {format(
-                    new Date(productCategory.createdAt),
-                    "dd-MM-yyyy HH:mm"
-                  )}
-                </TableCell>
-                <TableCell>
-                  {format(
-                    new Date(productCategory.updatedAt),
-                    "dd-MM-yyyy HH:mm"
-                  )}
-                </TableCell>
+                  <TableCell>
+                    {format(
+                      new Date(productCategory?.createdAt ?? null),
+                      "dd-MM-yyyy HH:mm"
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {format(
+                      new Date(productCategory?.updatedAt ?? null),
+                      "dd-MM-yyyy HH:mm"
+                    )}
+                  </TableCell>
 
-                <TableCell align="right">
-                  <NextLink
-                    href={`/dashboard/product-categories/${productCategory.id}/edit`}
-                    passHref
-                  >
-                    <IconButton component="a">
-                      <PencilAltIcon fontSize="small" />
-                    </IconButton>
-                  </NextLink>
-                </TableCell>
-              </TableRow>
-            ))}
+                  <TableCell align="right">
+                    <NextLink
+                      href={`/dashboard/product-categories/${productCategory?.id}/edit`}
+                      passHref
+                    >
+                      <IconButton component="a">
+                        <PencilAltIcon fontSize="small" />
+                      </IconButton>
+                    </NextLink>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </Scrollbar>

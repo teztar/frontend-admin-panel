@@ -41,6 +41,8 @@ export const BonusEditForm = (props) => {
     (state) => state.products
   );
 
+  console.log({ productCategories });
+
   const { bonusCategories, bonusTypes } = useSelector(
     (state) => state.handbooks
   );
@@ -266,7 +268,7 @@ export const BonusEditForm = (props) => {
                         name="productCategoryId"
                         onChange={handleChange}
                       >
-                        {productCategories.map((productCategory) => (
+                        {productCategories?.map((productCategory) => (
                           <MenuItem
                             key={productCategory.id}
                             value={productCategory.id}
@@ -427,7 +429,7 @@ export const BonusEditForm = (props) => {
                   }}
                   variant="outlined"
                 >
-                  Cancel
+                  Назад
                 </Button>
               </NextLink>
             </CardActions>

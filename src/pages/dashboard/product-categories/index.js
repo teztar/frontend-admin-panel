@@ -16,7 +16,6 @@ import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { Plus as PlusIcon } from "@icons/plus";
 import { Search as SearchIcon } from "@icons/search";
-import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
 import { getProductsCategories } from "@services/index";
 import { ProductCategoryListTable } from "@components/dashboard/product-category/product-category-list-table";
@@ -54,10 +53,6 @@ const ProductCategoriesList = () => {
   const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -124,6 +119,7 @@ const ProductCategoriesList = () => {
                 }}
               >
                 <TextField
+                  autoComplete="off"
                   defaultValue=""
                   fullWidth
                   onChange={handleQueryChange}

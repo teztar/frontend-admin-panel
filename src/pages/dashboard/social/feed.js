@@ -7,15 +7,10 @@ import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { SocialPostAdd } from "@components/dashboard/social/social-post-add";
 import { SocialPostCard } from "@components/dashboard/social/social-post-card";
 import { useMounted } from "../../../hooks/use-mounted";
-import { gtm } from "@lib/gtm";
 
 const SocialFeed = () => {
   const isMounted = useMounted();
   const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   const getPosts = useCallback(async () => {
     try {

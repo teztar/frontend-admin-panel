@@ -29,14 +29,9 @@ import { ExternalLink as ExternalLinkIcon } from "../../icons/external-link";
 import { InformationCircleOutlined as InformationCircleOutlinedIcon } from "../../icons/information-circle-outlined";
 import { Reports as ReportsIcon } from "../../icons/reports";
 import { Users as UsersIcon } from "../../icons/users";
-import { gtm } from "../../lib/gtm";
 
 const Overview = () => {
   const [displayBanner, setDisplayBanner] = useState(true);
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   useEffect(() => {
     // Restore the persistent state from local/session storage

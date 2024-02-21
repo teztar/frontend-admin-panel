@@ -9,7 +9,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { BannerEditForm } from "@components/dashboard/banner/banner-edit-form";
-import { gtm } from "@lib/gtm";
 
 const BannerEdit = () => {
   const dispatch = useDispatch();
@@ -17,10 +16,6 @@ const BannerEdit = () => {
   const { query } = useRouter();
 
   const { banner } = useSelector((state) => state.banners);
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   useEffect(
     () => {

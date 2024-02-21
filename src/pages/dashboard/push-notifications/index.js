@@ -16,7 +16,6 @@ import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { PushNotificationListTable } from "@components/dashboard/push-notifications/push-notifications-list-table";
 import { Plus as PlusIcon } from "@icons/plus";
 import { Search as SearchIcon } from "@icons/search";
-import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
 import { useRouter } from "next/router";
 import { getPushNotifications } from "@services/pushNotifications.service";
@@ -75,10 +74,6 @@ const PushNotificationList = () => {
   const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {

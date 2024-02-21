@@ -16,7 +16,6 @@ import { DashboardLayout } from "@components/dashboard/dashboard-layout";
 import { ClientListTable } from "@components/dashboard/client/client-list-table";
 import { Plus as PlusIcon } from "@icons/plus";
 import { Search as SearchIcon } from "@icons/search";
-import { gtm } from "@lib/gtm";
 import { useDispatch, useSelector } from "src/store";
 import { useRouter } from "next/router";
 import { getClients } from "@services/clients.service";
@@ -52,10 +51,6 @@ const ClientList = () => {
   const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {

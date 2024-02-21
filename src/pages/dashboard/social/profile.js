@@ -24,7 +24,6 @@ import { useMounted } from "../../../hooks/use-mounted";
 import { Chat as ChatIcon } from "@icons/chat";
 import { DotsHorizontal as DotsHorizontalIcon } from "@icons/dots-horizontal";
 import { UserAdd as UserAddIcon } from "@icons/user-add";
-import { gtm } from "@lib/gtm";
 
 const tabs = [
   { label: "Timeline", value: "timeline" },
@@ -36,10 +35,6 @@ export const SocialProfile = () => {
   const [currentTab, setCurrentTab] = useState("timeline");
   const [profile, setProfile] = useState(null);
   const [connectedStatus, setConnectedStatus] = useState("not_connected");
-
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
 
   const getProfile = useCallback(async () => {
     try {
