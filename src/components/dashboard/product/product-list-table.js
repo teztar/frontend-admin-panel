@@ -53,10 +53,31 @@ export const ProductListTable = (props) => {
             {newProducts.map((product) => (
               <TableRow hover key={product.id}>
                 <TableCell>{product.name}</TableCell>
-                <TableCell>{product.category}</TableCell>
+                <TableCell>
+                  {product.categories.map((category, index) => (
+                    <span key={index}>
+                      {category.category.name}
+                      {index < product.categories.length - 1 && "/"}
+                    </span>
+                  ))}
+                </TableCell>
                 <TableCell>{product.ingredients}</TableCell>
-                <TableCell>{product.price?.toLocaleString("ru")}</TableCell>
-                <TableCell>{product.measuring}</TableCell>
+                <TableCell>
+                  {product.volumes.map((volume, index) => (
+                    <span>
+                      {volume.price.toLocaleString("ru")}
+                      {index < product.volumes.length - 1 && "/"}
+                    </span>
+                  ))}
+                </TableCell>
+                <TableCell>
+                  {product.volumes.map((volume, index) => (
+                    <span>
+                      {volume.measuring}
+                      {index < product.volumes.length - 1 && "/"}
+                    </span>
+                  ))}
+                </TableCell>
                 <TableCell>{product.description}</TableCell>
                 <TableCell>
                   <img

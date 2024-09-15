@@ -71,7 +71,12 @@ export const ProductEditForm = (props) => {
 
   useEffect(() => {
     dispatch(getProductVolumes());
-    dispatch(getProductCategories());
+    dispatch(
+      getProductCategories({
+        page: 1,
+        perPage: 100,
+      })
+    );
   }, []);
 
   useEffect(() => {
@@ -181,6 +186,7 @@ export const ProductEditForm = (props) => {
                   <TextField
                     error={Boolean(touched.description && errors.description)}
                     fullWidth
+                    multiline
                     helperText={touched.description && errors.description}
                     label="Description"
                     name="description"
