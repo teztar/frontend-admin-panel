@@ -58,9 +58,14 @@ export const getProductCategoriesByPoint = createAsyncThunk(
 
 export const getProductCategories = createAsyncThunk(
   "products/getProductCategories",
-  async (_, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/products/categories");
+      const response = await axios.get("/products/categories", {
+        params: {
+          page: params?.page ?? 1,
+          perPage: params?.perPage ?? 10,
+        },
+      });
       return response.data;
     } catch (error) {
       // toast.error(error?.messages[0]?.error || error?.messages[0]);

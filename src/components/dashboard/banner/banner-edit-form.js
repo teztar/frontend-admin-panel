@@ -176,6 +176,7 @@ export const BannerEditForm = (props) => {
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
+                    multiline
                     required
                     fullWidth
                     error={Boolean(touched.body && errors.body)}

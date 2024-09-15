@@ -65,25 +65,31 @@ export const ClientOrderedProductsModal = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>Count</TableCell>
+                <TableCell>Product price</TableCell>
                 <TableCell>Amount</TableCell>
                 <TableCell>Product category</TableCell>
                 <TableCell>Product ingredients</TableCell>
                 <TableCell>Product measuring</TableCell>
-                <TableCell>Product name</TableCell>
-                <TableCell align="right">Product price</TableCell>
+                <TableCell align="right">Product name</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {orderedProducts.map((order) => (
                 <TableRow hover key={order.id}>
                   <TableCell>{order.count?.toLocaleString("ru")}</TableCell>
+                  <TableCell>
+                    {order.productByVolume.price?.toLocaleString("ru")}
+                  </TableCell>
                   <TableCell>{order.amount?.toLocaleString("ru")}</TableCell>
-                  <TableCell>{order.product.category}</TableCell>
-                  <TableCell>{order.product.ingredients}</TableCell>
-                  <TableCell>{order.product.measuring}</TableCell>
-                  <TableCell>{order.product?.name}</TableCell>
+                  <TableCell>
+                    {order.productByVolume.product.category}
+                  </TableCell>
+                  <TableCell>
+                    {order.productByVolume.product.ingredients}
+                  </TableCell>
+                  <TableCell>{order.productByVolume.measuring}</TableCell>
                   <TableCell align="right">
-                    {order.product?.price?.toLocaleString("ru")}
+                    {order.productByVolume.product?.name}
                   </TableCell>
                 </TableRow>
               ))}

@@ -42,7 +42,7 @@ export const PartnersBalancePointTransactionListTable = (props) => {
               <TableRow hover key={transaction.id}>
                 <TableCell>{transaction.point?.name}</TableCell>
                 <TableCell>
-                  {transaction.partnerCommission?.toLocaleString("ru")}
+                  {transaction.partnerCommission?.toLocaleString("ru")} %
                 </TableCell>
                 <TableCell>
                   {transaction.amount?.toLocaleString("ru")}

@@ -14,13 +14,17 @@ import {
   CardContent,
   CardHeader,
   Divider,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from "@mui/material";
 import { UploadFile } from "@mui/icons-material";
 import { format } from "date-fns";
-import { useDispatch } from "src/store";
-import { createPoint, updatePoint } from "@services/index";
+import { useDispatch, useSelector } from "src/store";
+import { createPoint, getKitchenTypes, updatePoint } from "@services/index";
 import useImageLoader from "@hooks/use-image-loader";
 import { removeEmptyBodyFields } from "@utils/axios";
 import { toSnakeCaseFormat } from "@utils/case-style";
@@ -30,9 +34,13 @@ export const PointEditForm = (props) => {
 
   const dispatch = useDispatch();
 
+  const { kitchenTypes } = useSelector((state) => state.kitchenTypes);
+
   const newPoint = useImageLoader("points", point, "pointImage")[0];
 
   const { query } = useRouter();
+
+  const [kitchenTypeId, setKitchenTypeId] = useState(point?.kitchenTypeId);
 
   const pointId = query?.pointId;
   const partnerId = query?.partnerId;
@@ -73,6 +81,20 @@ export const PointEditForm = (props) => {
     }
   }, [webImage]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      dispatch(
+        getKitchenTypes({
+          page: 1,
+          perPage: 100,
+          search: "",
+        })
+      );
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <Formik
       enableReinitialize={mode === "edit" ? true : false}
@@ -90,7 +112,7 @@ export const PointEditForm = (props) => {
           longitude: point?.address?.longitude || "",
           name: point?.address?.name || "",
         },
-        kitchenType: point?.kitchenType || "",
+        kitchenTypeId: kitchenTypeId || "",
         minimumCheckAmount: point?.minimumCheckAmount || "",
         openingTime: new Date("01/01/1970 " + point?.openingTime) || null,
         status: point?.status || "",
@@ -295,7 +317,7 @@ export const PointEditForm = (props) => {
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  <TextField
+                  {/* <TextField
                     error={Boolean(touched.kitchenType && errors.kitchenType)}
                     fullWidth
                     helperText={touched.kitchenType && errors.kitchenType}
@@ -305,7 +327,30 @@ export const PointEditForm = (props) => {
                     onChange={handleChange}
                     required
                     value={values.kitchenType}
-                  />
+                  /> */}
+
+                  <FormControl fullWidth>
+                    <InputLabel id="kitchenTypeId-label">
+                      Kithcen Type
+                    </InputLabel>
+                    <Select
+                      labelId="kitchenTypeId-label"
+                      value={values.kitchenTypeId}
+                      label="Kitchen Type"
+                      name="kitchenTypeId"
+                      onChange={handleChange}
+                    >
+                      {kitchenTypes.map((kitchenType) => (
+                        <MenuItem
+                          key={kitchenType.id}
+                          value={kitchenType.id}
+                          onClick={() => setKitchenTypeId(kitchenType?.id)}
+                        >
+                          {kitchenType?.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
@@ -401,7 +446,7 @@ export const PointEditForm = (props) => {
                         startIcon={<UploadFile />}
                         onClick={() => webImageRef?.current?.click()}
                       >
-                        Web image
+                        App image
                       </Button>
                       {webImageUrl && webImage && (
                         <Box mt={3}>
@@ -419,7 +464,7 @@ export const PointEditForm = (props) => {
                       <Grid item xs={12}>
                         <img
                           src={values.image}
-                          alt="image web"
+                          alt="image app"
                           style={{
                             width: 40,
                           }}
