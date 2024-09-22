@@ -15,7 +15,8 @@ export const getKitchenTypes = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -28,7 +29,8 @@ export const getKitchenType = createAsyncThunk(
       const response = await axios.get(`/kitchen_types/info/${params?.id}`);
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -43,7 +45,8 @@ export const createKitchenType = createAsyncThunk(
       resetForm();
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }
@@ -57,7 +60,8 @@ export const updateKitchenType = createAsyncThunk(
       toast.success("Тип кухни обнавлен");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }

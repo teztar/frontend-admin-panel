@@ -17,7 +17,8 @@ export const getPartnersBalance = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -40,7 +41,8 @@ export const getPartnersBalancePoints = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -66,7 +68,8 @@ export const getPartnersBalancePointsTransactions = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -83,7 +86,8 @@ export const updatePartnersBalancePoint = createAsyncThunk(
       toast.success("Статус точки обнавлен");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }
@@ -112,7 +116,8 @@ export const downloadPartnersBalance = createAsyncThunk(
         });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }

@@ -14,7 +14,8 @@ export const getBonuses = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -27,7 +28,8 @@ export const getBonus = createAsyncThunk(
       const response = await axios.get(`/bonuses/info/${params?.id}`);
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -42,7 +44,8 @@ export const createBonus = createAsyncThunk(
       resetForm();
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }
@@ -61,7 +64,8 @@ export const updateBonus = createAsyncThunk(
       for (const [key, value] of errArray) {
         toast.error(`${key}: ${value}`);
       }
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }

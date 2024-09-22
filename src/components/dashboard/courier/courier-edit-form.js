@@ -19,6 +19,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { format } from "date-fns";
 import { useDispatch } from "src/store";
 import { createCourier, updateCourier } from "@services/index";
+import ReactInputMask from "react-input-mask";
 
 export const CourierEditForm = (props) => {
   const { courier, mode = "edit", ...other } = props;
@@ -50,8 +51,8 @@ export const CourierEditForm = (props) => {
         patronymic: courier?.patronymic || "",
         passportSeries: courier?.passportSeries || "",
         phoneNumber: courier?.phoneNumber?.substring(4) || "",
-        startWorkTime: new Date("01/01/1970 " + courier?.startWorkTime) || null,
-        endWorkTime: new Date("01/01/1970 " + courier?.endWorkTime) || null,
+        startWorkTime: courier?.startWorkTime || null,
+        endWorkTime: courier?.endWorkTime || null,
         tin: courier?.tin || "",
         location: {
           latitude: courier?.address?.latitude || "",
@@ -63,6 +64,7 @@ export const CourierEditForm = (props) => {
       validationSchema={Yup.object().shape({
         name: Yup.string().min(4).max(255),
         tin: Yup.string().min(9).max(9),
+        phoneNumber: Yup.string().max(12).required("Phone is required"),
       })}
       onSubmit={async (
         values,
@@ -159,19 +161,26 @@ export const CourierEditForm = (props) => {
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  <TextField
-                    error={Boolean(touched.phoneNumber && errors.phoneNumber)}
-                    fullWidth
-                    helperText={touched.phoneNumber && errors.phoneNumber}
-                    label="Phone Number"
-                    name="phoneNumber"
-                    type="tel"
+                  <ReactInputMask
+                    mask="999 99 99 99"
+                    value={values.phoneNumber}
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    required
-                    value={values.phoneNumber}
-                    inputProps={{ maxLength: 9 }}
-                  />
+                    placeholder="999 99 99 99"
+                    maskChar=" "
+                  >
+                    {() => (
+                      <TextField
+                        error={Boolean(
+                          touched.phoneNumber && errors.phoneNumber
+                        )}
+                        fullWidth
+                        helperText={touched.phoneNumber && errors.phoneNumber}
+                        label="Phone Number"
+                        name="phoneNumber"
+                      />
+                    )}
+                  </ReactInputMask>
                 </Grid>
 
                 <Grid item md={6} xs={12}>
@@ -208,7 +217,7 @@ export const CourierEditForm = (props) => {
                 <Grid item md={6} xs={12}>
                   <TimePicker
                     ampm={false}
-                    inputFormat="hh:mm"
+                    inputFormat="HH:mm"
                     label="Start Work Time"
                     value={values.startWorkTime}
                     onChange={(time) => {
@@ -222,7 +231,7 @@ export const CourierEditForm = (props) => {
                 <Grid item md={6} xs={12}>
                   <TimePicker
                     ampm={false}
-                    inputFormat="hh:mm"
+                    inputFormat="HH:mm"
                     label="End Work Time"
                     onChange={(time) => {
                       setFieldValue("endWorkTime", time);

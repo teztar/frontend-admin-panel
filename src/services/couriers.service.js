@@ -15,7 +15,8 @@ export const getCouriers = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -28,7 +29,8 @@ export const getCourier = createAsyncThunk(
       const response = await axios.get(`/couriers/info/${params?.id}`);
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -46,7 +48,8 @@ export const getCourierStats = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -64,7 +67,8 @@ export const getCourierBalances = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -79,7 +83,8 @@ export const createCourier = createAsyncThunk(
       resetForm();
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }
@@ -96,7 +101,8 @@ export const createPayDebtAmount = createAsyncThunk(
       toast.success("Pay debt amount success");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }
@@ -110,7 +116,8 @@ export const updateCourier = createAsyncThunk(
       toast.success("Курьер обнавлен");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }

@@ -26,6 +26,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useDispatch } from "src/store";
 import { createClient, updateClient } from "@services/index";
+import ReactInputMask from "react-input-mask";
 
 const GENDERS = ["MALE", "FEMALE"];
 
@@ -58,7 +59,7 @@ export const ClientEditForm = (props) => {
       }}
       validationSchema={Yup.object().shape({
         name: Yup.string().min(4).max(255),
-        phone: Yup.string().max(9).required("Phone is required"),
+        phone: Yup.string().max(12).required("Phone is required"),
       })}
       onSubmit={async (
         values,
@@ -71,6 +72,7 @@ export const ClientEditForm = (props) => {
             phone: "+992" + values?.phone?.replaceAll(" ", ""),
           };
           if (mode === "create") {
+            delete newValues.password;
             dispatch(createClient({ values: newValues, resetForm: resetForm }));
           } else {
             dispatch(updateClient(newValues));
@@ -162,18 +164,24 @@ export const ClientEditForm = (props) => {
                   </FormControl>
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  <TextField
-                    error={Boolean(touched.phone && errors.phone)}
-                    fullWidth
-                    helperText={touched.phone && errors.phone}
-                    label="Phone"
-                    name="phone"
+                  <ReactInputMask
+                    mask="999 99 99 99"
+                    value={values.phone}
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    required
-                    value={values.phone}
-                    inputProps={{ maxLength: 9 }}
-                  />
+                    placeholder="999 99 99 99"
+                    maskChar=" "
+                  >
+                    {() => (
+                      <TextField
+                        error={Boolean(touched.phone && errors.phone)}
+                        fullWidth
+                        helperText={touched.phone && errors.phone}
+                        label="Phone"
+                        name="phone"
+                      />
+                    )}
+                  </ReactInputMask>
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <DatePicker
@@ -195,6 +203,7 @@ export const ClientEditForm = (props) => {
                         Password
                       </InputLabel>
                       <OutlinedInput
+                        autoComplete={false}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         required

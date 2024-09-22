@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { useDispatch } from "src/store";
 import { createPartner, updatePartner } from "@services/index";
+import ReactInputMask from "react-input-mask";
 
 export const PartnerEditForm = (props) => {
   const { partner, mode = "edit", ...other } = props;
@@ -208,7 +209,29 @@ export const PartnerEditForm = (props) => {
                           const errorPhone = getIn(errors, phoneNumber);
                           return (
                             <Grid item xs={12} key={index}>
-                              <TextField
+                              <ReactInputMask
+                                mask="999 99 99 99"
+                                value={p?.phoneNumber ?? ""}
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                placeholder="999 99 99 99"
+                                maskChar=" "
+                              >
+                                {() => (
+                                  <TextField
+                                    error={Boolean(touchedPhone && errorPhone)}
+                                    fullWidth
+                                    helperText={
+                                      touchedPhone && errorPhone
+                                        ? errorPhone
+                                        : ""
+                                    }
+                                    label="Phone numbers"
+                                    name={phoneNumber}
+                                  />
+                                )}
+                              </ReactInputMask>
+                              {/* <TextField
                                 error={Boolean(touchedPhone && errorPhone)}
                                 fullWidth
                                 helperText={
@@ -220,7 +243,7 @@ export const PartnerEditForm = (props) => {
                                 onChange={handleChange}
                                 value={p?.phoneNumber ?? ""}
                                 inputProps={{ maxLength: 9 }}
-                              />
+                              /> */}
                               <Box
                                 mt={3}
                                 gap={3}

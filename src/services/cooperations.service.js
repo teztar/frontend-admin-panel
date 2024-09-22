@@ -15,7 +15,8 @@ export const getCooperations = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -28,7 +29,8 @@ export const getCooperation = createAsyncThunk(
       const response = await axios.get(`/cooperation/info/${params?.id}`);
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -42,7 +44,8 @@ export const updateCooperation = createAsyncThunk(
       toast.success("Статус cooperationa обнавлен");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }

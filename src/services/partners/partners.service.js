@@ -10,11 +10,13 @@ export const getPartners = createAsyncThunk(
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
+          search: params?.search ?? "",
+          searchFields: params?.search ? "brand,company_tin" : "",
         },
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
       return rejectWithValue(error.error);
     }
   }
@@ -27,7 +29,7 @@ export const getPartner = createAsyncThunk(
       const response = await axios.get(`/partners/info/${params?.id}`);
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
       return rejectWithValue(error.error);
     }
   }
@@ -42,7 +44,7 @@ export const createPartner = createAsyncThunk(
       resetForm();
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
       return rejectWithValue(error.messages);
     }
   }
@@ -56,7 +58,7 @@ export const updatePartner = createAsyncThunk(
       toast.success("Партнёр обнавлен");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
       return rejectWithValue(error.messages);
     }
   }

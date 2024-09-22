@@ -26,10 +26,12 @@ export const ProductCategoryEditForm = (props) => {
       initialValues={{
         id: productCategory?.id || "",
         name: productCategory?.name || "",
+        queue: productCategory?.queue || "",
         submit: null,
       }}
       validationSchema={Yup.object().shape({
         name: Yup.string().min(4).max(255),
+        queue: Yup.string().min(1).max(100),
       })}
       onSubmit={async (
         values,
@@ -84,6 +86,20 @@ export const ProductCategoryEditForm = (props) => {
                     onChange={handleChange}
                     required
                     value={values.name}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.queue && errors.queue)}
+                    fullWidth
+                    helperText={touched.queue && errors.queue}
+                    label="Queue"
+                    name="queue"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    type="number"
+                    value={values.queue}
                   />
                 </Grid>
               </Grid>

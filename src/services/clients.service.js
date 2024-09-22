@@ -11,11 +11,13 @@ export const getClients = createAsyncThunk(
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
           search: params?.search ?? "",
+          searchFields: params?.search ? "name" : "",
         },
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -28,7 +30,8 @@ export const getClient = createAsyncThunk(
       const response = await axios.get(`/clients/info/${params?.id}`);
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -48,7 +51,8 @@ export const getClientOrders = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -63,7 +67,8 @@ export const createClient = createAsyncThunk(
       resetForm();
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }
@@ -77,7 +82,8 @@ export const updateClient = createAsyncThunk(
       toast.success("Клиент обнавлен");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }
@@ -91,7 +97,8 @@ export const updateClientStatus = createAsyncThunk(
       toast.success("Статус клеинта обнавлен");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }

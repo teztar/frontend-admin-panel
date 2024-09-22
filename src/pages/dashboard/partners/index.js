@@ -41,6 +41,7 @@ const PartnerList = () => {
 
   const handleQueryChange = (event) => {
     event.preventDefault();
+    setPage(0);
     setSearch(queryRef.current?.value);
   };
 
@@ -118,6 +119,7 @@ const PartnerList = () => {
                 <TextField
                   defaultValue=""
                   fullWidth
+                  value={search}
                   onChange={handleQueryChange}
                   inputProps={{ ref: queryRef }}
                   InputProps={{
