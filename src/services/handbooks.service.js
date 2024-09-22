@@ -8,7 +8,8 @@ export const getApplicationTypes = createAsyncThunk(
       const response = await axios.get("/handbook/application_types");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -21,7 +22,8 @@ export const getBonusCategories = createAsyncThunk(
       const response = await axios.get("/handbook/bonus_categories");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -34,7 +36,8 @@ export const getBonusTypes = createAsyncThunk(
       const response = await axios.get("/handbook/bonus_types");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -49,7 +52,8 @@ export const getClientBonusOperationTypes = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -62,7 +66,8 @@ export const getClientStatuses = createAsyncThunk(
       const response = await axios.get("/handbook/client_statuses");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -77,7 +82,8 @@ export const getCooperationRequestStatuses = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -90,7 +96,8 @@ export const getCooperationRequestTypes = createAsyncThunk(
       const response = await axios.get("/handbook/cooperation_request_types");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -103,7 +110,8 @@ export const getCourierStatuses = createAsyncThunk(
       const response = await axios.get("/handbook/courier_statuses");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -116,7 +124,8 @@ export const getGenders = createAsyncThunk(
       const response = await axios.get("/handbook/genders");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -129,7 +138,8 @@ export const getNotificationFormats = createAsyncThunk(
       const response = await axios.get("/handbook/notification_formats");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -142,7 +152,8 @@ export const getNotificationSortedFields = createAsyncThunk(
       const response = await axios.get("/handbook/notification_sorted_fields");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -155,7 +166,8 @@ export const getNotificationStatuses = createAsyncThunk(
       const response = await axios.get("/handbook/notification_statuses");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -168,7 +180,8 @@ export const getOrderPaymentOptions = createAsyncThunk(
       const response = await axios.get("/handbook/order_payment_options");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -181,7 +194,8 @@ export const getOrderStatuses = createAsyncThunk(
       const response = await axios.get("/handbook/order_statuses");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -196,7 +210,8 @@ export const getPartnerPointsBalanceStatuses = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -209,7 +224,8 @@ export const getPeriods = createAsyncThunk(
       const response = await axios.get("/handbook/periods");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -222,7 +238,8 @@ export const getPointStatuses = createAsyncThunk(
       const response = await axios.get("/handbook/point_statuses");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -234,7 +251,8 @@ export const getPrefixes = createAsyncThunk(
       const response = await axios.get("/handbook/prefixes");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -247,7 +265,8 @@ export const getProductVolumes = createAsyncThunk(
       const response = await axios.get("/handbook/product_volumes");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }

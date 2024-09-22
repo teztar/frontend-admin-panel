@@ -13,11 +13,13 @@ export const getBanners = createAsyncThunk(
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
+          search: params?.search ?? "",
+          searchFields: params?.search ? "title" : "",
         },
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
       return rejectWithValue(error.error);
     }
   }
@@ -30,7 +32,7 @@ export const getBanner = createAsyncThunk(
       const response = await axios.get(`/banners/info/${params?.id}`);
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
       return rejectWithValue(error.error);
     }
   }
@@ -69,7 +71,7 @@ export const getBannerImage = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
       return rejectWithValue(error.error);
     }
   }
@@ -113,7 +115,7 @@ export const createBanner = createAsyncThunk(
             data?.map((item) => {
               return Object.values(item).map((err) => {
                 return toast.error(err, {
-                  duration: 10000,
+                  duration: 1000,
                 });
               });
             });
@@ -122,6 +124,7 @@ export const createBanner = createAsyncThunk(
         });
       }
     } catch (error) {
+      toast.error(JSON.stringify(error.messages[0]));
       error.messages.map((message) => {
         return {
           image: toast.error(message.image[0]),
@@ -178,6 +181,7 @@ export const updateBanner = createAsyncThunk(
         });
       }
     } catch (error) {
+      toast.error(JSON.stringify(error.messages[0]));
       error.messages.map((message) => {
         return {
           image: toast.error(message.image[0]),
@@ -197,7 +201,7 @@ export const deleteBanner = createAsyncThunk(
       toast.success("Баннер удален");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
       return rejectWithValue(error.messages);
     }
   }

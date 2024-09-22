@@ -20,7 +20,8 @@ export const getProducts = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -35,7 +36,8 @@ export const getProduct = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -50,7 +52,8 @@ export const getProductCategoriesByPoint = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -68,7 +71,8 @@ export const getProductCategories = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -81,7 +85,8 @@ export const getProductImage = createAsyncThunk(
       const response = await axios.get(`/products/images/${params?.filePath}`);
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -95,7 +100,8 @@ export const getProductImage = createAsyncThunk(
 //       toast.success("Продукт добавлен");
 //       return response.data;
 //     } catch (error) {
-//       // toast.error(error?.messages[0]?.error || error?.messages[0]);
+//             toast.error(JSON.stringify(error.messages[0]));
+
 //       return rejectWithValue(error?.messages);
 //     }
 //   }
@@ -166,7 +172,8 @@ export const updateProduct = createAsyncThunk(
       toast.success("Продукт обнавлен");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }

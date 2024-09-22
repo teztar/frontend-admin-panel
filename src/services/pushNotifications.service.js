@@ -20,7 +20,8 @@ export const getPushNotifications = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -35,7 +36,8 @@ export const getPushNotification = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -113,7 +115,8 @@ export const createPushNotification = createAsyncThunk(
 //       toast.success("Пользователь добавлен");
 //       return response.data;
 //     } catch (error) {
-//       // toast.error(error?.messages[0]?.error || error?.messages[0]);
+//             toast.error(JSON.stringify(error.messages[0]));
+
 //       return rejectWithValue(error.messages);
 //     }
 //   }
@@ -131,7 +134,8 @@ export const updatePushNotification = createAsyncThunk(
       toast.success("Пользователь обнавлен");
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }

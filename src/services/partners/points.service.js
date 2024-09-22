@@ -18,7 +18,8 @@ export const getPoints = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -33,7 +34,8 @@ export const getPoint = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -46,7 +48,8 @@ export const getPointImage = createAsyncThunk(
       const response = await axios.get(`/points/images/${params?.filePath}`);
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -122,7 +125,8 @@ export const updatePoint = createAsyncThunk(
       for (const [key, value] of errArray) {
         toast.error(`${key}: ${value}`);
       }
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.messages);
     }
   }
@@ -136,7 +140,8 @@ export const updatePoint = createAsyncThunk(
 //       toast.success("Точка обнавлен");
 //       return response.data;
 //     } catch (error) {
-//       // toast.error(error?.messages[0]?.error || error?.messages[0]);
+//             toast.error(JSON.stringify(error.messages[0]));
+
 //       return rejectWithValue(error.messages);
 //     }
 //   }

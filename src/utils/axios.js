@@ -2,6 +2,7 @@ import axios from "axios";
 import crypto from "crypto-js";
 import { API_URL } from "./apiUrl";
 import { toCamelCaseFormat, toSnakeCaseFormat } from "./case-style";
+import toast from "react-hot-toast";
 
 export const key =
   "JDJhJDEwJFR1VEN6cGlBVlAwdllocTJVSVVlSWVqQXBJOVo1Yzl3ejBBdkhCYW9MdUZjVm9QTUVBbWI2";
@@ -100,6 +101,8 @@ axios.interceptors.request.use(
       ? JSON.stringify(toSnakeCaseFormat(removeEmptyFieds))
       : getUrlData;
 
+    console.log("request: ", request);
+
     const encryptedData = crypto.HmacSHA256(request, key);
 
     const headers = {
@@ -119,7 +122,12 @@ axios.interceptors.request.use(
 
     return cleanEmtpyFields(updatedConfig);
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    toast.error(
+      JSON.stringify(error.error) ?? "Произошла ошибка при выполнении запроса"
+    );
+    return Promise.reject(error);
+  }
 );
 
 // if (response?.data?.meta?.statusCode === 401) {

@@ -28,6 +28,7 @@ import { createPoint, getKitchenTypes, updatePoint } from "@services/index";
 import useImageLoader from "@hooks/use-image-loader";
 import { removeEmptyBodyFields } from "@utils/axios";
 import { toSnakeCaseFormat } from "@utils/case-style";
+import ReactInputMask from "react-input-mask";
 
 export const PointEditForm = (props) => {
   const { point, mode = "edit", ...other } = props;
@@ -106,7 +107,7 @@ export const PointEditForm = (props) => {
         assortment: point?.assortment || "",
         commission: point?.commission || "",
         averageCookingTime: point?.averageCookingTime || null,
-        closingTime: new Date("01/01/1970 " + point?.closingTime) || null,
+        closingTime: point?.closingTime || null,
         location: {
           latitude: point?.address?.latitude || "",
           longitude: point?.address?.longitude || "",
@@ -114,7 +115,7 @@ export const PointEditForm = (props) => {
         },
         kitchenTypeId: kitchenTypeId || "",
         minimumCheckAmount: point?.minimumCheckAmount || "",
-        openingTime: new Date("01/01/1970 " + point?.openingTime) || null,
+        openingTime: point?.openingTime || null,
         status: point?.status || "",
         image: mode === "edit" ? newPoint?.imageUrl : webImageUrl,
         phoneNumbers:
@@ -238,6 +239,7 @@ export const PointEditForm = (props) => {
                   <TextField
                     error={Boolean(touched.description && errors.description)}
                     fullWidth
+                    multiline
                     helperText={touched.description && errors.description}
                     label="Description"
                     name="description"
@@ -291,7 +293,7 @@ export const PointEditForm = (props) => {
                 <Grid item md={6} xs={12}>
                   <TimePicker
                     ampm={false}
-                    inputFormat="hh:mm"
+                    inputFormat="HH:mm"
                     label="Opening Time"
                     onChange={(time) => {
                       setFieldValue("openingTime", time);
@@ -484,19 +486,29 @@ export const PointEditForm = (props) => {
                           const errorPhone = getIn(errors, phoneNumber);
                           return (
                             <Grid item xs={12} key={index}>
-                              <TextField
-                                error={Boolean(touchedPhone && errorPhone)}
-                                fullWidth
-                                helperText={
-                                  touchedPhone && errorPhone ? errorPhone : ""
-                                }
-                                label="Phone numbers"
-                                name={phoneNumber}
+                              <ReactInputMask
+                                mask="999 99 99 99"
+                                value={p?.phoneNumber ?? ""}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                value={p?.phoneNumber ?? ""}
-                                inputProps={{ maxLength: 9 }}
-                              />
+                                placeholder="999 99 99 99"
+                                maskChar=" "
+                              >
+                                {() => (
+                                  <TextField
+                                    error={Boolean(touchedPhone && errorPhone)}
+                                    fullWidth
+                                    helperText={
+                                      touchedPhone && errorPhone
+                                        ? errorPhone
+                                        : ""
+                                    }
+                                    label="Phone numbers"
+                                    name={phoneNumber}
+                                  />
+                                )}
+                              </ReactInputMask>
+
                               <Box
                                 mt={3}
                                 gap={3}

@@ -33,6 +33,7 @@ export const ProductCategoryListTable = (props) => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
+              <TableCell>Queue</TableCell>
               <TableCell>create at</TableCell>
               <TableCell>updated at</TableCell>
               <TableCell align="right">Actions</TableCell>
@@ -49,6 +50,16 @@ export const ProductCategoryListTable = (props) => {
                     >
                       <Link color="inherit" variant="subtitle2">
                         {productCategory?.name}
+                      </Link>
+                    </NextLink>
+                  </TableCell>
+                  <TableCell>
+                    <NextLink
+                      href={`/dashboard/product-categories/${productCategory?.id}/edit`}
+                      passHref
+                    >
+                      <Link color="inherit" variant="subtitle2">
+                        {productCategory?.queue}
                       </Link>
                     </NextLink>
                   </TableCell>

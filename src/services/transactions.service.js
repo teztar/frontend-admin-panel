@@ -17,7 +17,8 @@ export const getTransactions = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -30,7 +31,8 @@ export const getTransaction = createAsyncThunk(
       const response = await axios.get(`/transactions/info/${params?.id}`);
       return response.data;
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.error);
     }
   }
@@ -59,7 +61,8 @@ export const getTransaction = createAsyncThunk(
 //         });
 //       return response.data;
 //     } catch (error) {
-//       // toast.error(error?.messages[0]?.error || error?.messages[0]);
+//             toast.error(JSON.stringify(error.messages[0]));
+
 //       return rejectWithValue(error.error);
 //     }
 //   }
@@ -119,7 +122,8 @@ export const downloadTransactionsFile = createAsyncThunk(
 
       return fileData; // This line is not necessary since you are triggering a download and not using the data further in your application.
     } catch (error) {
-      // toast.error(error?.messages[0]?.error || error?.messages[0]);
+      toast.error(JSON.stringify(error.messages[0]));
+
       return rejectWithValue(error.message);
     }
   }
