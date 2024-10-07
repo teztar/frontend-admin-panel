@@ -14,7 +14,6 @@ export const getBanners = createAsyncThunk(
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
           search: params?.search ?? "",
-          searchFields: params?.search ? "title" : "",
         },
       });
       return response.data;

@@ -11,7 +11,7 @@ export const getClients = createAsyncThunk(
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
           search: params?.search ?? "",
-          searchFields: params?.search ? "name" : "",
+          searchFields: params?.search ? ["name", "phone"] : "",
         },
       });
       return response.data;

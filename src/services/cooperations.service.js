@@ -11,6 +11,7 @@ export const getCooperations = createAsyncThunk(
           perPage: params?.perPage ?? 10,
           search: params?.search ?? "",
           type: params?.type ?? "",
+          searchFields: params?.search ? ["name", "phone"] : "",
         },
       });
       return response.data;

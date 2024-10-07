@@ -3,6 +3,7 @@ import crypto from "crypto-js";
 import { API_URL } from "./apiUrl";
 import { toCamelCaseFormat, toSnakeCaseFormat } from "./case-style";
 import toast from "react-hot-toast";
+import Router from "next/router";
 
 export const key =
   "JDJhJDEwJFR1VEN6cGlBVlAwdllocTJVSVVlSWVqQXBJOVo1Yzl3ejBBdkhCYW9MdUZjVm9QTUVBbWI2";
@@ -80,28 +81,36 @@ axios.interceptors.request.use(
       removeEmptyParams(config.params);
     }
 
-    const searchParams = new URLSearchParams(toSnakeCaseFormat(config.params));
+    // Convert params to snake_case using your existing toSnakeCaseFormat function
+    const snakeCaseParams = toSnakeCaseFormat(config.params);
+
+    // Create URLSearchParams to handle multiple values for the same key
+    const searchParams = new URLSearchParams();
+    Object.entries(snakeCaseParams || {}).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        // Append each value for repeated parameters
+        value.forEach((val) => searchParams.append(key, val));
+      } else {
+        searchParams.append(key, value);
+      }
+    });
 
     const accessToken = localStorage.getItem("accessToken");
 
-    let removeEmptyFieds;
-
+    let removeEmptyFields;
     if (config && config.data) {
-      removeEmptyFieds = removeEmptyBodyFields(config.data);
+      removeEmptyFields = removeEmptyBodyFields(config.data);
     }
+
     const getUrl = "/api/admin" + config?.url;
-
     const hasFilters = searchParams.toString().length > 0;
-
-    const getUrlData = config.params
-      ? getUrl + (hasFilters ? "?" : "") + searchParams
+    const getUrlData = snakeCaseParams
+      ? getUrl + (hasFilters ? "?" : "") + searchParams.toString()
       : getUrl;
 
     const request = config.data
-      ? JSON.stringify(toSnakeCaseFormat(removeEmptyFieds))
+      ? JSON.stringify(toSnakeCaseFormat(removeEmptyFields))
       : getUrlData;
-
-    console.log("request: ", request);
 
     const encryptedData = crypto.HmacSHA256(request, key);
 
@@ -115,9 +124,10 @@ axios.interceptors.request.use(
     const updatedConfig = {
       ...config,
       url: API_URL + config.url,
-      data: toSnakeCaseFormat(config.data),
-      params: toSnakeCaseFormat(config.params),
+      data: toSnakeCaseFormat(config.data), // Convert data to snake_case
+      params: searchParams, // Use URLSearchParams directly to handle multiple values
       headers: cleanEmtpyFields(headers),
+      paramsSerializer: (params) => searchParams.toString(), // Ensure proper serialization of multiple parameters
     };
 
     return cleanEmtpyFields(updatedConfig);
@@ -130,19 +140,14 @@ axios.interceptors.request.use(
   }
 );
 
-// if (response?.data?.meta?.statusCode === 401) {
-// getSession();
-// }
-
-// Reponse interceptor. Return defined data schema or error.
+// Response interceptor to convert data back to camelCase
 axios.interceptors.response.use(
-  (response) => toCamelCaseFormat(response),
+  (response) => toCamelCaseFormat(response), // Convert the response to camelCase
   (error) => {
     if (error.response) {
       if (error.response.status === 401) {
         localStorage.clear();
-        history.push("/#/");
-        window.location.reload();
+        Router.push("/#/"); // Adjust your path as needed
       }
       return parseError(error.response.data);
     }
@@ -150,6 +155,10 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// if (response?.data?.meta?.statusCode === 401) {
+// getSession();
+// }
 
 axios.interceptors.response.use(
   async (response) => {

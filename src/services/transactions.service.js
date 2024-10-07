@@ -13,6 +13,9 @@ export const getTransactions = createAsyncThunk(
           status: params?.status ?? "",
           addedFrom: params?.addedFrom ?? "",
           paymentOption: params?.paymentOption ?? "",
+          searchFields: params?.search
+            ? ["client_name", "client_phone", "partner_brand"]
+            : "",
         },
       });
       return response.data;

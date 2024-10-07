@@ -25,6 +25,7 @@ import {
   getBonusTypes,
   getPartners,
   getPoints,
+  getProductCategories,
   getProductCategoriesByPoint,
   getProducts,
   updateBonus,
@@ -40,8 +41,6 @@ export const BonusEditForm = (props) => {
   const { products, productCategories } = useSelector(
     (state) => state.products
   );
-
-  console.log({ productCategories });
 
   const { bonusCategories, bonusTypes } = useSelector(
     (state) => state.handbooks
@@ -60,6 +59,12 @@ export const BonusEditForm = (props) => {
   useEffect(() => {
     dispatch(getBonusTypes());
     dispatch(getBonusCategories());
+    dispatch(
+      getProductCategories({
+        page: 1,
+        perPage: 100,
+      })
+    );
     dispatch(getPartners({ perPage: 100 }));
   }, []);
 

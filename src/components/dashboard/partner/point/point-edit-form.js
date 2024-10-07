@@ -41,13 +41,13 @@ export const PointEditForm = (props) => {
 
   const { query } = useRouter();
 
-  const [kitchenTypeId, setKitchenTypeId] = useState(point?.kitchenTypeId);
-
   const pointId = query?.pointId;
   const partnerId = query?.partnerId;
 
   const map = useRef(null);
   const webImageRef = useRef(null);
+
+  console.log({ newPoint });
 
   const [webImage, setWebImage] = useState(newPoint?.imageUrl);
 
@@ -56,18 +56,22 @@ export const PointEditForm = (props) => {
   const formData = new FormData();
 
   const handleGetGeoObject = async (map, setFieldValue) => {
-    console.log("Map:", map);
     if (Array.isArray(map)) {
       setFieldValue("location.latitude", map[0]);
       setFieldValue("location.longitude", map[1]);
     } else {
       const coords = map.get("coords");
 
-      console.log("Coords:", coords);
-
       setFieldValue("location.latitude", coords[0]);
       setFieldValue("location.longitude", coords[1]);
     }
+  };
+
+  const convertToTime = (minutes) => {
+    const date = new Date();
+    date.setHours(0);
+    date.setMinutes(minutes ? parseInt(minutes, 10) : 0);
+    return date;
   };
 
   const pointPhones = point?.phoneNumbers?.map((item) => {
@@ -81,6 +85,12 @@ export const PointEditForm = (props) => {
       setWebImageUrl(URL.createObjectURL(webImage));
     }
   }, [webImage]);
+
+  useEffect(() => {
+    if (!webImage && point?.pointImage?.imageUrl) {
+      setWebImageUrl(point.pointImage.imageUrl); // Set the existing image URL
+    }
+  }, [point]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -104,18 +114,21 @@ export const PointEditForm = (props) => {
         partnerId: mode === "create" ? partnerId : "",
         name: point?.name || "",
         description: point?.description || "",
-        assortment: point?.assortment || "",
+        // assortment: point?.assortment || "",
         commission: point?.commission || "",
-        averageCookingTime: point?.averageCookingTime || null,
-        closingTime: point?.closingTime || null,
+        averageCookingTime:
+          mode === "edit" ? convertToTime(point?.averageCookingTime) : null,
+        closingTime:
+          mode === "edit" ? new Date("01/01/1970 " + point?.closingTime) : null,
         location: {
           latitude: point?.address?.latitude || "",
           longitude: point?.address?.longitude || "",
           name: point?.address?.name || "",
         },
-        kitchenTypeId: kitchenTypeId || "",
+        kitchenTypeId: point?.kitchenTypeId || "",
         minimumCheckAmount: point?.minimumCheckAmount || "",
-        openingTime: point?.openingTime || null,
+        openingTime:
+          mode === "edit" ? new Date("01/01/1970 " + point?.openingTime) : null,
         status: point?.status || "",
         image: mode === "edit" ? newPoint?.imageUrl : webImageUrl,
         phoneNumbers:
@@ -175,9 +188,25 @@ export const PointEditForm = (props) => {
             removeEmptyBodyFields(toSnakeCaseFormat(newValues))
           );
 
+          // Append payload to formData
           formData.append("payload", payload);
-          formData.append("image", webImage);
 
+          // Handle the image field
+          if (webImage) {
+            // If a new image is uploaded, append the new image
+            formData.append("image", webImage);
+          } else if (values.image) {
+            // Otherwise, use the existing image in edit mode
+            formData.append(
+              "image",
+              new File([values.image], "image.png", {
+                type: "image/png",
+                lastModified: new Date(),
+              })
+            );
+          }
+
+          // Convert FormData to object for logging or other uses
           for (let pair of formData.entries()) {
             data[pair[0]] = pair[1];
           }
@@ -191,8 +220,11 @@ export const PointEditForm = (props) => {
               })
             );
           } else {
-            dispatch(updatePoint(newValues));
+            dispatch(
+              updatePoint({ payload: formData, requestDigest: payload })
+            );
           }
+
           setStatus({ success: true });
           setSubmitting(false);
         } catch (err) {
@@ -247,19 +279,6 @@ export const PointEditForm = (props) => {
                     onChange={handleChange}
                     required
                     value={values.description}
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={Boolean(touched.assortment && errors.assortment)}
-                    fullWidth
-                    helperText={touched.assortment && errors.assortment}
-                    label="Assortment"
-                    name="assortment"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    required
-                    value={values.assortment}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
@@ -319,25 +338,13 @@ export const PointEditForm = (props) => {
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  {/* <TextField
-                    error={Boolean(touched.kitchenType && errors.kitchenType)}
-                    fullWidth
-                    helperText={touched.kitchenType && errors.kitchenType}
-                    label="Kitchen Type"
-                    name="kitchenType"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    required
-                    value={values.kitchenType}
-                  /> */}
-
                   <FormControl fullWidth>
                     <InputLabel id="kitchenTypeId-label">
-                      Kithcen Type
+                      Kitchen Type
                     </InputLabel>
                     <Select
                       labelId="kitchenTypeId-label"
-                      value={values.kitchenTypeId}
+                      value={values?.kitchenTypeId}
                       label="Kitchen Type"
                       name="kitchenTypeId"
                       onChange={handleChange}
@@ -346,7 +353,9 @@ export const PointEditForm = (props) => {
                         <MenuItem
                           key={kitchenType.id}
                           value={kitchenType.id}
-                          onClick={() => setKitchenTypeId(kitchenType?.id)}
+                          onClick={() =>
+                            setFieldValue("kitchenTypeId", kitchenType.id)
+                          }
                         >
                           {kitchenType?.name}
                         </MenuItem>

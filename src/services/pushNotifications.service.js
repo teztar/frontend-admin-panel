@@ -16,6 +16,7 @@ export const getPushNotifications = createAsyncThunk(
           search: params?.search ?? "",
           sort: params?.sort ?? "",
           format: params?.format ?? "",
+          searchFields: params?.search ? ["title"] : "",
         },
       });
       return response.data;

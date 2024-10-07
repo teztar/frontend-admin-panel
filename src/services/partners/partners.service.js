@@ -11,7 +11,16 @@ export const getPartners = createAsyncThunk(
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
           search: params?.search ?? "",
-          searchFields: params?.search ? "brand,company_tin" : "",
+          searchFields: params?.search
+            ? [
+                "brand",
+                "company_tin",
+                "email",
+                "director_name",
+                "phones",
+                "region",
+              ]
+            : "",
         },
       });
       return response.data;

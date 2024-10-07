@@ -13,6 +13,9 @@ export const getPartnersBalance = createAsyncThunk(
           dateTo: params?.dateTo || "2099-10-10",
           search: params?.search || "",
           status: params?.status || "",
+          searchFields: params?.search
+            ? ["partner_name", "partner_brand", "region"]
+            : "",
         },
       });
       return response.data;

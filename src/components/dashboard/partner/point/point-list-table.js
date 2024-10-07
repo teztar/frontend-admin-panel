@@ -44,7 +44,7 @@ export const PointListTable = (props) => {
             <TableRow>
               <TableCell>name</TableCell>
               {/* <TableCell>description</TableCell> */}
-              <TableCell>Assortment</TableCell>
+              {/* <TableCell>Assortment</TableCell> */}
               <TableCell>av cooking time</TableCell>
               <TableCell>commission</TableCell>
               <TableCell>opens in</TableCell>
@@ -62,7 +62,7 @@ export const PointListTable = (props) => {
                 <TableRow hover key={point.id}>
                   <TableCell>{point.name}</TableCell>
                   {/* <TableCell>{point.description}</TableCell> */}
-                  <TableCell>{point.assortment}</TableCell>
+                  {/* <TableCell>{point.assortment}</TableCell> */}
                   <TableCell>{point.averageCookingTime}</TableCell>
                   <TableCell>{point.commission}</TableCell>
                   <TableCell>{point.openingTime}</TableCell>
