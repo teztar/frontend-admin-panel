@@ -16,6 +16,7 @@ export const getProducts = createAsyncThunk(
           search: params?.search ?? "",
           categoryId: params?.category ?? "",
           pointId: params?.pointId,
+          searchFields: params?.search ? ["name"] : "",
         },
       });
       return response.data;
@@ -168,13 +169,72 @@ export const updateProduct = createAsyncThunk(
   "products/updateProduct",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/products/update", values);
-      toast.success("Продукт обнавлен");
-      return response.data;
-    } catch (error) {
-      toast.error(JSON.stringify(error.messages[0]));
+      const accessToken = localStorage.getItem("accessToken");
 
+      const encryptedData = crypto.HmacSHA256(values.requestDigest, key);
+
+      const requestHeaders = new Headers();
+
+      requestHeaders.append("Authorization", "Bearer " + accessToken);
+      requestHeaders.append("Accept", "application/json");
+      requestHeaders.append("X-RequestDigest", encryptedData);
+
+      const requestOptions = {
+        method: "PUT", // Use PUT for updates
+        headers: requestHeaders,
+        body: values.payload,
+        redirect: "follow",
+      };
+
+      const response = await fetch(
+        API_URL + "/products/update",
+        requestOptions
+      );
+
+      if (response.ok) {
+        return response.json().then((data) => {
+          toast.success("Продукт обновлен");
+          return toCamelCaseFormat(data);
+        });
+      }
+
+      if (!response.ok) {
+        return response.json().then((data) => {
+          const errors = () =>
+            data?.map((item) => {
+              return Object.values(item).map((err) => {
+                return toast.error(err, {
+                  duration: 10000,
+                });
+              });
+            });
+
+          errors();
+        });
+      }
+    } catch (error) {
+      error.messages.map((message) => {
+        return {
+          image: toast.error(message.image[0]),
+          client_id: toast.error(message.client_id[0]),
+        };
+      });
       return rejectWithValue(error.messages);
     }
   }
 );
+
+// export const updateProduct = createAsyncThunk(
+//   "products/updateProduct",
+//   async (values, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.put("/products/update", values);
+//       toast.success("Продукт обнавлен");
+//       return response.data;
+//     } catch (error) {
+//       toast.error(JSON.stringify(error.messages[0]));
+
+//       return rejectWithValue(error.messages);
+//     }
+//   }
+// );

@@ -10,6 +10,8 @@ export const getBonuses = createAsyncThunk(
         params: {
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
+          search: params?.search ?? "",
+          searchFields: params?.search ? ["commission", "bonus"] : "",
         },
       });
       return response.data;

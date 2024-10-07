@@ -62,6 +62,7 @@ export const CourierListTable = (props) => {
               <TableCell>Birthdate</TableCell>
               <TableCell>Phone</TableCell>
               <TableCell>Passport</TableCell>
+              <TableCell>TIN</TableCell>
               <TableCell>Start Work Time</TableCell>
               <TableCell>End Work Time</TableCell>
               <TableCell align="right">Actions</TableCell>
@@ -110,6 +111,7 @@ export const CourierListTable = (props) => {
                 </TableCell>
                 <TableCell>{courier.phoneNumber}</TableCell>
                 <TableCell>{courier.passportSeries}</TableCell>
+                <TableCell>{courier.tin}</TableCell>
                 <TableCell>{courier.startWorkTime}</TableCell>
                 <TableCell>{courier.endWorkTime}</TableCell>
 

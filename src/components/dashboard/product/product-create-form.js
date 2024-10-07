@@ -85,6 +85,9 @@ export const ProductEditForm = (props) => {
     }
   }, [webImage]);
 
+  console.log("volumes: ", volumesArr);
+  console.log("volume: ", product?.volumes);
+
   return (
     <Formik
       enableReinitialize={mode === "edit" ? true : false}
@@ -92,12 +95,21 @@ export const ProductEditForm = (props) => {
         id: mode === "edit" ? product?.id : null,
         pointId: mode === "create" ? pointId : null,
         name: product?.name || "",
-        categories: product?.categories || [],
+        categories:
+          product?.categories?.map((category) => ({
+            id: category.category.id,
+            name: category.category.name,
+          })) || [],
         description: product?.description || "",
         ingredients: product?.ingredients || "",
         volumes:
-          product && product?.volumes?.length > 0
-            ? product.volumes
+          product?.volumes?.length > 0
+            ? product.volumes.map((volume) => ({
+                price: volume.price,
+                volume: volume.volume, // This should match the key from volumesArr
+                measuring: volume.measuring,
+                maxQuantityInOneOrder: volume.maxQuantityInOneOrder,
+              }))
             : [
                 {
                   price: "",
@@ -124,9 +136,22 @@ export const ProductEditForm = (props) => {
           );
 
           formData.append("payload", payload);
-          formData.append("image", webImage);
 
-          console.log({ payload });
+          // Handle the image field
+          if (webImage) {
+            // If a new image is uploaded, append the new image
+            formData.append("image", webImage);
+          } else if (values.image) {
+            // Otherwise, use the existing image in edit mode
+            formData.append(
+              "image",
+              new File([values.image], "image.png", {
+                type: "image/png",
+                lastModified: new Date(),
+              })
+            );
+          }
+
           if (mode === "create") {
             dispatch(
               createProduct({
@@ -136,7 +161,12 @@ export const ProductEditForm = (props) => {
               })
             );
           } else {
-            dispatch(updateProduct(values));
+            dispatch(
+              updateProduct({
+                payload: formData,
+                requestDigest: payload,
+              })
+            );
           }
           setStatus({ success: true });
           setSubmitting(false);
@@ -318,22 +348,37 @@ export const ProductEditForm = (props) => {
 
                               <Grid item md={6} xs={12}>
                                 <FormControl fullWidth>
-                                  <InputLabel id="partnerId-label">
+                                  <InputLabel id="volume-label">
                                     Volumes
                                   </InputLabel>
                                   <Select
                                     labelId="volume-label"
-                                    value={p?.volume}
+                                    value={
+                                      volumesArr.find(
+                                        (volumeOption) =>
+                                          volumeOption.key === p.volume
+                                      )?.value || "" // Display the value that corresponds to the stored key
+                                    }
                                     label="Volumes"
                                     name={volume}
-                                    onChange={handleChange}
+                                    onChange={(e) => {
+                                      const selectedValue = e.target.value;
+                                      const selectedVolume = volumesArr.find(
+                                        (volumeOption) =>
+                                          volumeOption.value === selectedValue
+                                      );
+                                      setFieldValue(
+                                        `volumes[${index}].volume`,
+                                        selectedVolume?.key
+                                      ); // Store volume.key
+                                    }}
                                   >
-                                    {volumesArr.map((volume) => (
+                                    {volumesArr.map((volumeOption) => (
                                       <MenuItem
-                                        key={volume.key}
-                                        value={volume.key}
+                                        key={volumeOption.key}
+                                        value={volumeOption.value} // Display the value
                                       >
-                                        {volume?.value}
+                                        {volumeOption.value}
                                       </MenuItem>
                                     ))}
                                   </Select>

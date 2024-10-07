@@ -12,6 +12,7 @@ export const getOrders = createAsyncThunk(
           perPage: params?.perPage ?? 10,
           search: params?.search ?? "",
           status: params?.status ?? "",
+          searchFields: params?.search ? ["id"] : "",
         },
       });
       return response.data;

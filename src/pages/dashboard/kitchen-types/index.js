@@ -128,7 +128,7 @@ const KitchenTypesList = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder="Search product categories"
+                  placeholder="Search kitchen types"
                 />
               </Box>
             </Box>

@@ -24,25 +24,6 @@ import { getPartner, getPoints } from "@services/index";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { gtm } from "src/lib/gtm";
 
-const sortOptions = [
-  {
-    label: "Last update (newest)",
-    value: "updatedAt|desc",
-  },
-  {
-    label: "Last update (oldest)",
-    value: "updatedAt|asc",
-  },
-  {
-    label: "Total orders (highest)",
-    value: "totalOrders|desc",
-  },
-  {
-    label: "Total orders (lowest)",
-    value: "totalOrders|asc",
-  },
-];
-
 const PointList = () => {
   const dispatch = useDispatch();
 

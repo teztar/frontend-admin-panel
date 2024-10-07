@@ -11,6 +11,7 @@ export const getProductsCategories = createAsyncThunk(
           page: params?.page ?? 1,
           perPage: params?.perPage ?? 10,
           search: params?.search ?? "",
+          searchFields: params?.search ? ["name"] : "",
         },
       });
       return response.data;
