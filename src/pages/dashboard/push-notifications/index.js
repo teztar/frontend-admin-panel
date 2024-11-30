@@ -118,7 +118,7 @@ const PushNotificationList = () => {
                     startIcon={<PlusIcon fontSize="small" />}
                     variant="contained"
                   >
-                    Add
+                    Добавить
                   </Button>
                 </NextLink>
               </Grid>

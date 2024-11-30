@@ -43,6 +43,13 @@ export {
 } from "./productCategories.service";
 
 export {
+  getCategoryQueue,
+  getCategoriesQueue,
+  createCategoryQueue,
+  updateCategoryQueue,
+} from "./categoriesQueue.service";
+
+export {
   getKitchenType,
   getKitchenTypes,
   createKitchenType,
@@ -138,4 +145,6 @@ export {
   getPointStatuses,
   getPrefixes,
   getProductVolumes,
+  getBannerTypes,
+  getBannerReferenceTypes,
 } from "./handbooks.service";

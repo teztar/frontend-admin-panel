@@ -118,7 +118,7 @@ export const RoleEditForm = (props) => {
             sx={{ m: 1 }}
             variant="contained"
           >
-            {mode === "create" ? "Create" : "Update"}
+            {mode === "create" ? "Создать" : "Обновить"}
           </Button>
           <NextLink href="/dashboard/roles" passHref>
             <Button

@@ -85,7 +85,7 @@ const CourierBalanceList = () => {
                     startIcon={<PlusIcon fontSize="small" />}
                     variant="contained"
                   >
-                    Add
+                    Добавить
                   </Button>
                 </NextLink>
               </Grid>

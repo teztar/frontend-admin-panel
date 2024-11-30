@@ -58,7 +58,7 @@ export const BannerListTable = (props) => {
               <TableCell>app </TableCell>
               {/* <TableCell>Start date</TableCell> */}
               {/* <TableCell>End date</TableCell> */}
-              <TableCell>Active</TableCell>
+              <TableCell>status</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
