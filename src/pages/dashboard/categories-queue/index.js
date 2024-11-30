@@ -14,16 +14,18 @@ import {
 } from "@mui/material";
 import { AuthGuard } from "@components/authentication/auth-guard";
 import { DashboardLayout } from "@components/dashboard/dashboard-layout";
-import { PartnerListTable } from "@components/dashboard/partner/partner-list-table";
 import { Plus as PlusIcon } from "@icons/plus";
 import { Search as SearchIcon } from "@icons/search";
 import { useDispatch, useSelector } from "src/store";
-import { getPartners } from "@services/index";
+import { getCategoriesQueue } from "@services/index";
+import { CategoryQueueListTable } from "@components/dashboard/category-queue/category-queue-list-table";
 
-const PartnerList = () => {
+const CategoriesQueueList = () => {
   const dispatch = useDispatch();
 
-  const { partners, count } = useSelector((state) => state.partners);
+  const { productCategories, count } = useSelector(
+    (state) => state.productCategories
+  );
 
   const router = useRouter();
 
@@ -41,7 +43,6 @@ const PartnerList = () => {
 
   const handleQueryChange = (event) => {
     event.preventDefault();
-    setPage(0);
     setSearch(queryRef.current?.value);
   };
 
@@ -56,10 +57,10 @@ const PartnerList = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(
-        `/dashboard/partners?search=${search}&page=${page}&perPage=${rowsPerPage}`
+        `/dashboard/categories-queue?search=${search}&page=${page}&perPage=${rowsPerPage}`
       );
       dispatch(
-        getPartners({
+        getCategoriesQueue({
           page: Number(page + 1),
           perPage: Number(rowsPerPage),
           search: search,
@@ -73,7 +74,7 @@ const PartnerList = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Partner List</title>
+        <title>Dashboard: Products Categories Queue</title>
       </Head>
       <Box
         component="main"
@@ -86,10 +87,12 @@ const PartnerList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Партнёры</Typography>
+                <Typography variant="h4">
+                  Очередь категорий продуктов
+                </Typography>
               </Grid>
               <Grid item>
-                <NextLink href="/dashboard/partners/new" passHref>
+                <NextLink href="/dashboard/categories-queue/new" passHref>
                   <Button
                     startIcon={<PlusIcon fontSize="small" />}
                     variant="contained"
@@ -111,15 +114,16 @@ const PartnerList = () => {
               }}
             >
               <Box
+                component="form"
                 sx={{
                   flexGrow: 1,
                   m: 1.5,
                 }}
               >
                 <TextField
+                  autoComplete="off"
                   defaultValue=""
                   fullWidth
-                  value={search}
                   onChange={handleQueryChange}
                   inputProps={{ ref: queryRef }}
                   InputProps={{
@@ -129,13 +133,13 @@ const PartnerList = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder="Search partners"
+                  placeholder="Search categories queue"
                 />
               </Box>
             </Box>
-            <PartnerListTable
-              partners={partners}
-              partnersCount={count}
+            <CategoryQueueListTable
+              productCategories={productCategories}
+              productCategoriesCount={count}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               rowsPerPage={rowsPerPage}
@@ -148,10 +152,10 @@ const PartnerList = () => {
   );
 };
 
-PartnerList.getLayout = (page) => (
+CategoriesQueueList.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>{page}</DashboardLayout>
   </AuthGuard>
 );
 
-export default PartnerList;
+export default CategoriesQueueList;

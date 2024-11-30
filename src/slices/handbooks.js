@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   getApplicationTypes,
+  getBannerReferenceTypes,
+  getBannerTypes,
   getBonusCategories,
   getBonusTypes,
   getClientBonusOperationTypes,
@@ -41,6 +43,8 @@ const initialState = {
   pointStatuses: [],
   prefixes: [],
   volumes: [],
+  bannerTypes: [],
+  bannerReferenceTypes: [],
   loading: true,
   error: null,
 };
@@ -262,6 +266,28 @@ const handbooks = createSlice({
       state.volumes = action.payload?.payload;
     });
     builder.addCase(getProductVolumes.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(getBannerTypes.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getBannerTypes.fulfilled, (state, action) => {
+      state.loading = false;
+      state.bannerTypes = action.payload?.payload;
+    });
+    builder.addCase(getBannerTypes.rejected, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(getBannerReferenceTypes.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getBannerReferenceTypes.fulfilled, (state, action) => {
+      state.loading = false;
+      state.bannerReferenceTypes = action.payload?.payload;
+    });
+    builder.addCase(getBannerReferenceTypes.rejected, (state) => {
       state.loading = false;
     });
   },

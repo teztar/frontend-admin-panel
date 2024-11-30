@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
@@ -12,24 +13,47 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import { useDispatch } from "src/store";
-import { createKitchenType, updateKitchenType } from "@services/index";
+import { useDispatch, useSelector } from "src/store";
+import {
+  createProductCategory,
+  getPoints,
+  getProductsCategories,
+  updateProductCategory,
+} from "@services/index";
 
-export const KitchenTypeEditForm = (props) => {
+export const CategoryQueueEditForm = (props) => {
   const dispatch = useDispatch();
 
-  const { kitchenType, mode = "edit", ...other } = props;
+  const { productCategory, mode = "edit", ...other } = props;
+
+  const categories = useSelector((state) => state.productCategories);
+  const points = useSelector((state) => state.points);
+
+  console.log({ categories });
+  console.log({ points });
+
+  useEffect(() => {
+    dispatch(
+      getProductsCategories({
+        perPage: 100,
+      })
+    );
+
+    dispatch(getPoints({ perPage: 100 }));
+  }, []);
 
   return (
     <Formik
       enableReinitialize={true}
       initialValues={{
-        id: kitchenType?.id || "",
-        name: kitchenType?.name || "",
+        id: productCategory?.id || "",
+        name: productCategory?.name || "",
+        queue: productCategory?.queue || "",
         submit: null,
       }}
       validationSchema={Yup.object().shape({
         name: Yup.string().min(4).max(255),
+        queue: Yup.string().min(1).max(100),
       })}
       onSubmit={async (
         values,
@@ -38,10 +62,10 @@ export const KitchenTypeEditForm = (props) => {
         try {
           if (mode === "create") {
             dispatch(
-              createKitchenType({ values: values, resetForm: resetForm })
+              createProductCategory({ values: values, resetForm: resetForm })
             );
           } else {
-            dispatch(updateKitchenType(values));
+            dispatch(updateProductCategory(values));
           }
           setStatus({ success: true });
           setSubmitting(false);
@@ -66,7 +90,7 @@ export const KitchenTypeEditForm = (props) => {
         <form noValidate onSubmit={handleSubmit} {...other}>
           <Card>
             <CardHeader
-              title={`${mode === "create" ? "Create" : "Edit"} kitchen type`}
+              title={`${mode === "create" ? "Create" : "Edit"} category queue`}
             />
             <Divider />
             <CardContent>
@@ -82,6 +106,20 @@ export const KitchenTypeEditForm = (props) => {
                     onChange={handleChange}
                     required
                     value={values.name}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.queue && errors.queue)}
+                    fullWidth
+                    helperText={touched.queue && errors.queue}
+                    label="Queue"
+                    name="queue"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    type="number"
+                    value={values.queue}
                   />
                 </Grid>
               </Grid>
@@ -100,7 +138,7 @@ export const KitchenTypeEditForm = (props) => {
               >
                 {mode === "create" ? "Создать" : "Обновить"}
               </Button>
-              <NextLink href="/dashboard/kitchen-types" passHref>
+              <NextLink href="/dashboard/product-categories" passHref>
                 <Button
                   component="a"
                   disabled={isSubmitting}

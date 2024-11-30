@@ -271,3 +271,31 @@ export const getProductVolumes = createAsyncThunk(
     }
   }
 );
+
+export const getBannerReferenceTypes = createAsyncThunk(
+  "banners/getBannerReferenceTypes",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/handbook/banner_reference_types");
+      return response.data;
+    } catch (error) {
+      toast.error(JSON.stringify(error.messages[0]));
+
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
+export const getBannerTypes = createAsyncThunk(
+  "banners/getBannerTypes",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/handbook/banner_types");
+      return response.data;
+    } catch (error) {
+      toast.error(JSON.stringify(error.messages[0]));
+
+      return rejectWithValue(error.error);
+    }
+  }
+);

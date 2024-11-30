@@ -135,7 +135,7 @@ const ProductList = () => {
                     startIcon={<PlusIcon fontSize="small" />}
                     variant="contained"
                   >
-                    Add
+                    Добавить
                   </Button>
                 </NextLink>
               </Grid>

@@ -147,7 +147,7 @@ axios.interceptors.response.use(
     if (error.response) {
       if (error.response.status === 401) {
         localStorage.clear();
-        Router.push("/#/"); // Adjust your path as needed
+        Router.push("/authentication/login");
       }
       return parseError(error.response.data);
     }
