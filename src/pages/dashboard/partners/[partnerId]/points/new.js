@@ -19,7 +19,7 @@ const PointCreate = () => {
       >
         <Container maxWidth="md">
           <Box sx={{ mb: 3 }}>
-            <Typography variant="h4">Create a new point</Typography>
+            <Typography variant="h4">Создать новую точку</Typography>
           </Box>
           <PointEditForm mode="create" />
         </Container>

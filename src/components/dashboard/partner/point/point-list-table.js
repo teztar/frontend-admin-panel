@@ -42,18 +42,18 @@ export const PointListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell>name</TableCell>
+              <TableCell>Название</TableCell>
               {/* <TableCell>description</TableCell> */}
               {/* <TableCell>Assortment</TableCell> */}
-              <TableCell>av cooking time</TableCell>
-              <TableCell>commission</TableCell>
-              <TableCell>opens in</TableCell>
-              <TableCell>closes in</TableCell>
-              <TableCell>phones</TableCell>
-              <TableCell>min check amount</TableCell>
-              <TableCell>address</TableCell>
-              <TableCell>status</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell>Среднее время приготовления (мин)</TableCell>
+              <TableCell>Комиссия</TableCell>
+              <TableCell>Открывается в</TableCell>
+              <TableCell>Закрывается в</TableCell>
+              <TableCell>Телефоны</TableCell>
+              <TableCell>Минимальная сумма чека</TableCell>
+              <TableCell>Адрес</TableCell>
+              <TableCell>Статус</TableCell>
+              <TableCell align="right">Действия</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
